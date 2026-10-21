@@ -1,0 +1,41 @@
+{
+  "checks": [
+    {
+      "id": "mountain",
+      "effect": 0,
+      "selected": 1
+    },
+    {
+      "id": "mountain",
+      "effect": 1,
+      "selected": 1
+    },
+    {
+      "id": "mountain",
+      "effect": 2,
+      "selected": 1
+    },
+    {
+      "id": "mountain",
+      "effect": 3,
+      "selected": 1
+    },
+    {
+      "id": "mountain",
+      "effect": 4,
+      "selected": 1
+    },
+    {
+      "id": "mountain",
+      "effect": 5,
+      "selected": 1
+    },
+    {
+      "id": "mountain",
+      "effect": 6,
+      "selected": 1
+    }
+  ],
+  "mobileOverflow": false,
+  "errors": []
+}

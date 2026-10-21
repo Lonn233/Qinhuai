@@ -1,0 +1,10 @@
+export const SURFACE_ZONES=Object.freeze({eave:'檐口',roof:'屋面',facade:'墙柱',window:'窗户',sign:'匾额',trim:'墙顶压边'});
+export const SURFACE_DEFAULTS=Object.freeze({enabled:false,intensity:1.5,distance:10,angle:120,azimuth:0,elevation:-25,softness:.8,shadows:true});
+export const SURFACE_CONTROLS=[['intensity','外溢强度',0,8,.05,'×'],['distance','向外照射距离',.5,30,.1,'m'],['angle','投射光束角',20,170,1,'°'],['azimuth','投射水平偏转',-90,90,1,'°'],['elevation','投射上下偏转',-80,80,1,'°'],['softness','光斑边缘柔化',0,1,.01,'']];
+export function normalizeSurface(value,includeFloors=true){const out={...SURFACE_DEFAULTS};if(!value||typeof value!=='object')return out;for(const [k,,min,max] of SURFACE_CONTROLS)if(typeof value[k]==='number'&&Number.isFinite(value[k]))out[k]=Math.min(max,Math.max(min,value[k]));for(const k of ['enabled','shadows'])if(typeof value[k]==='boolean')out[k]=value[k];if(includeFloors&&value.floors&&typeof value.floors==='object')out.floors=Object.fromEntries(['first','second'].map(floor=>[floor,normalizeSurface({...out,...value.floors[floor]},false)]));return out;}
+export function normalizeSurfaceSpill(value){return Object.fromEntries(Object.keys(SURFACE_ZONES).map(k=>[k,normalizeSurface(value?.[k])]));}
+export function sourceLevel(zone,base,window){const strength=zone==='trim'?base.window:base[zone];return Math.max(0,Number(strength)||0)*Math.max(0,Number(base.brightness)||0)*(zone==='window'?(window.enabled?window.brightness:0):1);}
+export function sourceColor(zone,base,window){return zone==='window'?(window.color||base.windowColor):base[{eave:'color',roof:'roofColor',facade:'facadeColor',sign:'windowColor',trim:'trimColor'}[zone]]||base.color;}
+
+export function surfaceFloorSettings(value,floor){const state=normalizeSurface(value);return normalizeSurface(state.floors?.[floor]||state,false);}
+export function updateSurfaceFloor(value,floor,patch){const state=normalizeSurface(value),floors=Object.fromEntries(['first','second'].map(key=>[key,surfaceFloorSettings(state,key)]));floors[floor]=normalizeSurface({...floors[floor],...patch},false);return normalizeSurface({...state,floors});}

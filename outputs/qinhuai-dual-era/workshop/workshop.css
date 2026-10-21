@@ -1,0 +1,241 @@
+:root{--ink:#383b2e;--muted:#747463;--paper:#f2eadb;--line:#6c6d4c35;--green:#485840;--rose:#af6c94;--serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;--sans:"Microsoft YaHei","PingFang SC",sans-serif}*{box-sizing:border-box}body{margin:0;overflow:hidden;background:#d3c6af;color:var(--ink);font-family:var(--sans);font-size:13px}button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}button:disabled{opacity:.35;cursor:not-allowed}button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--green);outline-offset:5px}[hidden]{display:none!important}#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}.vignette{position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,#f2eadbf7 0%,#f2eadbec 27%,#f2eadb25 62%,transparent 100%)}body.playing .vignette{background:linear-gradient(0deg,#f2eadbe8,transparent 25%,transparent 80%,#f2eadb88)}.masthead{position:fixed;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:27px 42px;z-index:5;pointer-events:none}.masthead button{pointer-events:auto}.brand{display:flex;align-items:center;gap:13px}.seal{display:inline-flex;background:#914c3f;color:#f2e6d1;border:1px solid #f0d0b999;outline:2px solid #914c3f;align-items:center;justify-content:center;width:34px;height:41px;font-family:var(--serif);font-size:17px;line-height:1.05;text-align:center}.brand strong{display:block;font-family:var(--serif);font-size:23px;font-weight:500;letter-spacing:4px}.brand div>span{display:block;font-size:8px;letter-spacing:2.2px;margin-top:5px;color:var(--muted)}.top-actions{display:flex;align-items:center;gap:22px}.edition{font-size:10px;letter-spacing:2px}.edition i{font-style:normal;margin-left:7px;font-family:Georgia,serif}.quiet{border-bottom:1px solid var(--line);padding:10px 0;font-size:12px}.quiet span{margin-left:16px}.intro{position:absolute;left:7%;top:24%;max-width:510px}.eyebrow{font-size:10px;letter-spacing:3px;display:flex;align-items:center;gap:12px;color:#666a53}.eyebrow>span{display:inline-block;width:28px;height:1px;background:#8e9475}h1{font-family:var(--serif);font-weight:500;font-size:clamp(44px,4.65vw,77px);line-height:1.42;letter-spacing:7px;margin:27px 0 21px}p{line-height:1.95}.intro-description{font-size:13px;line-height:2.15;color:#6b6b5a;letter-spacing:1px;margin-bottom:28px}.primary{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:17px 24px;background:var(--green);color:#f8f1df;border:1px solid #3a4d32;min-width:232px;letter-spacing:1.3px;transition:background .2s,transform .2s}.primary:hover{background:#37462f}.primary span:last-child{font-size:18px}.intro-meta{display:flex;gap:17px;margin-top:22px;color:#797a67;font-size:10px}.intro-meta span+span:before{content:'·';margin-right:17px}.intro-footnote{margin-top:55px;display:flex;flex-direction:column;gap:9px}.intro-footnote b{font-family:var(--serif);letter-spacing:4px;font-size:13px;font-weight:400}.intro-footnote span{font-size:9px;letter-spacing:.7px;color:#8e8c79}.text-button{padding:14px 0;border-bottom:1px solid var(--line);font-size:12px;color:#626a51}.text-button.small{font-size:10px;padding:10px 0}.hero-caption{position:absolute;right:6%;bottom:11%;border-left:1px solid #666d4d66;padding-left:20px}.hero-caption>span{font-size:9px;letter-spacing:2px}.hero-caption strong{display:block;font-family:var(--serif);font-size:26px;font-weight:400;letter-spacing:3px;margin-top:12px}.hero-caption p{font-size:10px;letter-spacing:1px;color:#6b705a}.swatches{display:flex;gap:7px}.swatches i{width:12px;height:12px;border-radius:50%;background:#bf87b8}.swatches i:nth-child(2){background:#57724a}.swatches i:nth-child(3){background:#b8b18b}.task-panel{position:absolute;top:132px;left:36px;width:248px;padding:22px;background:#f2eadbeb;border:1px solid #ffffff66;box-shadow:0 8px 28px #51462a08}.task-top{display:flex;justify-content:space-between;font-size:9px;letter-spacing:2px;color:var(--muted)}h2{font-family:var(--serif);font-weight:500;font-size:27px;letter-spacing:2px;margin:16px 0 12px}#stage-hint{color:#77735e;font-size:11px;line-height:1.9;min-height:63px}.task-count{display:flex;justify-content:space-between;font-size:11px;margin-top:19px}.progress-track{height:2px;background:#7e79502c;margin-top:10px}.progress-track i{display:block;height:100%;background:var(--green);transition:width .35s}.station-button{display:flex;justify-content:space-between;width:100%;border-bottom:1px solid var(--line);padding:17px 0;font-size:11px}.station-button:hover{color:#a26277}.material-ledger{padding-top:18px}.material-ledger>span{font-size:9px;letter-spacing:2px;color:var(--muted)}.material-ledger p{font-size:10px;line-height:1.9;margin:7px 0}.structure-panel{position:absolute;right:30px;top:135px;width:155px;padding:17px;background:#f2eadbe0;border:1px solid #ffffff50}.panel-kicker{font-size:9px;letter-spacing:2px;margin-bottom:10px}.view-buttons{display:flex;flex-direction:column}.view-buttons button{padding:10px 0;text-align:left;font-size:11px;border-bottom:1px solid var(--line)}button[aria-pressed=true]{color:#9a546e}.structure-panel details{font-size:10px;padding-top:12px}.structure-panel summary{cursor:pointer}.structure-panel label{display:flex;align-items:center;gap:5px;margin-top:9px}.structure-panel input{accent-color:var(--green)}#view-mode{font-size:8px;color:#88846d;margin-top:14px;line-height:1.6}.toolbelt{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);display:flex;padding:8px;background:#f6efdfed;border:1px solid #fff9;box-shadow:0 10px 30px #3a2c2410}.toolbelt-label{display:flex;align-items:center;padding:0 12px;color:#8b826c;font-family:var(--serif);font-size:11px;line-height:1.7;border-right:1px solid var(--line);margin-right:7px}#tools{display:flex;gap:5px}.tool{position:relative;width:66px;height:69px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;border:1px solid transparent}.tool b{font-family:var(--serif);font-size:22px;font-weight:400}.tool span{font-size:9px}.tool kbd{position:absolute;right:5px;top:4px;color:#96917b;font-size:8px}.tool.selected{border-color:#78805c;background:#e2e5d6}.tool.required:not(.selected):after{content:'';position:absolute;width:4px;height:4px;background:#b78a47;border-radius:50%;bottom:3px}.history-tools{display:flex;margin-left:8px;border-left:1px solid var(--line);padding-left:5px}.history-tools button{font-size:24px;width:38px}.history-tools span{display:block;font-size:8px;margin-top:5px}.game-footer{position:absolute;bottom:0;left:0;right:0;padding:19px 30px;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#787761;border-top:1px solid #a6a18a35;background:#f2eadb9c}.game-footer>div{display:flex;gap:21px}.game-footer button{font-size:10px;padding:0}.game-footer kbd{margin-left:5px}.work-action{position:absolute;left:50%;bottom:180px;transform:translateX(-50%);text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}#action-location{font-size:9px;letter-spacing:3px;color:#596044;background:#f2eadbd9;padding:6px 10px}#craft-action{position:relative;min-width:300px;overflow:hidden;font-size:12px;padding:15px 22px;min-height:52px}#action-text{font-size:12px!important;z-index:1;white-space:nowrap}kbd{font-family:inherit;font-size:10px;border:1px solid currentColor;border-radius:2px;padding:1px 4px;font-weight:400}#hold-progress{position:absolute;left:0;top:0;bottom:0;background:#ffffff16;width:0}.action-sub{font-size:9px;color:#6c6f57;background:#f2eadbc4;padding:3px 8px}#crosshair{position:absolute;left:50%;top:50%;width:14px;height:14px;transform:translate(-50%,-50%);opacity:.6;pointer-events:none}#crosshair i{position:absolute;background:#fff9e3;box-shadow:0 0 2px #343d25}#crosshair i:first-child{width:12px;height:1px;top:6px}#crosshair i:last-child{height:12px;width:1px;left:6px}.interact-hint{position:absolute;left:50%;top:56%;transform:translateX(-50%);font-size:11px;background:#333c2dc9;color:#f6efdf;padding:8px 13px;pointer-events:none;white-space:nowrap}.interact-hint:empty{display:none}#toast{position:fixed;left:50%;top:96px;transform:translate(-50%,-12px);padding:12px 20px;background:#34452eea;color:#f8eedc;font-size:12px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:25;max-width:90vw;line-height:1.7}#toast.visible{opacity:1;transform:translate(-50%,0)}dialog{border:1px solid #b8ae94;background:#f3ecdf;color:var(--ink);padding:30px;max-width:min(900px,90vw);max-height:90vh;box-shadow:0 30px 100px #1d251c50}dialog::backdrop{background:#252d2280;backdrop-filter:blur(5px)}.dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:24px}.dialog-heading h2{margin-top:10px}.close-dialog{font-size:30px;line-height:1;padding:7px}.reference-tabs{display:flex;gap:25px;border-bottom:1px solid var(--line);margin-bottom:20px}.reference-tabs button{padding:12px 0}.reference-tabs .active{border-bottom:2px solid var(--green)}.reference-image{max-height:55vh;overflow:auto;text-align:center;background:#e3dfd4}.reference-image img{display:block;width:100%;max-width:760px;height:auto;margin:auto}.reference-note{font-size:10px;color:#787360;margin-bottom:0}#help-dialog{width:640px}dl{display:grid;grid-template-columns:150px 1fr;gap:17px 22px;font-size:12px;line-height:1.9}dt{color:var(--green)}dd{margin:0;color:#787360}#help-dialog>p,#reset-dialog>p{font-size:12px;color:#77735e}#complete-dialog{width:500px;text-align:center;padding:32px}.complete-seal{display:inline-flex;align-items:center;justify-content:center;border:1px solid #9c6555;color:#9c6555;width:56px;height:56px;font-family:var(--serif);font-size:32px;border-radius:50%;margin:30px 0 10px}#complete-dialog h2{font-size:43px}#complete-dialog p{color:#817960}.completion-stats{display:flex;justify-content:space-around;padding:25px 0;margin-bottom:22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.completion-stats b{font-family:Georgia,serif;font-size:29px;font-weight:400;display:block}.completion-stats span{font-size:10px;color:#868169}#complete-dialog .primary{width:100%}.loading{position:fixed;inset:0;background:#f2eadb;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;transition:opacity .5s}.loading p{font-family:var(--serif);font-size:17px;letter-spacing:3px;margin-top:30px}#touch-movement{position:absolute;bottom:170px;left:15px;display:grid;grid-template-columns:repeat(3,36px);gap:5px}#touch-movement button{background:#f2eadbd9;width:36px;height:36px;touch-action:none}#touch-movement button:first-child{grid-column:2}#touch-movement button:nth-child(2){grid-column:1}body.freewalk #crosshair{opacity:1}body.freewalk .work-action{bottom:175px}body.freewalk .task-panel{opacity:.92}
+@media(min-width:1700px){.intro{left:9%;top:23%}.task-panel{left:45px;top:150px}.structure-panel{right:45px}}
+@media(max-width:1050px){.masthead{padding:22px 25px}.intro{left:6%;top:23%}h1{font-size:51px}.intro-description{font-size:12px}.task-panel{left:18px;width:215px;padding:17px}.structure-panel{right:18px;width:136px}.edition{display:none}.tool{width:57px}.game-footer>div{gap:12px}.game-footer{padding:17px 18px}.hero-caption{right:4%;bottom:12%}}
+@media(max-width:700px){.masthead{padding:18px 20px}.brand strong{font-size:18px}.brand div>span{font-size:6px;letter-spacing:1px}.seal{width:28px;height:35px;font-size:15px}.top-actions{gap:13px}.quiet{font-size:10px}#sound-toggle{display:none}.intro{top:20%;left:7%}h1{font-size:44px;margin:20px 0 18px}.intro-description{font-size:11px}.intro-meta{font-size:8px;gap:10px}.intro-meta span+span:before{margin-right:10px}.intro-footnote{margin-top:30px}.hero-caption{display:none}.vignette{background:linear-gradient(90deg,#f2eadbee,#f2eadbb0 48%,#f2eadb1a)}.task-panel{top:88px;left:12px;width:181px;padding:13px}.task-top{font-size:8px;letter-spacing:1px}h2{font-size:23px}#stage-hint{font-size:10px;min-height:0;line-height:1.7}.task-panel h2{margin:10px 0}.task-count{margin-top:12px;font-size:10px}.material-ledger{display:none}.station-button{padding:12px 0;font-size:10px}.structure-panel{right:10px;top:88px;width:102px;padding:12px}.view-buttons button{font-size:9px;padding:8px 0}.panel-kicker{font-size:8px;letter-spacing:1px}.structure-panel details{font-size:9px}.structure-panel #view-mode{display:none}.toolbelt{bottom:60px;padding:5px;width:calc(100% - 20px);justify-content:center}.toolbelt-label{display:none}#tools{gap:0;flex:1;justify-content:space-around}.tool{width:39px;height:58px}.tool b{font-size:20px}.tool span{font-size:8px}.history-tools{margin-left:1px;padding-left:2px}.history-tools button{width:25px;font-size:20px}.game-footer{padding:13px 12px;flex-wrap:wrap;gap:8px}.game-footer #save-status{display:none}.game-footer>div{gap:12px}.game-footer button{font-size:8px}#total-progress{font-size:8px}.work-action{bottom:139px;gap:7px}#craft-action{min-width:220px;padding:12px 15px}#action-text{font-size:10px!important}.action-sub{font-size:8px}#action-location{font-size:8px}.work-action .primary{min-height:44px}.interact-hint{font-size:9px;max-width:80vw;white-space:normal}.task-panel .small{font-size:9px}dialog{padding:19px}dl{grid-template-columns:100px 1fr;gap:13px;font-size:10px}.dialog-heading h2{font-size:22px}#complete-dialog h2{font-size:36px}#toast{top:73px;font-size:10px}.intro-footnote span{max-width:200px;line-height:1.8}.reference-note{font-size:9px}}
+@media(max-height:700px) and (min-width:701px){.intro{top:19%}h1{font-size:47px;margin:18px 0}.intro-description{margin-bottom:20px}.intro-footnote{margin-top:24px}.task-panel{top:100px;padding:17px}.material-ledger{display:none}.structure-panel{top:100px}.work-action{bottom:155px}.toolbelt{bottom:58px}.game-footer{padding:14px 25px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+
+.mobile-hint{display:none}
+@media(max-width:700px){.mobile-hint{display:block;font:inherit;font-size:9px;background:none;border:0;color:inherit;padding:2px 0 5px;cursor:pointer}.task-panel #stage-hint{display:none}.show-stage-hint .task-panel #stage-hint{display:block}.task-panel .task-count{margin-top:8px}.task-panel .station-button{padding:9px 0}.task-panel #help-toggle{font-size:8px}.task-panel h2{font-size:21px}.structure-panel{width:90px;padding:10px}.view-buttons button{padding:6px 0}}
+
+.phase-title{font-size:11px;letter-spacing:1px;color:#546447;margin-top:17px}.phase-track{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:10px}.phase-track span{font-size:8px;line-height:1.7;color:#9a9588;border-top:2px solid #cfc8b8;padding-top:3px;white-space:nowrap}.phase-track .current{color:#7a4a37;border-color:#a76b4b}.phase-track .done{color:#496044;border-color:#718461}@media(max-width:700px){.phase-title{font-size:9px;margin-top:10px}.phase-track{gap:3px;margin-top:7px}.phase-track span{font-size:0;height:4px;padding:0}.show-stage-hint .phase-track{grid-template-columns:repeat(2,1fr)}.show-stage-hint .phase-track span{font-size:8px;height:auto}}
+
+.sound-controls{display:flex;align-items:center;gap:14px;pointer-events:auto}.sound-controls #sound-toggle{display:block;white-space:nowrap}.sound-controls details{position:relative}.sound-controls summary{font-size:11px;cursor:pointer;list-style:none;padding:10px 0;border-bottom:1px solid var(--line)}.sound-controls summary::-webkit-details-marker{display:none}.sound-popover{position:absolute;right:0;top:38px;width:215px;padding:17px;background:#f2eadbf5;border:1px solid var(--line);box-shadow:0 7px 22px #40342120}.sound-popover label{display:flex;justify-content:space-between;font-size:11px}.sound-popover input{display:block;width:100%;margin:16px 0 8px;accent-color:var(--green);cursor:pointer}.sound-popover p{font-size:10px;color:var(--muted);margin:0}.sound-controls summary:focus-visible{outline:2px solid var(--green);outline-offset:4px}@media(max-width:700px){.top-actions{gap:10px}.sound-controls{gap:9px}.sound-controls #sound-toggle,.sound-controls summary{font-size:9px}.top-actions .quiet span{margin-left:4px}.sound-popover{width:192px}.sound-popover input{min-height:28px}}
+
+.masthead:has(#sound-settings[open]){z-index:26}
+
+/* Quiet, full-canvas workbench: materials carry the feedback. */
+body.handworking #game-ui,body.handworking .masthead,body.handworking .vignette,body.handworking #toast{visibility:hidden}
+#handwork{position:fixed;inset:0;z-index:30;pointer-events:none}#handwork-surface{position:absolute;inset:0;pointer-events:auto;touch-action:none;cursor:grab}#handwork-surface:active{cursor:grabbing}.handwork-heading{position:absolute;top:0;left:0;right:0;padding:30px 42px;display:flex;justify-content:space-between;align-items:flex-start;background:linear-gradient(#f2eadbe8,transparent);pointer-events:none}.handwork-heading button{pointer-events:auto}.handwork-heading h2{margin:12px 0 6px;font-size:30px}.handwork-heading p{font-size:11px;margin:0;color:#625d49}.handwork-bottom{position:absolute;bottom:0;left:0;right:0;padding:22px 42px 26px;background:linear-gradient(transparent,#f2eadbf2 30%);text-align:center;pointer-events:none}#handwork-tool{font-size:10px;letter-spacing:2px;color:#67694e}#handwork-status{min-height:24px;margin:8px auto 12px;font-size:13px;max-width:700px}#handwork-status[data-ready=true]{color:#3b633c}.handwork-buttons{display:flex;align-items:center;justify-content:center;gap:24px;pointer-events:auto;width:fit-content;margin:0 auto}.handwork-buttons .primary{min-width:205px;padding:13px 22px}.handwork-bottom small{display:block;margin-top:12px;font-size:10px;color:#76705c}.handwork-buttons button[hidden]{display:none}
+@media(max-width:700px){.handwork-heading{padding:24px 18px}.handwork-heading h2{font-size:25px}.handwork-heading p{max-width:235px;font-size:10px}.handwork-heading .eyebrow{font-size:8px}.handwork-heading>button{font-size:10px;white-space:nowrap}.handwork-heading kbd{display:none}.handwork-bottom{padding:15px 14px 22px}#handwork-status{font-size:12px;line-height:1.8;min-height:44px;max-width:360px}.handwork-buttons{gap:14px;flex-wrap:wrap;max-width:360px}.handwork-buttons .primary{min-width:165px;padding:12px 14px;font-size:12px}.handwork-buttons .quiet{font-size:11px}.handwork-bottom small{font-size:9px;line-height:1.7}}
+
+button,summary{touch-action:manipulation}@media(max-width:700px){.game-footer button{min-height:32px;padding:4px 6px}.game-footer>div{gap:6px}}
+
+/* One continuous workshop: a quiet paper ledger, never an opaque editor. */
+#craft-inventory{display:none;position:fixed;z-index:35;top:90px;left:50%;transform:translateX(-50%);width:430px;background:#eee6d6ed;border:1px solid #fff8e5aa;box-shadow:0 4px 22px #332f201c;padding:8px 12px 10px;user-select:none;touch-action:none}
+body.playing #craft-inventory{display:block}.inventory-caption{display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#76725c;margin-bottom:7px}.inventory-caption b{font-weight:500;letter-spacing:3px}.inventory-caption span{font-size:8px}.inventory-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.inventory-item{position:relative;height:58px;border:1px solid #82765b45;background:#d7ccb522;display:flex;align-items:center;flex-direction:column;justify-content:flex-end;gap:4px;padding:4px;cursor:grab;color:#484d39!important;font-size:10px;touch-action:none}.inventory-item:active{cursor:grabbing}.inventory-item.selected{border-color:#4e6343;background:#83966b21;box-shadow:inset 0 -2px #61774b}.inventory-item.empty{opacity:.48}.inventory-item kbd{position:absolute;top:5px;left:6px;font-size:9px}.item-count{position:absolute;right:6px;top:4px;font:11px Georgia,serif}.item-drawing.ring{height:24px;width:32px;border:2px solid #a48d55;border-radius:50%;transform:rotate(-17deg);position:relative}.item-drawing.ring:after{content:'';position:absolute;background:#faf4e5;bottom:-2px;left:6px;width:7px;height:4px}.item-drawing.ring-1{width:28px;height:21px}.item-drawing.ring-2{width:24px;height:18px;margin-bottom:3px}.item-drawing.strut{width:32px;height:21px;border-top:3px solid #a48d55;border-radius:50%;transform:rotate(-35deg);margin-bottom:3px}.item-drawing.short-strip{width:32px;height:21px;border-top:3px solid #a48d55;border-bottom:2px solid #c4ad6f;border-radius:50%;transform:rotate(-18deg);margin-bottom:3px;}
+body.handworking #craft-inventory{top:auto;bottom:10px}body.handworking .handwork-bottom{bottom:101px;padding:16px 28px 10px;background:linear-gradient(transparent,#f2eadbe8 35%)}body.handworking .handwork-bottom small{margin-top:8px}body.handworking #handwork-status{margin:6px auto 10px;min-height:20px;font-size:12px}body.handworking .handwork-heading{padding:22px 32px}.handwork-heading h2{font-size:27px}.handwork-buttons{gap:18px}.handwork-buttons .primary{min-width:190px;font-size:12px}.handwork-buttons .quiet{font-size:11px}.workbench-moving #handwork-surface{pointer-events:none}.workbench-moving #handwork-tool:after{content:' · 镜头缓慢就位中…'}
+#bend-controls{display:flex;gap:14px}#bend-controls button{touch-action:none}#bend-controls button:active{color:#698143;background:#73805c22}#bend-gauge{width:260px;margin:0 auto 9px}#bend-gauge label{display:flex;gap:9px;font-size:9px;color:#71684f}#bend-gauge label span{margin-left:auto}.bend-track{position:relative;margin-top:5px;height:5px;background:#9b8a6525}.bend-track progress{display:block;width:100%;height:5px;border:0;background:transparent;appearance:none}.bend-track progress::-webkit-progress-bar{background:transparent}.bend-track progress::-webkit-progress-value{background:#a78a59}.bend-track progress::-moz-progress-bar{background:#a78a59}.bend-track i{position:absolute;left:80.4167%;width:5%;top:-2px;bottom:-2px;border:1px solid #4b704d;background:#77a67666;pointer-events:none}#bend-gauge[data-state=over] output{color:#a04e3c}#bend-gauge[data-state=ready] output{color:#3e7046}
+@media(max-width:700px){#craft-inventory{width:min(350px,calc(100vw - 24px));top:auto;bottom:238px;padding:6px 9px}.inventory-item{height:52px;font-size:9px}.inventory-caption{margin-bottom:5px}body.handworking #craft-inventory{bottom:8px}body.handworking .handwork-bottom{bottom:92px;padding:12px 10px 6px}body.handworking .handwork-heading{padding:18px}.handwork-heading h2{font-size:22px;margin-top:8px}.handwork-buttons{gap:9px;max-width:100%}.handwork-buttons .primary{min-width:142px;padding:10px 12px;font-size:11px}#bend-controls{gap:10px}.handwork-buttons .quiet{font-size:10px;padding:8px 0}#bend-controls kbd{display:none}#handwork-tool{font-size:9px;letter-spacing:1px}body.handworking #handwork-status{font-size:11px;min-height:20px;line-height:1.6;max-width:330px}#bend-gauge{width:210px;margin-bottom:5px}.handwork-bottom small{font-size:8px}body.handworking .handwork-bottom small{display:none}}
+@media(max-height:600px) and (min-width:701px){body.handworking .handwork-heading{padding:12px 24px}.handwork-heading h2{font-size:20px;margin:5px 0}.handwork-heading .eyebrow{display:none}body.handworking .handwork-bottom{bottom:80px;padding:8px 16px 4px}.handwork-bottom small{display:none}.inventory-item{height:42px}.item-drawing.ring{height:18px;width:26px}#craft-inventory{padding:5px 10px}.inventory-caption{margin-bottom:3px}#bend-gauge{margin-bottom:4px}body.handworking #handwork-status{margin:3px auto}.handwork-buttons .primary{padding:8px 14px}}
+
+.handwork-actions{display:flex;align-items:center;gap:22px;flex-shrink:0}
+.test-skip{color:#75572c}
+.test-skip:disabled{opacity:.4;cursor:default}
+.handwork-actions button{white-space:nowrap}
+.game-footer>div{flex-wrap:wrap;justify-content:center}
+@media(max-width:700px){.handwork-heading>div:first-child{min-width:0;flex:1}.handwork-actions{flex-direction:column;align-items:flex-end;gap:6px;margin-left:12px;max-width:132px}.handwork-actions button{font-size:10px;min-height:32px;padding:5px 0}.game-footer>div{row-gap:0}.game-footer #skip-stage{font-size:9px}}
+/* Paper processing keeps tools out of the work surface. */
+body.paper-work #craft-inventory{display:none}
+body.paper-work .handwork-bottom{bottom:10px}
+#paper-supplies{position:absolute;top:134px;left:30px;width:185px;padding:14px;background:#eee6d6ec;border:1px solid #fff8e5aa;pointer-events:auto;color:#4d513c}
+#paper-supplies[hidden]{display:none}
+#paper-supplies .eyebrow{font-size:10px}
+#paper-supplies>small{display:block;font-size:10px;margin-top:7px}
+#paper-stock{display:flex;gap:12px;align-items:center;width:100%;margin-top:10px;padding:9px;background:#fff8e655;border:1px solid #82765b55;cursor:grab;touch-action:none;text-align:left;color:inherit}
+#paper-stock i{font-size:36px;font-style:normal;color:#a39b80}#paper-stock span{font-size:12px}#paper-stock small{font-size:9px}#paper-stock:disabled{opacity:.45}
+@media(max-width:700px){#paper-supplies{left:12px;top:122px;width:145px;padding:9px}body.paper-work .handwork-heading h2{font-size:19px}body.paper-work .handwork-heading p{font-size:9px;max-width:210px}body.paper-work .handwork-bottom{bottom:8px}}
+/* Lining tools reuse the always-visible inventory, with no separate editor. */
+.lining-item,.lining-inventory-caption{display:none}.lining-work .inventory-item:not(.lining-item),.lining-work .frame-inventory-caption{display:none}.lining-work .lining-item{display:flex}.lining-work .lining-inventory-caption{display:inline}.lining-work .inventory-slots{grid-template-columns:1fr 1fr}
+.item-drawing.brush{width:7px;height:26px;background:#a28b57;transform:rotate(28deg);position:relative;margin-bottom:2px}.item-drawing.brush:after{content:'';position:absolute;top:-4px;left:-5px;width:17px;height:11px;background:#d7ccab;border-bottom:3px solid #939081}.item-drawing.paper{width:29px;height:25px;background:#a1374e;border:1px solid #6f2236;transform:rotate(-8deg);box-shadow:2px 2px #86263e33}.white-paper .item-drawing.paper{background:#f4ecd9;border-color:#c4b897}
+#lining-panels{display:flex;gap:6px;justify-content:center;pointer-events:auto;margin:0 auto 10px;width:fit-content}#lining-panels[hidden]{display:none}#lining-panels button{font-size:10px;padding:6px 11px;color:#6d6852;background:#e8dfcc;border:1px solid #ada1846b}#lining-panels button.current{border-color:#536946;box-shadow:inset 0 -2px #536946}#lining-panels button.glued{background:#d6ddbc;color:#425535}#lining-panels button:disabled{opacity:.5}
+@media(max-width:700px){#lining-panels{gap:4px;margin-bottom:8px}#lining-panels button{font-size:9px;padding:5px 7px}.lining-work .handwork-heading p{max-width:220px}}
+/* A thread-bound handbook: indigo cloth, warm paper, ink and vermilion. */
+#craft-book-open{position:fixed;right:30px;top:100px;z-index:45;display:flex;align-items:center;gap:9px;background:#eee6d9ed;padding:8px 12px;border:1px solid #8e78504a;box-shadow:0 3px 12px #352c1917;font-family:var(--serif);font-size:17px}
+#craft-book-open small{display:block;font-family:var(--sans);font-size:9px;letter-spacing:1px;margin-top:3px;color:#776c58}.book-mini{display:grid;place-items:center;width:30px;height:39px;background:#344b4b;color:#f2e5c9;border-left:4px double #d5c7a0;font-size:19px}
+#craft-book{width:min(1020px,94vw);max-width:1020px;height:min(760px,92dvh);max-height:92dvh;padding:0 0 0 22px;border:6px solid #344b4b;border-left-width:9px;border-radius:2px;background:#ede1c9;color:#443c2f;box-shadow:0 25px 100px #181a1470;overflow:hidden}
+#craft-book[open]{display:flex;flex-direction:column}#craft-book::backdrop{background:#202721a8;backdrop-filter:blur(5px)}
+.book-binding{position:absolute;left:3px;top:0;bottom:0;width:13px;background:repeating-linear-gradient(0deg,transparent 0 57px,#b8ac8d 58px 60px,transparent 61px 100px);border-right:1px solid #b19c73}
+.book-head{display:flex;justify-content:space-between;align-items:center;padding:22px 30px 16px;border-bottom:1px solid #7c694747;flex-shrink:0}.book-imprint{font-size:10px;letter-spacing:4px;color:#856b49}#craft-book-title{font:400 31px var(--serif);letter-spacing:7px;margin:9px 0 0}#book-close{border:1px solid #88775868;padding:9px 13px;font-family:var(--serif)}
+.book-spread{display:grid;grid-template-columns:32% 68%;min-height:0;flex:1;background:linear-gradient(90deg,#eee2cb 30%,#d1bfa0 32%,#f6ecd8 34%,#f6ecd8 96%,#e5d5b9)}
+.book-index{padding:22px 20px;overflow:auto;border-right:1px solid #aa916549}.book-index-head{display:flex;justify-content:space-between;align-items:center;font-family:var(--serif);font-size:20px}.book-index-head button{font-size:11px;color:#964a3c;padding:5px}.book-index>p{font-size:10px;color:#8b795e;margin:12px 0 20px}.book-index nav h3{font:400 12px var(--serif);letter-spacing:2px;color:#987853;margin:18px 0 6px}.book-index nav button{display:flex;align-items:baseline;gap:9px;width:100%;text-align:left;padding:8px 5px;border-bottom:1px dotted #94774d38;font:13px var(--serif)}.book-index nav button span{font:10px Georgia;color:#9d8060}.book-index nav button i{font:9px var(--sans);color:#9b493a;margin-left:auto;white-space:nowrap}.book-index nav button[aria-current=true]{background:#8f483c14;color:#913e30;border-left:2px solid #913e30}
+.book-leaf{padding:30px 38px;overflow:auto;transform-origin:left center}#book-chapter-kicker{font-size:10px;letter-spacing:2px;color:#926d48}#book-chapter-title{font:400 29px/1.4 var(--serif);letter-spacing:2px;margin:16px 0 24px}.book-material{border-block:1px solid #a78b593f;padding:13px 0}.book-material b,.book-margin-note b{font:15px var(--serif);color:#904b3b}.book-material p{font-size:12px;line-height:1.8;margin:7px 0 0}#book-steps{padding-left:25px;margin:22px 0}#book-steps li{font:15px/1.9 var(--serif);padding-left:8px;margin-bottom:12px}#book-steps li::marker{color:#964b3a;font-family:Georgia}.book-margin-note{background:#c9b27a19;border-left:2px solid #a78556;padding:12px 16px}.book-margin-note p{font:12px/1.9 var(--sans);margin:8px 0 0}.book-order{font-size:10px;line-height:1.8;color:#897350;margin:20px 0 0}.book-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 26px;border-top:1px solid #9c825743;flex-shrink:0}.book-foot button{font:14px var(--serif);padding:8px}.book-foot small{width:100%;text-align:center;font-size:9px;color:#8a785e}#book-page{font:14px Georgia;color:#8a6945}#book-toc-toggle{display:none}
+#dye-context{position:fixed;inset:0;z-index:34;pointer-events:none}#dye-clock{position:absolute;right:30px;top:185px;width:187px;padding:15px 17px;background:#efe6d6ee;border-left:3px solid #8a7654;color:#544d3b}#dye-clock>span{font-size:10px;letter-spacing:1px}#dye-time{display:block;font:36px/1.4 Georgia;font-variant-numeric:tabular-nums}#dye-clock small{display:block;font-size:10px;line-height:1.8}#dye-clock[data-state=ready]{border-color:#536c49}#dye-clock[data-state=over]{border-color:#a04434;color:#a04434}.dye-target{position:absolute;transform:translate(-50%,18px);font-size:10px;padding:5px 8px;white-space:nowrap;background:#e8dfcbdb;border:1px solid #907d5c45;border-radius:2px;color:#62533e}.dye-target.near{background:#465940;color:#fff4dc;border-color:#465940}body.paper-work #paper-supplies{width:165px;top:180px;left:20px;background:#eee6d6c9}
+@media(max-width:700px){#craft-book-open{top:76px;right:12px;padding:5px 8px;font-size:13px}.book-mini{width:23px;height:30px;font-size:15px}#craft-book-open small{font-size:8px}#craft-book{width:96vw;height:94dvh;max-height:94dvh;padding-left:12px;border-width:4px}.book-binding{width:6px;left:2px}.book-head{padding:16px}#craft-book-title{font-size:24px}.book-imprint{font-size:9px;letter-spacing:2px}.book-spread{display:block;background:#f4ead6}.book-index{display:none;height:100%;padding:15px}.book-leaf{height:100%;padding:20px}#book-chapter-title{font-size:25px;margin:12px 0 18px}#book-steps li{font-size:14px}.book-foot{padding:8px 10px;gap:5px}.book-foot button{font-size:12px}.book-foot small{font-size:8px}#book-toc-toggle{display:block}#craft-book.show-index .book-index{display:block}#craft-book.show-index .book-leaf{display:none}#dye-clock{right:10px;top:127px;width:143px;padding:8px 10px}#dye-time{font-size:27px}#dye-clock small{font-size:9px}body.paper-work #paper-supplies{top:127px;left:10px;width:135px;padding:8px}.dye-target{font-size:9px;padding:4px 5px}}
+@media(max-width:700px){#craft-book-open{top:100px}#dye-clock{top:156px}}
+@media(max-width:700px){body.handworking #craft-book-open{top:140px}body.handworking #dye-clock{top:196px}}
+
+/* Finished stock ledger: parchment dividers, bamboo rings and dyed paper. */
+.backpack{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);display:flex;align-items:center;padding:9px;background:#f6efdfed;border:1px solid #fff9;box-shadow:0 10px 30px #3a2c2410;pointer-events:auto}
+.backpack-label{padding:0 13px;font:12px/1.8 var(--serif);color:#796c51;border-right:1px solid var(--line);margin-right:8px}
+#backpack-items{display:flex;gap:5px}
+.backpack-slot{position:relative;width:72px;height:67px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:9px;padding:8px 4px 4px;border:1px solid #82765b35;background:#d7ccb51a;font:12px var(--serif)}
+.backpack-slot.empty{color:#847d6b}.backpack-slot.empty .item-drawing{opacity:.4}
+.backpack-count{position:absolute;right:4px;top:3px;min-width:19px;text-align:center;padding:1px 3px;background:#e6dec9;color:#485840;font:600 11px var(--sans);border-radius:2px;font-variant-numeric:tabular-nums}
+.backpack-slot .cut-paper,.backpack-slot .dyed-paper{width:25px;height:25px;border:1px solid #beac89;background:#fff7e5;transform:rotate(-10deg);box-shadow:3px 2px #d4c5a4,5px 4px #b7a58555}
+.backpack-slot .dyed-paper{border-color:#b98e9c;background:linear-gradient(#fff6e9 8%,#e9b6cd 48%,#ad4a81 100%)}
+body.playing:not(.handworking) #craft-inventory{display:none}
+body.handworking .backpack{visibility:visible;position:fixed;top:87px;bottom:auto;z-index:34;padding:5px}
+body.handworking .backpack-slot{height:56px;width:58px;gap:5px;font-size:11px}
+body.handworking .backpack .history-tools{display:none}
+@media(max-width:700px){.backpack{bottom:60px;padding:5px;width:calc(100% - 20px)}.backpack-label{display:none}#backpack-items{flex:1;justify-content:space-around;gap:3px}.backpack-slot{width:calc((100vw - 95px)/5);height:58px;font-size:11px}.backpack .history-tools button{width:25px}body.handworking .backpack{top:79px;width:285px}body.handworking .backpack-slot{width:50px;height:48px;gap:3px;font-size:10px}body.handworking .backpack .item-drawing{height:19px;width:23px}}
+
+/* Leave the mobile chapter heading and book tab unobstructed. */
+@media(max-width:700px){body.handworking .backpack{top:150px}body.paper-work .backpack{top:auto;bottom:108px}}
+
+.sound-controls [data-music-toggle]{display:block;white-space:nowrap}.sound-popover .music-volume-label{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+@media(max-width:700px){.sound-controls [data-music-toggle]{font-size:9px}.top-actions{gap:6px}.sound-controls{gap:7px}.handwork-actions{flex-wrap:wrap;justify-content:flex-end}#handwork-music-toggle{font-size:10px}}
+
+@media(max-width:700px){.handwork-actions{gap:2px}.handwork-actions button{min-height:23px;padding:2px 0}}
+
+/* Pressing modes: parchment field guide, confined to the existing operation panel. */
+#press-mode-panel {width:100%;flex-basis:100%;border-bottom:1px solid #b6a383;padding:0 0 10px;margin-bottom:5px;color:#594b37;}
+.press-mode-row {display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px;}
+.press-mode-row label {font-weight:700;letter-spacing:2px;}
+#press-mode {font:inherit;color:#453e2d;background:#f4ecdc;border:1px solid #aa9471;border-radius:3px;padding:7px 28px 7px 10px;cursor:pointer;}
+.press-mode-row span {font-size:11px;color:#7a6b54;}
+#manual-press-guide ol {display:flex;list-style:none;padding:0;margin:10px 0 7px;gap:6px;counter-reset:press-step;}
+#manual-press-guide li {counter-increment:press-step;flex:1;border-top:2px solid #cbbda3;padding-top:5px;font-size:12px;color:#8b7c65;}
+#manual-press-guide li::before {content:counter(press-step,decimal-leading-zero) ' ';font-size:10px;}
+#manual-press-guide li.current {color:#9c3e2e;border-color:#9c3e2e;font-weight:700;}
+#manual-press-guide li.complete {color:#4d6549;border-color:#738267;}
+#manual-press-progress {display:block;width:100%;height:4px;accent-color:#866443;border:0;}
+#manual-press-progress::-webkit-progress-bar {background:#dbceb6;}
+#manual-press-progress::-webkit-progress-value {background:#866443;}
+#handwork-confirm {touch-action:none;user-select:none;}
+@media(max-width:700px){.press-mode-row{gap:6px}.press-mode-row span{font-size:10px}#press-mode-panel{padding-bottom:6px}#manual-press-guide li{font-size:11px}#manual-press-guide li::before{display:none}#manual-press-guide ol{margin:6px 0}#press-mode{padding:5px;font-size:12px}}
+
+#press-mode-panel{pointer-events:auto;max-width:640px;margin:0 auto 8px;text-align:left;}
+
+@media(max-width:700px){body.paper-work.press-work .backpack{top:166px;bottom:auto;}}
+
+#lining-facing {margin:0 auto 8px;font-size:12px;color:#974f32;letter-spacing:.5px;}
+#lining-facing[data-aligned="true"]{color:#435f37;}
+body.lining-work #handwork-surface{cursor:grab;touch-action:none;}
+body.lining-work #handwork-surface:active{cursor:grabbing;}
+body.lining-work.workbench-moving #handwork-tool:after{content:' · 正在屈膝入座，请稍候…';}
+@media(max-width:700px){#lining-facing{font-size:11px;margin-bottom:5px}}
+
+/* One shared inventory tray: crafted stock and workstation tools never split. */
+:root{--inventory-height:102px}
+body.playing #craft-inventory,body.playing:not(.handworking) #craft-inventory,body.paper-work #craft-inventory{display:block;top:auto;bottom:58px;width:min(740px,calc(100vw - 28px));padding:8px 12px;box-sizing:border-box;}
+body.playing.handworking #craft-inventory{top:auto;bottom:10px;}
+#craft-inventory .inventory-caption{display:flex;align-items:center;gap:12px;min-height:18px;}
+#craft-inventory .history-tools{margin-left:auto;border:0;gap:8px;}
+#craft-inventory .history-tools button{width:auto;font-size:18px;}
+#craft-inventory .history-tools span{display:inline;font-size:10px;margin-left:3px;}
+body.handworking #craft-inventory .history-tools{display:none;}
+#craft-inventory .inventory-slots{grid-template-columns:repeat(6,minmax(0,1fr));}
+body.lining-work #craft-inventory .inventory-slots{grid-template-columns:repeat(8,minmax(0,1fr));}
+body.lining-work #craft-inventory .inventory-item:not(.lining-item){display:flex;}
+#craft-inventory .stock-item{display:flex;cursor:help;}
+#craft-inventory .cut-paper,#craft-inventory .dyed-paper{width:25px;height:25px;border:1px solid #beac89;background:#fff7e5;transform:rotate(-10deg);box-shadow:3px 2px #d4c5a4,5px 4px #b7a58555;}
+#craft-inventory .dyed-paper{border-color:#b98e9c;background:linear-gradient(#fff6e9 8%,#e9b6cd 48%,#ad4a81 100%);}
+body.paper-work #craft-inventory .frame-inventory-caption{font-size:0;}
+body.paper-work #craft-inventory .frame-inventory-caption:after{content:'成品、材料 · 数量随制作更新';font-size:10px;}
+#craft-inventory #paper-supplies{position:static;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;width:auto;padding:7px 0 0;margin-top:6px;border:0;border-top:1px solid var(--line);background:none;}
+#craft-inventory #paper-supplies[hidden]{display:none;}
+#craft-inventory #paper-supplies .eyebrow{display:none;}
+#craft-inventory #paper-stock{width:auto;flex:0 0 auto;margin:0;padding:3px 6px;}
+#craft-inventory #paper-stock i{font-size:24px;}
+#craft-inventory #paper-stock br{display:none;}
+#craft-inventory #paper-stock span{font-size:11px;}
+#craft-inventory #paper-stock small{display:none;}
+#craft-inventory #paper-supplies>small{margin:0;font-size:10px;}
+body.playing.handworking .handwork-bottom{bottom:calc(var(--inventory-height) + 18px);}
+/* The handcraft notebook stays available during every workstation interaction. */
+body.playing .task-panel,body.playing.handworking .task-panel{visibility:visible;position:fixed;z-index:36;left:24px;top:135px;width:234px;padding:15px;background:#f2eadbf2;pointer-events:auto;box-sizing:border-box;}
+.task-panel .task-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+#hint-toggle{display:block;margin-left:auto;padding:4px 0;border:0;background:none;color:#4b5940;font-size:10px;white-space:nowrap;cursor:pointer;}
+#guide-content{max-height:calc(100dvh - var(--inventory-height) - 220px);overflow:auto;scrollbar-width:thin;}
+#guide-content[hidden]{display:none;}
+body.playing .task-panel #stage-hint{display:block;min-height:0;}
+body.playing.guide-minimized .task-panel{width:212px;padding:10px 12px;}
+body.handworking .task-panel #go-station{display:none;}
+body.handworking .task-panel .material-ledger{display:none;}
+body.handworking .task-panel h2{font-size:23px;margin:12px 0;}
+@media(max-width:700px){
+ body.playing #craft-inventory,body.playing:not(.handworking) #craft-inventory,body.paper-work #craft-inventory{width:calc(100vw - 16px);padding:6px 8px;bottom:53px;}
+ body.playing.handworking #craft-inventory{bottom:8px;}
+ #craft-inventory .inventory-caption{gap:6px;font-size:9px;margin-bottom:5px;}
+ #craft-inventory .inventory-caption>span{font-size:8px;letter-spacing:0;}
+ #craft-inventory .inventory-slots{gap:4px;}
+ body.lining-work #craft-inventory .inventory-slots{grid-template-columns:repeat(4,minmax(0,1fr));}
+ #craft-inventory .inventory-item{height:53px;min-width:0;padding:4px 1px;font-size:9px;}
+ #craft-inventory .item-drawing.ring{width:24px;height:18px;}
+ #craft-inventory .item-drawing.strut{height:25px;}
+ #craft-inventory .item-count{font-size:10px;right:1px;top:1px;}
+ #craft-inventory kbd{left:2px;top:2px;font-size:8px;}
+ #craft-inventory .cut-paper,#craft-inventory .dyed-paper{width:20px;height:20px;}
+ #craft-inventory #paper-supplies{gap:4px 8px;}
+ body.playing .task-panel,body.playing.handworking .task-panel{left:12px;top:140px;width:175px;padding:9px;}
+ .task-panel .task-top{gap:4px;font-size:8px;}
+ #hint-toggle{font-size:9px;}
+ #guide-content{max-height:145px;}
+ body.playing.guide-minimized .task-panel{width:175px;padding:9px;}
+ body.playing .task-panel h2{font-size:18px;margin:8px 0;}
+ body.playing .task-panel .phase-track{display:none;}
+ body.playing.handworking .handwork-bottom{bottom:calc(var(--inventory-height) + 14px);}
+}
+@media(max-height:600px) and (min-width:701px){body.playing .task-panel,body.playing.handworking .task-panel{top:94px;width:190px;}#guide-content{max-height:155px;}}
+
+/* Ring order is chosen before picking material, not inferred from batch count. */
+#ring-choice{pointer-events:auto;width:fit-content;display:flex;align-items:center;justify-content:center;gap:8px;margin:8px auto;color:#66543b;font-size:12px}
+#ring-choice[hidden]{display:none}#ring-choice button{padding:7px 14px;border:1px solid #b9a582;background:#ede1c9;color:#58452e;border-radius:3px;font:inherit;cursor:pointer}
+#ring-choice button[aria-pressed="true"]{background:#755239;color:#fff5df;border-color:#755239}#ring-choice button:disabled{opacity:.55;cursor:default}
+@media(max-width:600px){#ring-choice{gap:5px}#ring-choice button{padding:6px 8px}}
+
+/* Same single backpack, shaped material icons for seated decoration. */
+#lining-paper.decoration-paper .item-drawing.paper{border-radius:80% 0 75% 15%;background:#b56584;transform:rotate(-35deg);}
+#lining-paper.leaf-paper .item-drawing.paper{background:#68854c;border-radius:65% 20% 65% 20%;}
+
+/* Drop feedback stays beside the actual attachment point and never intercepts input. */
+#decoration-drop-prompt{position:fixed;z-index:35;transform:translateX(-50%);pointer-events:none;max-width:210px;padding:7px 12px;border:1px solid #ab9670;border-radius:3px;background:#f2e8d5ed;color:#665039;font-size:12px;text-align:center;box-shadow:0 3px 12px #30211218}
+#decoration-drop-prompt[data-ready="true"]{background:#e4edce;border-color:#6a8452;color:#375331}
+
+/* Keep workstation guidance off the central crafting surface. */
+body.playing.handworking .handwork-bottom{
+ left:auto;right:24px;bottom:calc(var(--inventory-height) + 24px);width:312px;max-width:calc(100vw - 32px);
+ max-height:calc(100dvh - var(--inventory-height) - 160px);box-sizing:border-box;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;
+ padding:17px 18px 14px;text-align:left;pointer-events:auto;background:#f2eadbf5;border:1px solid #b5a17a;border-top:3px solid #8d4938;
+ box-shadow:0 7px 24px #39291c20,inset 0 0 0 3px #fff8e34d;
+}
+.operation-panel-heading{display:flex;align-items:center;gap:9px;margin-bottom:13px;padding-bottom:11px;border-bottom:1px solid #ad997a55;}
+.operation-seal{display:grid;place-items:center;width:25px;height:27px;background:#8d4938;color:#fff0d5;font-size:16px;}
+.operation-panel-heading h3{margin:0;font-size:17px;font-weight:500;letter-spacing:2px;color:#514331;}
+.operation-panel-heading>span:last-child{margin-left:auto;font-size:10px;color:#88785f;letter-spacing:1px;}
+body.handworking .handwork-bottom #handwork-tool{display:block;letter-spacing:.6px;line-height:1.8;}
+body.handworking .handwork-bottom #handwork-status{margin:8px 0 12px;min-height:0;max-width:none;font-size:12px;line-height:1.85;overflow-wrap:anywhere;}
+.handwork-bottom .handwork-buttons{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;width:100%;max-width:none;margin:12px 0 0;gap:8px 14px;}
+.handwork-bottom .handwork-buttons .primary{flex:1 1 100%;min-width:0;width:100%;padding:11px 12px;font-size:12px;}
+.handwork-bottom .handwork-buttons .quiet{padding:7px 0;font-size:11px;}
+body.handworking .handwork-bottom>small{margin-top:12px;padding-top:10px;border-top:1px solid #ad997a44;font-size:10px;line-height:1.7;}
+.handwork-bottom #lining-facing{line-height:1.7;margin:0 0 10px;}
+.handwork-bottom #lining-panels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:5px;}
+.handwork-bottom #lining-panels[hidden]{display:none;}
+.handwork-bottom #ring-choice{width:100%;flex-wrap:wrap;justify-content:flex-start;gap:6px;font-size:11px;}
+.handwork-bottom #ring-choice>span{flex-basis:100%;}
+.handwork-bottom #ring-choice button{padding:6px 10px;}
+.handwork-bottom #bend-gauge{width:100%;margin-top:12px;}
+.handwork-bottom #bend-controls{flex-basis:100%;flex-wrap:wrap;gap:10px;}
+.handwork-bottom .press-mode-row{gap:8px;font-size:12px;}
+.handwork-bottom .press-mode-row>span{flex-basis:100%;font-size:10px;}
+.handwork-bottom #manual-press-guide ol{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px 6px;}
+@media(max-width:700px){
+ body.playing.handworking .handwork-bottom{right:12px;bottom:calc(var(--inventory-height) + 20px);width:280px;max-width:calc(100vw - 24px);max-height:min(22dvh,calc(100dvh - var(--inventory-height) - 155px));padding:12px 14px;}
+ .operation-panel-heading{margin-bottom:9px;padding-bottom:8px;}.operation-panel-heading h3{font-size:15px;}
+ body.handworking .handwork-bottom #handwork-status{font-size:11px;line-height:1.7;}
+}
+
+/* Finished flower heads share the existing backpack. */
+#craft-inventory .inventory-slots{grid-template-columns:repeat(8,minmax(0,1fr));}
+body.lining-work #craft-inventory .inventory-slots{grid-template-columns:repeat(9,minmax(0,1fr));}
+#inventory-flower .item-drawing.flower{font:32px/28px Georgia,serif;color:#ae6d8e;height:28px;}
+#inventory-flower:disabled{cursor:default;}
+#inventory-flower:not(:disabled){border-color:#9b6d80;background:#b56c8b16;}
+body.flower-placement .frame-inventory-caption{font-size:0;}
+body.flower-placement .frame-inventory-caption:after{content:'拖出花头 · 对准高亮处松手';font-size:10px;}
+@media(max-width:700px){#craft-inventory .inventory-slots,body.lining-work #craft-inventory .inventory-slots{grid-template-columns:repeat(4,minmax(0,1fr));}}
+
+/* Keep walking-mode entry controls clear of the backpack on narrow screens. */
+@media(max-width:700px){body.playing:not(.handworking) #craft-inventory .inventory-slots{grid-template-columns:repeat(8,minmax(0,1fr));}}

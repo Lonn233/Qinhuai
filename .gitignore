@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Local personal data and runtime storage
+.local-data/
+*.tmp
+*.bak
+
+# Iteration snapshots, audits and throwaway artifacts
+work/
+
+# Generated offline builds (the main app build is tracked through Git LFS)
+outputs/qinhuai-dual-era/audit-baseline.html
+outputs/qinhuai-dual-era/pilot-LOD*.html
+
+# Source assets not required by the playable builds or the offline app
+outputs/qinhuai-dual-era/assets/
+*.blend
+*.blend1

@@ -1,0 +1,28 @@
+{
+  "status": "blocked_by_saved_browser_permission",
+  "origin": "http://127.0.0.1:4173",
+  "baseline": null,
+  "optimized": null,
+  "reason": "Browser-use origin approval denied. No alternate browser, raw CDP, or indirect automated collection attempted. Requires user-authorized browser access or user-run benchmark reports.",
+  "requiredViews": [
+    "overview",
+    "dense_buildings",
+    "river_reflections",
+    "pavilion_close",
+    "era_switch"
+  ],
+  "metrics": [
+    "fps_mean",
+    "fps_1pct_low",
+    "fps_min",
+    "cpu_frame_ms",
+    "gpu_frame_ms",
+    "draw_calls",
+    "triangles",
+    "geometries",
+    "textures",
+    "first_frame_ms",
+    "assets_ready_ms",
+    "memory"
+  ]
+}

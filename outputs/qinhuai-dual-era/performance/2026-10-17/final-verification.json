@@ -1,0 +1,50 @@
+{
+  "verificationDate": "2026-10-17",
+  "javascriptSyntaxFiles": 13,
+  "pythonSyntaxFiles": 6,
+  "frozenFilesHashVerified": 11,
+  "defaultAsset": "original",
+  "allCandidatesUnapproved": true,
+  "validatedGlbsAndHashes": 9,
+  "glbValidationErrors": 0,
+  "tests": [
+    {
+      "file": "tests.log",
+      "tests": 21,
+      "pass": 21,
+      "fail": 0
+    },
+    {
+      "file": "test-frozen-baseline.log",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    {
+      "file": "test-audit-baseline.html.log",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    {
+      "file": "test-pilot-LOD0.html.log",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    {
+      "file": "test-pilot-LOD1.html.log",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    {
+      "file": "test-pilot-LOD2.html.log",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    }
+  ],
+  "browserRuntimeVerified": false,
+  "performanceAcceptance": "pending_browser_measurements_and_visual_signoff"
+}

@@ -1,0 +1,57 @@
+{
+  "result": {
+    "assets": {
+      "loaded": 5,
+      "errors": []
+    },
+    "base": {
+      "ok": true,
+      "failures": []
+    },
+    "phase": "ready",
+    "stats": {
+      "era": "modern",
+      "buildings": 158,
+      "trees": 35,
+      "boats": 12,
+      "instances": 33030,
+      "meshes": 247,
+      "drawCalls": 415,
+      "triangles": 3673355,
+      "bounds": [
+        150.90999694168568,
+        16.343599082902074,
+        132.07499998807907
+      ]
+    },
+    "lanterns": [
+      {
+        "id": "mountain",
+        "loaded": true
+      },
+      {
+        "id": "lion",
+        "loaded": true
+      },
+      {
+        "id": "fish",
+        "loaded": true
+      },
+      {
+        "id": "crane",
+        "loaded": true
+      },
+      {
+        "id": "lotus",
+        "loaded": true
+      }
+    ],
+    "camera": [
+      -11,
+      2.55,
+      -6.4
+    ]
+  },
+  "errors": [],
+  "consoleErrors": []
+}

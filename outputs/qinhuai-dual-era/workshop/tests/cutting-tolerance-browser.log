@@ -1,0 +1,6 @@
+PASS mouse paper_cutting offset and sparse trace
+PASS mouse petal_cutting offset and sparse trace
+PASS mouse leaf_cutting offset and sparse trace
+PASS touch paper_cutting offset and sparse trace
+PASS touch petal_cutting offset and sparse trace
+PASS touch leaf_cutting offset and sparse trace

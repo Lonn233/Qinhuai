@@ -1,0 +1,125 @@
+{
+  "note": "Game-specific derivatives; all originals untouched. Embedded texture bytes preserved.",
+  "models": [
+    {
+      "id": "mountain",
+      "source": "E:/soft/inspiration/灯会/model/鳖山灯/鳖山灯.glb",
+      "sourceSha256": "35126c7d7c092f4ae370addf49e3c641c4514c34b73ad6f65502d259f989c242",
+      "sourceTriangles": 2148158,
+      "triangles": 110000,
+      "error": 0.0011708394158631563,
+      "sourceBytes": 72985156,
+      "bytes": 14198576,
+      "textureSha256": [
+        "61efd2acd7fda22e94a7268b8803001a8cee98cbd1a02b901b47113ffa319938",
+        "26a89551f991683d5495e1b4cf96c77fd09353122b10bfad6002b6558c2a61f2",
+        "bcfc0ced7c1ee700f0a2246f4e3512ca05a0d345ce73830e98b34298b002bd5d"
+      ]
+    },
+    {
+      "id": "lion",
+      "source": "E:/soft/inspiration/灯会/model/lion/Meshy_AI_Golden_Lion_Dance_Mas_1017092614_texture.glb",
+      "sourceSha256": "c007365304b71e547b4b6ea69b6a89e9ed2944b2aef408628b49b06389d12652",
+      "sourceTriangles": 1621206,
+      "triangles": 89996,
+      "error": 0.001006611157208681,
+      "sourceBytes": 56112712,
+      "bytes": 12463112,
+      "textureSha256": [
+        "d914c29cd508c88b3e28877f91370905ed88620f69a5ffea447e720201741c69",
+        "d1f16307a8715fe5e62863f85f2169f9ceea6e3ae843a702d275b7e4d2a2fdc9",
+        "cad1c201f211e435ed1a9d7b7aee72d0f5f34c3e55ee60a07c539a776a237cac"
+      ]
+    },
+    {
+      "id": "fish",
+      "source": "E:/soft/inspiration/灯会/model/fish/golden_fish.glb",
+      "sourceSha256": "c45ae7397603bc7a9009defac66b366d5c1a496dd29bcd50355a66d2620141e4",
+      "sourceTriangles": 835802,
+      "triangles": 80000,
+      "error": 0.0004567433788906783,
+      "sourceBytes": 32205672,
+      "bytes": 10657084,
+      "textureSha256": [
+        "4d6240887709518b3b7c2c9a2b2c8f55b4086ce19ffd606de106f730a74f0ac2",
+        "d6d2ac0b678f8792c43b883093685f8ee2330ffb102507d576e1e044788c4984",
+        "5e66e45f0cf6a69be13e77a37d07a8249bed3a91d379543cf810ab13459bfd34"
+      ]
+    },
+    {
+      "id": "crane",
+      "source": "E:/soft/inspiration/灯会/model/灯笼/Meshy_AI_Golden_Crane_Lantern_1017122124_texture.glb",
+      "sourceSha256": "71f170701ded6486a4fd86ad02f372b6324b5c67b1a39b7dcc55d7ea2cfbf68f",
+      "sourceTriangles": 740196,
+      "triangles": 79998,
+      "error": 0.00047274079406633973,
+      "sourceBytes": 27834036,
+      "bytes": 9136568,
+      "textureSha256": [
+        "f59820dc2268e24778cbe9ed67bb2f52af6f9f7b6680cf906bb2a2e559812935",
+        "bd6d5981f217dfd73166d2de1f81a0800892361bc3d96599e4d288238a13d4b3",
+        "be5bfa82ee0144c259c5d7ccff34401d35eda0d51b042a272a6adba03d9d1f30"
+      ]
+    },
+    {
+      "id": "lotus-one",
+      "source": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\hehua_1.glb",
+      "sourceSha256": "8be77261210f690e21ce4a575e355fddfaf1afd7a1c3b36516628a996ca43baa",
+      "sourceTriangles": 260194,
+      "triangles": 35000,
+      "error": 0.00047263907617889345,
+      "sourceBytes": 14693852,
+      "bytes": 8296132,
+      "textureSha256": [
+        "0f2232cb6c7dbc09e73031189ee663927716176ae9114c1719d079f330f11e48",
+        "1ac881b4c84ca7e8e53b219a934ef2554c48ede23cfa2919a40bf9e66c0da322",
+        "28f9e98fc83a339b8ed2602452a22a21c52e0248c0d692801ccc78d34df1b70c"
+      ]
+    },
+    {
+      "id": "lotus-main",
+      "source": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\hehua-main.glb",
+      "sourceSha256": "ff793d2bca1b5c4855166ae841be4168b812c0bd09ebcd1d52b00c9abc4fcd4c",
+      "sourceTriangles": 1169780,
+      "triangles": 49992,
+      "error": 0.0018265352118760347,
+      "sourceBytes": 40959044,
+      "bytes": 8594188,
+      "textureSha256": [
+        "7660ff2c3099dd88423a81be8f25d4503a4b070ec1db036c15462146e05d0fdd",
+        "920e4fa9d0af8dad7f9f5ec0c00f297c5dcb6c42672762d5199d228391859604",
+        "7d809a3e565f0502ff407dc8765d87926962d8e6f07c3e22bff3f48c5480b0d1"
+      ]
+    },
+    {
+      "id": "pavilion",
+      "source": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\Meshy_AI_kuixingge_1016044736_texture.glb",
+      "sourceSha256": "f6ac2f7eecb4e667bc301d2d1a41d39e5b9a8a25e9ceda34add0d4f46e091c4d",
+      "sourceTriangles": 6752372,
+      "triangles": 149892,
+      "error": 0.0027185946237295866,
+      "sourceBytes": 205823700,
+      "bytes": 14727544,
+      "textureSha256": [
+        "17720b16b32c5556fdf024dcada1d74ac05cef2122b9db55159af4b1b9131970",
+        "6a750a51b58ff5a790241ac823e40cbd22b1771421db9d7145743176f4946bee",
+        "5d01f5512868d389f634233a2da71e62d9a95c38c198b4d1b79a7bddbf8dc47b"
+      ]
+    },
+    {
+      "id": "bridge",
+      "source": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\qiao.glb",
+      "sourceSha256": "9aa1d18490682e454f30b6b458685abfd1cef33fe39ebf32be2c4c53a747ba4b",
+      "sourceTriangles": 560350,
+      "triangles": 100000,
+      "error": 0.0003111991100013256,
+      "sourceBytes": 26808396,
+      "bytes": 13499084,
+      "textureSha256": [
+        "5e0e9d069cf6850a3f114251a542fe327eddf60889d0d99b6ebb01b975bad3b8",
+        "1105e9d3d5055d37c5427c1986a7d968a65b3f8fef60fd289a944e1d4e7a341e",
+        "c68a70516eb8c47580d7ed56c7f4eb02f8d9984caaca71a64f0ebb56244df897"
+      ]
+    }
+  ]
+}

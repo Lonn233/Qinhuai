@@ -1,0 +1,1 @@
+const path=require('node:path');require('esbuild').build({entryPoints:[path.join(__dirname,'study.js')],bundle:true,minify:true,format:'iife',target:['chrome100'],outfile:path.join(__dirname,'study.bundle.js')}).then(()=>console.log('Built lion light study: 5 presets')).catch(e=>{console.error(e);process.exitCode=1;});

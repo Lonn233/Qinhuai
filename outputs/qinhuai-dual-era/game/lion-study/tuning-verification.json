@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "9 presets apply correct brightness",
+    "Live brightness and color affect material uniforms; named save persisted",
+    "Reload and apply saved colors/brightness",
+    "Per-lantern saved presets isolated; custom draft survives model switching",
+    "Reset restores base profile and invalid hex colors are rejected",
+    "Storage failure shows error without claiming save success",
+    "Saved preset deletion persists",
+    "Malformed and duplicate stored entries filtered",
+    "390px mobile has no overflow; live preview remains visible while tuning",
+    "Fish, crane and lotus support new presets and brightness control"
+  ],
+  "errors": []
+}

@@ -1,0 +1,166 @@
+{
+  "passed": true,
+  "errors": [],
+  "missing": [],
+  "samples": {
+    "bamboo": {
+      "peak": 0.1434609591960907,
+      "rms": 0.007553094485033397,
+      "finite": true,
+      "tail": 0
+    },
+    "wood": {
+      "peak": 0.21776536107063293,
+      "rms": 0.010290661042841886,
+      "finite": true,
+      "tail": 0
+    },
+    "binding": {
+      "peak": 0.09314029663801193,
+      "rms": 0.0049202964898862845,
+      "finite": true,
+      "tail": 0
+    },
+    "lining": {
+      "peak": 0.13519719243049622,
+      "rms": 0.006574666242850798,
+      "finite": true,
+      "tail": 0
+    },
+    "cut": {
+      "peak": 0.20779578387737274,
+      "rms": 0.006509009136543632,
+      "finite": true,
+      "tail": 0
+    },
+    "water": {
+      "peak": 0.14887036383152008,
+      "rms": 0.011388735816555867,
+      "finite": true,
+      "tail": 0
+    },
+    "dry_ready": {
+      "peak": 0.07218606024980545,
+      "rms": 0.007419217919463611,
+      "finite": true,
+      "tail": 0
+    },
+    "press": {
+      "peak": 0.1754273772239685,
+      "rms": 0.010833493265159295,
+      "finite": true,
+      "tail": 0
+    },
+    "shape": {
+      "peak": 0.11936585605144501,
+      "rms": 0.005165591903464258,
+      "finite": true,
+      "tail": 0
+    },
+    "paste": {
+      "peak": 0.09280771762132645,
+      "rms": 0.004805585652528369,
+      "finite": true,
+      "tail": 0
+    },
+    "paper": {
+      "peak": 0.13594785332679749,
+      "rms": 0.00554373305588609,
+      "finite": true,
+      "tail": 0
+    },
+    "assemble": {
+      "peak": 0.13216760754585266,
+      "rms": 0.005599531912850904,
+      "finite": true,
+      "tail": 0
+    },
+    "check": {
+      "peak": 0.08968278020620346,
+      "rms": 0.004918351720387785,
+      "finite": true,
+      "tail": 0
+    },
+    "switch": {
+      "peak": 0.09526075422763824,
+      "rms": 0.00252363461118633,
+      "finite": true,
+      "tail": 0
+    },
+    "light_on": {
+      "peak": 0.09372348338365555,
+      "rms": 0.009252595285359254,
+      "finite": true,
+      "tail": 0
+    },
+    "light_off": {
+      "peak": 0.05693407729268074,
+      "rms": 0.004113808136652459,
+      "finite": true,
+      "tail": 0
+    },
+    "complete": {
+      "peak": 0.12341313064098358,
+      "rms": 0.020377536258988922,
+      "finite": true,
+      "tail": 0
+    },
+    "phase_done": {
+      "peak": 0.0541030652821064,
+      "rms": 0.007153019802742594,
+      "finite": true,
+      "tail": 0
+    },
+    "tool": {
+      "peak": 0.05693407729268074,
+      "rms": 0.0027367339485874316,
+      "finite": true,
+      "tail": 0
+    },
+    "ui": {
+      "peak": 0.03699927404522896,
+      "rms": 0.0017944056326962758,
+      "finite": true,
+      "tail": 0
+    },
+    "undo": {
+      "peak": 0.043503377586603165,
+      "rms": 0.0018907139060087667,
+      "finite": true,
+      "tail": 0
+    },
+    "blocked": {
+      "peak": 0.07857634127140045,
+      "rms": 0.004128968906080575,
+      "finite": true,
+      "tail": 0
+    },
+    "footstep": {
+      "peak": 0.14336036145687103,
+      "rms": 0.006129866844159025,
+      "finite": true,
+      "tail": 0
+    },
+    "enter": {
+      "peak": 0.07881759852170944,
+      "rms": 0.00448060925994364,
+      "finite": true,
+      "tail": 0
+    }
+  },
+  "unavailable": {
+    "enabled": true,
+    "volume": 0.45,
+    "available": false,
+    "paused": false,
+    "state": "idle",
+    "activeVoices": 0,
+    "pending": 0,
+    "lastSound": null,
+    "played": 0
+  },
+  "voices": 8,
+  "cleared": 0,
+  "pausedUnchanged": true,
+  "zeroSilent": true
+}

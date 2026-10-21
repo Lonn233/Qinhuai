@@ -1,0 +1,6 @@
+PASS desktop frame_assembly stock, automatic tool, visible backpack
+PASS desktop paper_dye stock, automatic tool, visible backpack
+PASS desktop petal_cutting stock, automatic tool, visible backpack
+PASS mobile frame_assembly stock, automatic tool, visible backpack
+PASS mobile paper_dye stock, automatic tool, visible backpack
+PASS mobile petal_cutting stock, automatic tool, visible backpack

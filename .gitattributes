@@ -1,0 +1,5 @@
+outputs/qinhuai-dual-era/index.html filter=lfs diff=lfs merge=lfs -text
+outputs/qinhuai-dual-era/Meshy_AI_kuixingge_1016044736_texture.glb filter=lfs diff=lfs merge=lfs -text
+outputs/qinhuai-dual-era/qiao.glb filter=lfs diff=lfs merge=lfs -text
+outputs/qinhuai-dual-era/hehua-main.glb filter=lfs diff=lfs merge=lfs -text
+outputs/qinhuai-dual-era/hehua_1.glb filter=lfs diff=lfs merge=lfs -text

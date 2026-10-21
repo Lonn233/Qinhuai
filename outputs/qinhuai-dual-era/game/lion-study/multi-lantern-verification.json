@@ -1,0 +1,193 @@
+{
+  "combinations": [
+    {
+      "lantern": "lion",
+      "effect": 0,
+      "selected": 1,
+      "previews": true,
+      "cache": 1
+    },
+    {
+      "lantern": "lion",
+      "effect": 1,
+      "selected": 1,
+      "previews": true,
+      "cache": 1
+    },
+    {
+      "lantern": "lion",
+      "effect": 2,
+      "selected": 1,
+      "previews": true,
+      "cache": 1
+    },
+    {
+      "lantern": "lion",
+      "effect": 3,
+      "selected": 1,
+      "previews": true,
+      "cache": 1
+    },
+    {
+      "lantern": "lion",
+      "effect": 4,
+      "selected": 1,
+      "previews": true,
+      "cache": 1
+    },
+    {
+      "lantern": "mountain",
+      "effect": 0,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "mountain",
+      "effect": 1,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "mountain",
+      "effect": 2,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "mountain",
+      "effect": 3,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "mountain",
+      "effect": 4,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "fish",
+      "effect": 0,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "fish",
+      "effect": 1,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "fish",
+      "effect": 2,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "fish",
+      "effect": 3,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "fish",
+      "effect": 4,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "crane",
+      "effect": 0,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "crane",
+      "effect": 1,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "crane",
+      "effect": 2,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "crane",
+      "effect": 3,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "crane",
+      "effect": 4,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "lotus",
+      "effect": 0,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "lotus",
+      "effect": 1,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "lotus",
+      "effect": 2,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "lotus",
+      "effect": 3,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    },
+    {
+      "lantern": "lotus",
+      "effect": 4,
+      "selected": 1,
+      "previews": true,
+      "cache": 2
+    }
+  ],
+  "rememberedLion": 4,
+  "rapid": {
+    "id": "fish",
+    "active": 2,
+    "ready": true
+  },
+  "retryVisible": true,
+  "recovered": true,
+  "mobileOverflow": false,
+  "unexpectedErrors": [],
+  "injectedErrors": [
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Error: 模型加载失败：503\n    at Ja (http://127.0.0.1:4180/game/lion-study/study.bundle.js:4029:2251)"
+  ]
+}

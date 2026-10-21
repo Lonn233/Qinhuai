@@ -1,0 +1,72 @@
+[
+  {
+    "file": "bridge.glb",
+    "errors": 0,
+    "warnings": 1,
+    "codes": [
+      "NODE_MATRIX_DEFAULT",
+      "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+    ]
+  },
+  {
+    "file": "crane.glb",
+    "errors": 0,
+    "warnings": 1,
+    "codes": [
+      "NODE_MATRIX_DEFAULT",
+      "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+    ]
+  },
+  {
+    "file": "fish.glb",
+    "errors": 0,
+    "warnings": 1,
+    "codes": [
+      "NODE_MATRIX_DEFAULT",
+      "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+    ]
+  },
+  {
+    "file": "lion.glb",
+    "errors": 0,
+    "warnings": 1,
+    "codes": [
+      "NODE_MATRIX_DEFAULT",
+      "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+    ]
+  },
+  {
+    "file": "lotus-main.glb",
+    "errors": 0,
+    "warnings": 1,
+    "codes": [
+      "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+    ]
+  },
+  {
+    "file": "lotus-one.glb",
+    "errors": 0,
+    "warnings": 1,
+    "codes": [
+      "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+    ]
+  },
+  {
+    "file": "mountain.glb",
+    "errors": 0,
+    "warnings": 1,
+    "codes": [
+      "NODE_MATRIX_DEFAULT",
+      "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+    ]
+  },
+  {
+    "file": "pavilion.glb",
+    "errors": 0,
+    "warnings": 1,
+    "codes": [
+      "NODE_MATRIX_DEFAULT",
+      "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+    ]
+  }
+]

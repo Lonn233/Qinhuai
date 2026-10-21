@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1524'/%3E%3Cpath d='M9 45h46M14 34h36M23 23h18M32 12v9M18 36v8m28-8v8M26 25v8m12-8v8' stroke='%23ffc16a' stroke-width='4' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./main-scene-persistence.css?v=1">
+  <title>秦淮现代全场景模型 · 独立测试</title>
+  <style>
+    :root{color-scheme:dark;--panel:rgba(12,18,28,.88);--line:rgba(178,205,229,.2);--text:#eaf3fb;--muted:#9fb2c5;--accent:#6fc6d9;--warn:#ffcc80}
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07111b;color:var(--text);font:13px/1.45 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+    #app{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
+    .panel{position:fixed;z-index:2;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 45px rgba(0,0,0,.28);backdrop-filter:blur(14px)}
+    #toolbar{max-height:calc(100vh - 28px);overflow:auto;top:14px;left:14px;width:min(350px,calc(100vw - 28px));padding:15px}
+    h1{font-size:16px;margin:0 0 3px;font-weight:650;letter-spacing:.02em}h2{font-size:12px;color:var(--muted);font-weight:500;margin:0 0 12px}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}.row label{display:flex;gap:6px;align-items:center;color:#d5e2ec}
+    button{border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:rgba(103,145,169,.16);color:var(--text);cursor:pointer;font:inherit}button:hover{background:rgba(111,198,217,.28)}.lighting-row{margin-top:12px}.lighting-row .hint{width:100%}.lighting-row button{font-size:12px;padding:6px 8px}button.active{background:rgba(111,198,217,.3);border-color:rgba(111,198,217,.72);color:#fff}button:disabled{opacity:.45;cursor:wait}
+    .hint{color:var(--muted);font-size:12px}.value{color:#fff}.accent{color:var(--accent)}.warn{color:var(--warn)}
+    #status{border-top:1px solid var(--line);margin-top:12px;padding-top:10px;white-space:pre-wrap;color:var(--muted);font-size:12px;max-height:150px;overflow:auto}
+    #progress{position:fixed;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);min-width:min(440px,calc(100vw - 32px));padding:19px;text-align:center;display:none}
+    #progress.compact{top:auto;bottom:16px;transform:translateX(-50%);padding:12px;pointer-events:none}
+    #progress.show{display:block}.bar{height:6px;border-radius:99px;background:rgba(255,255,255,.13);overflow:hidden;margin:12px 0 8px}.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#6fc6d9,#b7e8de);transition:width .2s}
+    #perf{right:14px;top:14px;min-width:220px;padding:11px 13px;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;display:none;white-space:pre}.perf-on #perf{display:block}
+    #help{right:14px;bottom:14px;padding:10px 12px;color:var(--muted);font-size:12px}.hidden{display:none!important}
+    #errors{position:fixed;left:14px;right:14px;bottom:14px;z-index:4;background:rgba(66,27,20,.94);border:1px solid rgba(255,180,130,.5);padding:12px;border-radius:10px;display:none}.error-item{margin:4px 0}.error-item button{margin-left:8px;padding:4px 8px}
+    .night-section{padding:10px 0;border-top:1px solid var(--line,rgba(255,255,255,.15));border-bottom:1px solid var(--line,rgba(255,255,255,.15));margin-bottom:10px}
+    .night-section .row{margin:0 0 8px}.night-section button{min-height:40px}.night-section .active{border-color:#e7b96f;background:rgba(206,143,54,.2);color:#ffe2af}
+    #nightView,#waterMode,#waterQuality,#performanceQuality{flex:1;min-width:0;max-width:100%;height:36px;color:var(--text,#e8edf5);background:#162333;border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:0 8px;font:inherit}
+    #timeReadout{font-size:12px;color:#d9c5a4;line-height:1.5}#nightViewButton{font-size:12px;min-height:36px}
+    .gate-presets{border-top:1px solid var(--line);margin-top:10px;padding-top:10px}.gate-presets h3{font-size:13px;margin:0 0 8px;color:#efd2a0}.gate-options{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.gate-options button{min-height:40px;text-align:left}.gate-presets .hint{margin-bottom:8px}
+    .festival-panel{border-top:1px solid var(--line);margin:10px 0;padding-top:10px}.festival-panel summary{cursor:pointer;color:#efd2a0;font-size:13px}.festival-views{margin-top:10px}.festival-range{display:grid;grid-template-columns:1fr auto;gap:5px;margin:9px 0;font-size:12px}.festival-range input{grid-column:1/-1;width:100%;accent-color:#dda34c}.festival-panel p{line-height:1.6}#toolbar{max-height:calc(100vh - 32px);overflow-y:auto}
+    @media(max-width:680px){#toolbar{max-height:54vh;overflow:auto}.panel{border-radius:11px}#help{left:14px;right:14px;bottom:10px;text-align:center}#perf{top:auto;right:10px;bottom:58px;min-width:0}.row button{padding:8px 10px}}
+    .map-light-panel{border-top:1px solid var(--line);padding-top:11px;margin:12px 0}
+    .map-light-panel>summary{cursor:pointer;color:#ffe2af;font-weight:600;font-size:13px;line-height:1.6}
+    .map-light-panel .hint{line-height:1.6;margin:8px 0}.map-light-group{border-top:1px solid var(--line);padding:10px 0}
+    .map-light-group>summary{cursor:pointer;font-size:12px;color:#efd2a0;line-height:1.6}
+    .map-light-field{display:grid;grid-template-columns:minmax(0,1fr) 88px;align-items:center;gap:5px 8px;margin:12px 0;font-size:12px}
+    .map-light-value{display:flex;align-items:center;gap:4px}.map-light-value input{width:72px;min-width:0;height:30px;border:1px solid var(--line);border-radius:5px;background:#101c2a;color:#ffe2af;padding:3px 5px;font:12px ui-monospace,monospace}
+    .map-light-value span{color:var(--muted)}.map-light-field input[type=range]{grid-column:1/-1;width:100%;margin:3px 0;height:18px;accent-color:#dda34c;cursor:pointer}
+    .map-light-panel input:focus-visible,.map-light-panel summary:focus-visible{outline:2px solid #e7b96f;outline-offset:3px}
+    .map-light-status{font-size:11px;line-height:1.6;color:#b6c9ab;margin-bottom:3px}.map-light-status.warn{color:var(--warn)}
+    #buildingLightName,#buildingLightSaved{min-width:0;max-width:100%;padding:7px;border:1px solid var(--line);border-radius:5px;background:#101c2a;color:#ffe2af;font:inherit}
+    #buildingLightName{flex:1;width:140px}
+    #buildingLightSaved{flex:1;width:130px}
+    #buildingLightControls .map-light-group[hidden]{display:none}
+    #environment-building{display:block;width:100%;margin:8px 0 12px;padding:7px;border:1px solid var(--line);border-radius:5px;background:#101c2a;color:#ffe2af;font-size:12px}
+    #environmentSpillPanel>label{font-size:12px;color:var(--muted)}.environment-check{display:flex;gap:8px;align-items:center;margin:10px 0;font-size:12px}.environment-check input{accent-color:#dda34c}
+    /* Keep the menu toggle reachable even when the adjustment list is long. */
+    #toolbar{display:flex;flex-direction:column;padding:0;overflow:hidden;max-height:calc(100dvh - 28px)}
+    .toolbar-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;padding:8px 10px 8px 15px;border-bottom:1px solid var(--line)}
+    .toolbar-heading{font-size:12px;font-weight:600;letter-spacing:.08em;color:#efd2a0;white-space:nowrap}
+    #toolbarToggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:6px 10px;white-space:nowrap;font-size:12px}
+    #toolbarToggle svg{width:15px;height:15px;flex:none}
+    #toolbarToggle:focus-visible{outline:2px solid #e7b96f;outline-offset:2px}
+    #toolbarContent{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:14px 15px 15px;scrollbar-width:thin;scrollbar-color:#495969 transparent}
+    #toolbarContent[hidden]{display:none}
+    #toolbar.is-collapsed{width:min(190px,calc(100vw - 28px))}
+    #toolbar.is-collapsed .toolbar-header{border-bottom:0}
+    #toolbar.is-collapsed #toolbarToggle svg{transform:rotate(180deg)}
+    @media(max-width:680px){#toolbar{max-height:54dvh}.toolbar-header{padding-left:13px}#toolbarToggle{min-height:40px}}
+    .environment-focus-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:8px 0}
+    .environment-focus-row .environment-check{margin:0;font-size:11px}
+    #environment-focus{color:#ffe2af;border-color:rgba(231,185,111,.45)}
+    #environment-focus-status{font-size:11px;line-height:1.6}
+    .environment-color-row{display:grid;grid-template-columns:1fr 42px 96px;align-items:center;gap:8px;margin:12px 0 6px;font-size:12px}
+    .environment-color-row input{height:34px;min-width:0;border:1px solid var(--line);border-radius:6px;background:#101c2a;color:#ffe2af}
+    #environment-color{width:42px;padding:3px;cursor:pointer}
+    #environment-color-hex{width:96px;padding:5px 7px;font:12px ui-monospace,monospace}
+    #environment-color-status{font-size:11px;margin-top:5px}
+  #dragonPresetName{min-width:0;flex:1;padding:8px;background:#101c2a;border:1px solid var(--line);border-radius:6px;color:var(--text)} #dragonPresets{min-width:0;flex:1} #dragonLightPanel summary{color:#ffd59b} #dragonColorHex{width:96px;padding:5px} #dragonColor{width:42px;padding:3px}
+  </style>
+  <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head>
+<body>
+  <div id="app"></div>
+  <section id="toolbar" class="panel" aria-label="主地图调节菜单">
+    <div class="toolbar-header">
+      <span class="toolbar-heading">地图调节</span>
+      <button id="toolbarToggle" type="button" aria-controls="toolbarContent" aria-expanded="true" aria-label="收起调节菜单" title="收起调节菜单">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m11.5 5-5 5 5 5M16 5v10"/></svg>
+        <span id="toolbarToggleLabel">收起</span>
+      </button>
+    </div>
+    <div id="toolbarContent">
+    <section id="scenePersistence" class="scene-save" aria-label="本机文件自动存档"></section>
+    <h1>秦淮现代全场景模型</h1>
+    <h2>外置 GLB 分块独立测试页 · 不改动主场景</h2>
+    <div class="row">
+      <button id="loadNear" data-mode="near">加载近景</button>
+      <button id="loadAll" data-mode="all">加载全部</button>
+      <button id="retryFailed">重试失败</button>
+    </div>
+    <div class="row">
+      <button id="orbitMode" class="active" aria-pressed="true">轨道视角</button>
+      <button id="firstPersonMode" aria-pressed="false">第一人称</button>
+      <button id="thirdPersonMode" aria-pressed="false">第三人称</button>
+      <button id="resetCamera">重置视角</button>
+    </div>
+    <div class="night-section" aria-label="昼夜时段">
+      <div class="row" role="group" aria-label="切换白天与夜晚">
+        <button data-time-of-day="day" class="active" aria-pressed="true">白天 · 14:00</button>
+        <button data-time-of-day="sunset" aria-pressed="false">傍晚 · 18:00</button>
+        <button data-time-of-day="blueHour" aria-pressed="false">蓝调 · 18:40</button>
+        <button data-time-of-day="night" aria-pressed="false">夜晚 · 20:00</button>
+      </div>
+      <div class="row">
+        <select id="nightView" aria-label="重点夜景取景位置">
+          <option value="dragonWall">龙墙 · 金龙红墙近景</option>
+          <option value="bridge">石桥 · 金栏暖石近景</option>
+          <option value="riverfront">参考图 · 河岸夜景全景</option>
+          <option value="pavilion">魁星阁 · 分层暖金屋檐</option>
+          <option value="boats">秦淮游船 · 金色灯篷</option>
+          <option value="gate">天下文枢 · 牌坊灯光</option>
+          <option value="gateDetail">天下文枢 · 檐口近景</option>
+          <option value="windowspill">窗光外溢 · 地面近景</option>
+          <option value="temple">后方殿宇 · 暖金屋顶</option>
+          <option value="courtyard">大成殿 · 树阵金灯笼挂网</option>
+          <option value="festivalMountain">鳖山灯 · 空地试摆</option>
+          <option value="festivalLions">瑞狮灯 · 牌坊后方小路</option>
+          <option value="redLanterns">临水檐下 · 红灯笼</option>
+          <option value="festivalWater">水面灯 · 荷花与菊水灯</option>
+          <option value="streetlamps">沿街路灯 · 四联暖黄灯笼</option>
+        </select>
+        <button id="nightViewButton">夜景取景</button>
+      </div>
+      <details class="map-light-panel" id="mapLightPanel" open>
+        <summary>主场景灯光 · 环境受光与水面反射</summary>
+        <div id="dragonLightControls"></div>
+        <div id="environmentLightControls"></div>
+        <div id="mapLightControls"></div>
+      </details>
+      <div class="gate-presets" role="group" aria-label="天下文枢四套灯效">
+        <h3>天下文枢 · 灯效对比</h3>
+        <div class="gate-options">
+          <button data-gate-light="gold" aria-pressed="true" class="active">A · 金檐暗瓦</button>
+          <button data-gate-light="corners" aria-pressed="false">B · 檐角聚光</button>
+          <button data-gate-light="soft" aria-pressed="false">C · 金光渐染</button>
+          <button data-gate-light="amber" aria-pressed="false">D · 浓金层次</button>
+        </div>
+        <div id="gateLightDescription" class="hint" role="status" aria-live="polite">亮金檐口，暗瓦面；檐底保留阴影。</div>
+        <button id="gateDetailView">查看牌坊近景</button>
+        <p class="hint">切换方案保持当前视角，仅调整天下文枢。白天选择会开启夜景。</p>
+      </div>
+      <div id="timeReadout" role="status" aria-live="polite">14:00 · 白天预设 · 原始模型材质</div>
+      <div class="hint">静态时段预设；首次夜景会补载重点区域，不移动建筑。</div>
+    </div>
+    <details class="festival-panel">
+      <summary>花灯布置 · 位置预览与鳖山灯试摆</summary>
+      <div class="row festival-views">
+        <button data-festival-view="festivalMountain">鳖山空地</button>
+        <button data-festival-view="festivalLions">后巷瑞狮</button>
+        <button data-festival-view="festivalWater">河道水灯</button>
+      </div>
+      <p class="hint"><a href="./building-light-study.html?building=matou" target="_blank" rel="noopener">红灯笼光效 · 前往马头墙试灯 ↗</a></p>
+      <p class="hint">鳖山先按直径 13 米试摆，朝向、大小待确认。限制在空地安全范围内；此处滑块仅作预览，不覆盖试灯室存档。</p>
+      <label class="festival-range" for="mountainDiameter">鳖山直径 <output id="mountainDiameterValue">13.0 m</output>
+        <input id="mountainDiameter" type="range" min="8" max="15" step="0.1" value="13">
+      </label>
+      <label class="festival-range" for="mountainRotation">朝向 <output id="mountainRotationValue">180°</output>
+        <input id="mountainRotation" type="range" min="0" max="359" step="1" value="180">
+      </label>
+      <div class="row"><button id="resetMountainPreview">恢复 13 米试摆</button><button id="retryFestival">重试花灯</button></div>
+      <div id="festivalReadout" class="hint" role="status" aria-live="polite">随地图区域载入花灯…</div>
+      <p class="hint">两种荷花 28 盏、菊水灯 4 盏；瑞狮 3 对。菊水灯暂沿用荷花的通体彩光预设。</p>
+    </details>
+    <div class="row lighting-row" aria-label="天空光照预设">
+      <span class="hint">天空光照</span>
+      <button data-light-preset="natural" class="active" aria-pressed="true">自然日光</button>
+      <button data-light-preset="soft" aria-pressed="false">柔和日光</button>
+    </div>
+    <div class="row">
+      <label><input id="wireframe" type="checkbox"> 线框</label>
+      <label><input id="modelVisible" type="checkbox" checked> 显示模型</label>
+      <label><input id="waterVisible" type="checkbox" checked> 显示河面</label>
+    </div>
+    <div class="row">
+      <label>河面 <select id="waterMode"><option value="flow">流动反射</option><option value="original">原始河面</option></select></label>
+      <label>水面画质 <select id="waterQuality"><option value="auto">自动</option><option value="balanced">标准</option><option value="low">节能</option></select></label>
+    </div>
+    <div id="waterStatus" class="hint" role="status"></div>
+    <label>运行画质 <select id="performanceQuality"><option value="smooth">流畅</option><option value="low">低性能</option><option value="original">原效果</option></select></label>
+    <div id="summary" class="hint">正在读取 manifest…</div>
+    <div id="status">等待加载资源</div>
+    </div>
+  </section>
+  <section id="perf" class="panel"></section>
+  <section id="progress" class="panel">
+    <div id="progressTitle">正在加载秦淮现代全场景…</div>
+    <div class="bar"><i id="progressBar"></i></div>
+    <div id="progressText" class="hint">准备中</div>
+  </section>
+  <div id="errors"></div>
+  <div id="help">轨道视角：鼠标拖动旋转、滚轮缩放、右键平移。第一人称：W/A/S/D 行走，Shift 加速；支持鼠标锁定时可直接转向，无法锁定时按住鼠标拖动转向，Esc 释放鼠标。</div>
+  <script src="./import-toolbar.js?v=collapse-20261019"></script>
+  <script src="./import-viewer-startup.js?v=performance-47-spatial"></script>
+</body>
+</html>

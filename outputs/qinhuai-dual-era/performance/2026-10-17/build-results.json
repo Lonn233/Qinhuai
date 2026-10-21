@@ -1,0 +1,47 @@
+{
+  "createdAt": "2026-10-17T03:07:40.268Z",
+  "defaultPavilion": "original",
+  "runtimeMeasurementStatus": "blocked_by_saved_browser_permission",
+  "pages": [
+    {
+      "file": "audit-baseline.html",
+      "kind": "baseline",
+      "bytes": 304646216,
+      "sha256": "9bc8bf675424c7d00a0f3ad87eb799d1e2d5fbcafcb39374e49fa590d9bd1fec",
+      "buildSeconds": 23.991581299999996,
+      "browserVerified": false
+    },
+    {
+      "file": "index.html",
+      "kind": "optimized-original",
+      "bytes": 304646526,
+      "sha256": "453d64caa8b42ba7bdef82420282886ff78027eaddd38c1e65e38690a235781c",
+      "buildSeconds": 25.3490371,
+      "browserVerified": false
+    },
+    {
+      "file": "pilot-LOD0.html",
+      "kind": "pilot-LOD0",
+      "bytes": 141250272,
+      "sha256": "8e80bd5eec96dc1cad567aec03cc140ae8760fad973405c81db3d7ff8077e93d",
+      "buildSeconds": 20.0387713,
+      "browserVerified": false
+    },
+    {
+      "file": "pilot-LOD1.html",
+      "kind": "pilot-LOD1",
+      "bytes": 119969734,
+      "sha256": "4da006b7b65ac086801f3de81e5ac3482dee604370e0186bb19e639ef6f8b378",
+      "buildSeconds": 17.01534539999999,
+      "browserVerified": false
+    },
+    {
+      "file": "pilot-LOD2.html",
+      "kind": "pilot-LOD2",
+      "bytes": 117708338,
+      "sha256": "b75358ebf5ebfe1bc8a41780e6444246b8c409f27b90c5a934bd43ffb43cd9dd",
+      "buildSeconds": 16.047241799999988,
+      "browserVerified": false
+    }
+  ]
+}

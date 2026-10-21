@@ -1,0 +1,51 @@
+npm warn Unknown user config "electron_mirror". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> qinhuai-reference-district@1.0.0 test
+> node --max-old-space-size=512 --test test-loading.cjs test-startup.cjs test-performance-tools.cjs
+
+✔ raw data blocks round-trip with independently padded base64 and UI yields (147.5986ms)
+✔ gzip data streams decompress to the original bytes (32.5025ms)
+✔ missing, corrupt and truncated assets fail visibly instead of hanging (4.459ms)
+✔ unsupported native decompression produces an actionable error (0.6037ms)
+✔ asset queue is sequential and survives synchronous and asynchronous failures (66.73ms)
+✔ startup UI shows real errors, does not overwrite them, and releases the overlay on success (3.378ms)
+Verified 4 unchanged GLBs; 2462 inert blocks; largest executable 1708726 characters
+✔ built offline HTML has small executable scripts and exact selected GLB payloads (4869.9052ms)
+✔ registry gates unapproved assets, deduplicates in-flight load, shares geometry and releases once (7.0409ms)
+✔ registry disposal invalidates leases and handles pending loads without double disposal (1.2139ms)
+✔ failed asset load can retry without cached rejected promise (0.8408ms)
+✔ projected LOD uses hysteresis, canonical bounds and explicit main camera selection (4.3381ms)
+✔ LOD raycast tests only selected level, with no invisible duplicate hits (3.6109ms)
+✔ LOD rejects invalid inputs and perspective camera uses projection depth (1.5994ms)
+✔ performance statistics distinguish scheduling, CPU, GPU unavailable and 1% low (1.362ms)
+✔ comparison requires three valid runs, matching hardware, settings and camera (3.2594ms)
+✔ base scene appears before GLB loading, current era/weather/layers survive delayed models (1044.5663ms)
+Qinhuai asset PAVILION Error: Simulated PAVILION parse failure
+    at GLTFLoader.parseAsync (E:\soft\project\codex-Qinhuai\outputs\qinhuai-dual-era\test-startup.cjs:55:28)
+    at loadModel (model-source.js:795:36)
+    at async Object.run (model-source.js:809:59)
+    at async Object.run (model-source.js:815:77)
+    at async runAssetQueue (evalmachine.<anonymous>:75:7)
+    at async loadSceneAssets (model-source.js:815:17)
+    at async TestContext.<anonymous> (E:\soft\project\codex-Qinhuai\outputs\qinhuai-dual-era\test-startup.cjs:103:82)
+    at async Test.run (node:internal/test_runner/test:1332:7)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:911:7)
+✔ a failed GLB leaves the map usable and does not block following assets or hide the error (818.9968ms)
+✔ failed initial rendering is reported and never marked as a ready scene (655.5265ms)
+✔ both eras share derived night materials without changing source or light layout (1572.2828ms)
+Error: Simulated export failure
+    at GLTFExporter.parseAsync (E:\soft\project\codex-Qinhuai\outputs\qinhuai-dual-era\test-startup.cjs:73:345)
+    at $.onclick (model-source.js:734:39)
+    at async TestContext.<anonymous> (E:\soft\project\codex-Qinhuai\outputs\qinhuai-dual-era\test-startup.cjs:125:2)
+    at async Test.run (node:internal/test_runner/test:1332:7)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:911:7)
+✔ export failure disposes only temporary cloned materials (751.4383ms)
+✔ pilot uses canonical original bounds and keeps night, era, layers and first-person behavior (771.2944ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8076.4158

@@ -1,0 +1,1551 @@
+{
+  "passed": true,
+  "errors": [],
+  "completed": [
+    "bamboo_prep",
+    "frame_assembly",
+    "lining_upper",
+    "lining_lower",
+    "paper_cutting",
+    "paper_dye",
+    "leaf_dye",
+    "paper_drying",
+    "petal_pressing",
+    "leaf_pressing",
+    "petal_shaping",
+    "petal_assembly",
+    "calyx_assembly",
+    "flower_making",
+    "top_flower_assembly",
+    "pod_making",
+    "pod_assembly",
+    "lotus_leaf_assembly",
+    "hanging_assembly",
+    "light_installation",
+    "final_inspection"
+  ],
+  "resources": {
+    "before": {
+      "geometries": 616,
+      "textures": 9
+    },
+    "after": {
+      "geometries": 616,
+      "textures": 9
+    }
+  },
+  "final": {
+    "version": 2,
+    "workflowRevision": 1,
+    "craftRevision": 1,
+    "lining": {
+      "lining_upper": {
+        "glued": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "installed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "lining_lower": {
+        "glued": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "installed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    "stage": 21,
+    "counts": {
+      "bamboo_prep": 3,
+      "frame_assembly": 12,
+      "frame_binding": 12,
+      "lining_upper": 6,
+      "lining_lower": 6,
+      "paper_cutting": 8,
+      "paper_dye": 6,
+      "leaf_dye": 2,
+      "paper_drying": 1,
+      "petal_pressing": 6,
+      "leaf_pressing": 2,
+      "petal_shaping": 6,
+      "petal_assembly": 36,
+      "calyx_assembly": 12,
+      "flower_making": 6,
+      "top_flower_assembly": 6,
+      "pod_making": 2,
+      "pod_assembly": 2,
+      "lotus_leaf_assembly": 2,
+      "hanging_assembly": 3,
+      "light_installation": 1,
+      "final_inspection": 1
+    },
+    "papers": [
+      {
+        "id": "petal-layer-01-01",
+        "status": "installed",
+        "readyAt": 1792350658993
+      },
+      {
+        "id": "petal-layer-01-02",
+        "status": "installed",
+        "readyAt": 1792350658993
+      },
+      {
+        "id": "petal-layer-01-03",
+        "status": "installed",
+        "readyAt": 1792350658993
+      },
+      {
+        "id": "petal-layer-01-04",
+        "status": "installed",
+        "readyAt": 1792350658993
+      },
+      {
+        "id": "petal-layer-01-05",
+        "status": "installed",
+        "readyAt": 1792350658993
+      },
+      {
+        "id": "petal-layer-01-06",
+        "status": "installed",
+        "readyAt": 1792350658993
+      },
+      {
+        "id": "petal-layer-01-07",
+        "status": "installed",
+        "readyAt": 1792350660424
+      },
+      {
+        "id": "petal-layer-01-08",
+        "status": "installed",
+        "readyAt": 1792350660424
+      },
+      {
+        "id": "petal-layer-01-09",
+        "status": "installed",
+        "readyAt": 1792350660424
+      },
+      {
+        "id": "petal-layer-01-10",
+        "status": "installed",
+        "readyAt": 1792350660424
+      },
+      {
+        "id": "petal-layer-01-11",
+        "status": "installed",
+        "readyAt": 1792350660424
+      },
+      {
+        "id": "petal-layer-01-12",
+        "status": "installed",
+        "readyAt": 1792350660424
+      },
+      {
+        "id": "petal-layer-02-01",
+        "status": "installed",
+        "readyAt": 1792350661786
+      },
+      {
+        "id": "petal-layer-02-02",
+        "status": "installed",
+        "readyAt": 1792350661786
+      },
+      {
+        "id": "petal-layer-02-03",
+        "status": "installed",
+        "readyAt": 1792350661786
+      },
+      {
+        "id": "petal-layer-02-04",
+        "status": "installed",
+        "readyAt": 1792350661786
+      },
+      {
+        "id": "petal-layer-02-05",
+        "status": "installed",
+        "readyAt": 1792350661786
+      },
+      {
+        "id": "petal-layer-02-06",
+        "status": "installed",
+        "readyAt": 1792350661786
+      },
+      {
+        "id": "petal-layer-02-07",
+        "status": "installed",
+        "readyAt": 1792350663138
+      },
+      {
+        "id": "petal-layer-02-08",
+        "status": "installed",
+        "readyAt": 1792350663138
+      },
+      {
+        "id": "petal-layer-02-09",
+        "status": "installed",
+        "readyAt": 1792350663138
+      },
+      {
+        "id": "petal-layer-02-10",
+        "status": "installed",
+        "readyAt": 1792350663138
+      },
+      {
+        "id": "petal-layer-02-11",
+        "status": "installed",
+        "readyAt": 1792350663138
+      },
+      {
+        "id": "petal-layer-02-12",
+        "status": "installed",
+        "readyAt": 1792350663138
+      },
+      {
+        "id": "petal-layer-03-01",
+        "status": "installed",
+        "readyAt": 1792350664595
+      },
+      {
+        "id": "petal-layer-03-02",
+        "status": "installed",
+        "readyAt": 1792350664595
+      },
+      {
+        "id": "petal-layer-03-03",
+        "status": "installed",
+        "readyAt": 1792350664595
+      },
+      {
+        "id": "petal-layer-03-04",
+        "status": "installed",
+        "readyAt": 1792350664595
+      },
+      {
+        "id": "petal-layer-03-05",
+        "status": "installed",
+        "readyAt": 1792350664595
+      },
+      {
+        "id": "petal-layer-03-06",
+        "status": "installed",
+        "readyAt": 1792350664595
+      },
+      {
+        "id": "petal-layer-03-07",
+        "status": "installed",
+        "readyAt": 1792350666336
+      },
+      {
+        "id": "petal-layer-03-08",
+        "status": "installed",
+        "readyAt": 1792350666336
+      },
+      {
+        "id": "petal-layer-03-09",
+        "status": "installed",
+        "readyAt": 1792350666336
+      },
+      {
+        "id": "petal-layer-03-10",
+        "status": "installed",
+        "readyAt": 1792350666336
+      },
+      {
+        "id": "petal-layer-03-11",
+        "status": "installed",
+        "readyAt": 1792350666336
+      },
+      {
+        "id": "petal-layer-03-12",
+        "status": "installed",
+        "readyAt": 1792350666336
+      }
+    ],
+    "leaves": [
+      {
+        "id": "leaf-paper-1",
+        "status": "installed",
+        "readyAt": 1792350668377
+      },
+      {
+        "id": "leaf-paper-2",
+        "status": "installed",
+        "readyAt": 1792350668377
+      },
+      {
+        "id": "leaf-paper-3",
+        "status": "installed",
+        "readyAt": 1792350668377
+      },
+      {
+        "id": "leaf-paper-4",
+        "status": "installed",
+        "readyAt": 1792350668377
+      },
+      {
+        "id": "leaf-paper-5",
+        "status": "installed",
+        "readyAt": 1792350668377
+      },
+      {
+        "id": "leaf-paper-6",
+        "status": "installed",
+        "readyAt": 1792350668377
+      },
+      {
+        "id": "leaf-paper-7",
+        "status": "installed",
+        "readyAt": 1792350668377
+      },
+      {
+        "id": "leaf-paper-8",
+        "status": "installed",
+        "readyAt": 1792350670045
+      },
+      {
+        "id": "leaf-paper-9",
+        "status": "installed",
+        "readyAt": 1792350670045
+      },
+      {
+        "id": "leaf-paper-10",
+        "status": "installed",
+        "readyAt": 1792350670045
+      },
+      {
+        "id": "leaf-paper-11",
+        "status": "installed",
+        "readyAt": 1792350670045
+      },
+      {
+        "id": "leaf-paper-12",
+        "status": "installed",
+        "readyAt": 1792350670045
+      },
+      {
+        "id": "leaf-paper-13",
+        "status": "installed",
+        "readyAt": 1792350670045
+      },
+      {
+        "id": "leaf-paper-14",
+        "status": "installed",
+        "readyAt": 1792350670045
+      }
+    ],
+    "complete": true,
+    "lit": true,
+    "actions": 143,
+    "frameItems": {
+      "placedRings": [
+        0,
+        1,
+        2
+      ],
+      "usedStrips": [
+        0,
+        1,
+        2
+      ]
+    },
+    "handwork": {
+      "bamboo_prep:0": {
+        "mode": "bend",
+        "quality": 0.9240320000000306,
+        "curve": 0.9905040000000038,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 2.3,
+        "strip": 0
+      },
+      "bamboo_prep:1": {
+        "mode": "bend",
+        "quality": 0.9240320000000315,
+        "curve": 0.9905040000000039,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 2.3,
+        "strip": 1
+      },
+      "bamboo_prep:2": {
+        "mode": "bend",
+        "quality": 0.9357440000000334,
+        "curve": 0.9919680000000042,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 2.3,
+        "strip": 2
+      },
+      "frame_assembly:0": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:1": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:2": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:3": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:4": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:5": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:6": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:7": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:8": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:9": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:10": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "frame_assembly:11": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": 0,
+        "distance": 1.5
+      },
+      "lining_upper:0": {
+        "mode": "paper",
+        "panel": 0,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_upper:1": {
+        "mode": "paper",
+        "panel": 1,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_upper:2": {
+        "mode": "paper",
+        "panel": 2,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_upper:3": {
+        "mode": "paper",
+        "panel": 3,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_upper:4": {
+        "mode": "paper",
+        "panel": 4,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_upper:5": {
+        "mode": "paper",
+        "panel": 5,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_lower:0": {
+        "mode": "paper",
+        "panel": 0,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_lower:1": {
+        "mode": "paper",
+        "panel": 1,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_lower:2": {
+        "mode": "paper",
+        "panel": 2,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_lower:3": {
+        "mode": "paper",
+        "panel": 3,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_lower:4": {
+        "mode": "paper",
+        "panel": 4,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "lining_lower:5": {
+        "mode": "paper",
+        "panel": 5,
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 1,
+        "angle": 0,
+        "distance": 1
+      },
+      "paper_cutting:0": {
+        "mode": "trace",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 3.231676475129519
+      },
+      "paper_cutting:1": {
+        "mode": "trace",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 3.231676475129519
+      },
+      "paper_cutting:2": {
+        "mode": "trace",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 3.231676475129519
+      },
+      "paper_cutting:3": {
+        "mode": "trace",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 3.231676475129519
+      },
+      "paper_cutting:4": {
+        "mode": "trace",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 3.231676475129519
+      },
+      "paper_cutting:5": {
+        "mode": "trace",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 3.231676475129519
+      },
+      "paper_cutting:6": {
+        "mode": "trace",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 3.231676475129519
+      },
+      "paper_cutting:7": {
+        "mode": "trace",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 3.231676475129519
+      },
+      "paper_dye:0": {
+        "mode": "dye",
+        "quality": 0.8438957828213384,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0.6438957828213384,
+        "angle": -0.4,
+        "distance": 6.8062861566341075
+      },
+      "paper_dye:1": {
+        "mode": "dye",
+        "quality": 0.8444249480619829,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0.6444249480619829,
+        "angle": -0.4,
+        "distance": 6.8062861566341075
+      },
+      "paper_dye:2": {
+        "mode": "dye",
+        "quality": 0.8413832831783438,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0.6413832831783438,
+        "angle": -0.4,
+        "distance": 6.8062861566341075
+      },
+      "paper_dye:3": {
+        "mode": "dye",
+        "quality": 0.8363332827476271,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0.6363332827476271,
+        "angle": -0.4,
+        "distance": 6.8062861566341075
+      },
+      "paper_dye:4": {
+        "mode": "dye",
+        "quality": 0.8547749486218222,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0.6547749486218223,
+        "angle": -0.4,
+        "distance": 6.8062861566341075
+      },
+      "paper_dye:5": {
+        "mode": "dye",
+        "quality": 0.8653457797876256,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0.6653457797876257,
+        "angle": -0.4,
+        "distance": 6.8062861566341075
+      },
+      "leaf_dye:0": {
+        "mode": "dye",
+        "quality": 0.8785374426642827,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0.6785374426642827,
+        "angle": -0.4,
+        "distance": 6.8062861566341075
+      },
+      "leaf_dye:1": {
+        "mode": "dye",
+        "quality": 0.8654249466001561,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0.6654249466001562,
+        "angle": -0.4,
+        "distance": 6.8062861566341075
+      },
+      "petal_pressing:0": {
+        "mode": "press",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.462214306316792
+      },
+      "petal_pressing:1": {
+        "mode": "press",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.462214306316792
+      },
+      "petal_pressing:2": {
+        "mode": "press",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.462214306316792
+      },
+      "petal_pressing:3": {
+        "mode": "press",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.462214306316792
+      },
+      "petal_pressing:4": {
+        "mode": "press",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.462214306316792
+      },
+      "petal_pressing:5": {
+        "mode": "press",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.462214306316792
+      },
+      "leaf_pressing:0": {
+        "mode": "press",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.462214306316792
+      },
+      "leaf_pressing:1": {
+        "mode": "press",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.462214306316792
+      },
+      "petal_shaping:0": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "petal_shaping:1": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "petal_shaping:2": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "petal_shaping:3": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "petal_shaping:4": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "petal_shaping:5": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "petal_assembly:0": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:1": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:2": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:3": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:4": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:5": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:6": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:7": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:8": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:9": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:10": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:11": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:12": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:13": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:14": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:15": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:16": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:17": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:18": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:19": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:20": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:21": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:22": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:23": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:24": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:25": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:26": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:27": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:28": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:29": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:30": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:31": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:32": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:33": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:34": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "petal_assembly:35": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:0": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:1": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:2": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:3": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:4": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:5": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:6": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:7": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:8": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:9": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:10": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "calyx_assembly:11": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "flower_making:0": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "flower_making:1": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "flower_making:2": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "flower_making:3": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "flower_making:4": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "flower_making:5": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "top_flower_assembly:0": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "top_flower_assembly:1": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "top_flower_assembly:2": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "top_flower_assembly:3": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "top_flower_assembly:4": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "top_flower_assembly:5": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "pod_making:0": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "pod_making:1": {
+        "mode": "shape",
+        "quality": 0.99999991390302,
+        "curve": 0.60999991390302,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 0.9149999437637888
+      },
+      "pod_assembly:0": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "pod_assembly:1": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "lotus_leaf_assembly:0": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "lotus_leaf_assembly:1": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "hanging_assembly:0": {
+        "mode": "bind",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 8.030921252735423
+      },
+      "hanging_assembly:1": {
+        "mode": "bind",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 8.030921252735423
+      },
+      "hanging_assembly:2": {
+        "mode": "bind",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 8.030921252735423
+      },
+      "light_installation:0": {
+        "mode": "place",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -2.7755575615628914e-17,
+        "distance": 2.4622139808799646
+      },
+      "final_inspection:0": {
+        "mode": "inspect",
+        "quality": 1,
+        "curve": 0,
+        "oval": 0,
+        "dose": 0,
+        "angle": -0.4,
+        "distance": 4.355145423949079
+      }
+    }
+  },
+  "verified": [
+    "all 21 manual substeps / eight phases via real gestures",
+    "only final lantern inspection remains",
+    "three inventory rings and twelve ribs consumed",
+    "one original scene and continuous sessions",
+    "completion, capture, visibility and exploded views",
+    "undo redo and legacy v2 reload"
+  ]
+}

@@ -1,0 +1,13 @@
+const {chromium}=require('C:/Users/Lonn/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const assert=require('node:assert/strict');const {ensureHandwork}=require('./gesture-driver.cjs');
+(async()=>{console.log('Launching browser');const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,timeout:20000});console.log('Browser ready');try{for(const mobile of [false,true]){
+ const page=await browser.newPage({viewport:mobile?{width:390,height:844}:{width:1440,height:900},isMobile:mobile,hasTouch:mobile});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ console.log('Opening',mobile);await page.goto('http://127.0.0.1:4180/lotus-workshop.html',{timeout:20000});console.log('Page ready');assert.ok(await page.locator('#music-toggle').isVisible());assert.equal(await page.evaluate(()=>document.querySelector('audio').paused),true);
+ await page.click('#begin');console.log('Entered');await page.waitForFunction(()=>{const a=document.querySelector('audio');return !a.paused&&a.currentTime>.1});assert.equal(await page.evaluate(()=>document.querySelector('audio').loop),true);
+ await page.click('#music-toggle');assert.equal(await page.evaluate(()=>document.querySelector('audio').paused),true);assert.equal(await page.evaluate(()=>__LOTUS_WORKSHOP__.audio.snapshot().enabled),true);
+ await page.click('#sound-settings summary');await page.locator('#music-volume').fill('40');assert.equal(await page.evaluate(()=>document.querySelector('audio').volume),.4);await page.click('#sound-settings summary');
+ await page.reload();assert.equal(await page.locator('#music-toggle').textContent(),'音乐：关');await page.click('#resume');assert.equal(await page.evaluate(()=>document.querySelector('audio').paused),true);assert.equal(await page.evaluate(()=>document.querySelector('audio').volume),.4);
+ await ensureHandwork(page,mobile);await page.click('#handwork-music-toggle');await page.waitForFunction(()=>!document.querySelector('audio').paused&&document.querySelector('audio').currentTime>.1);
+ await page.evaluate(()=>__LOTUS_WORKSHOP__.music.pause());assert.equal(await page.evaluate(()=>document.querySelector('audio').paused),true);await page.evaluate(()=>__LOTUS_WORKSHOP__.music.resume());await page.waitForFunction(()=>!document.querySelector('audio').paused);
+ await page.screenshot({path:`workshop/tests/music-${mobile?'mobile':'desktop'}.png`});assert.deepEqual(errors,[]);await page.close();console.log('PASS',mobile?'mobile':'desktop','MP3 playback, looping, independent toggle, volume persistence, workbench control, pause/resume');
+ }}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1});

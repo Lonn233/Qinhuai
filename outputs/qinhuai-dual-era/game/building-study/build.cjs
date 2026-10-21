@@ -1,0 +1,1 @@
+const path=require('node:path');require('esbuild').buildSync({entryPoints:[path.join(__dirname,'study.js')],bundle:true,minify:true,format:'iife',target:['chrome100'],outfile:path.join(__dirname,'study.bundle.js')});console.log('Built building study: six independent architectural presets');

@@ -1,0 +1,76 @@
+{
+  "checks": [
+    "Legacy colour-only presets apply at the new initial dimension",
+    "mountain: exact initial dimensions, live resize, independent resets and saved size restore",
+    "lotus: exact initial dimensions, live resize, independent resets and saved size restore",
+    "lion: exact initial dimensions, live resize, independent resets and saved size restore",
+    "crane: exact initial dimensions, live resize, independent resets and saved size restore",
+    "fish: exact initial dimensions, live resize, independent resets and saved size restore",
+    "Per-model sizes survive switches and GPU cache eviction",
+    "Reload/cache clearing retains saved dimensions without rewriting old colour presets",
+    "Mobile size controls fit without horizontal overflow"
+  ],
+  "measurements": {
+    "mountain": {
+      "sizeMeters": 13,
+      "width": 13,
+      "depth": 11.930794966057544,
+      "height": 9.872124591439189,
+      "minY": 0.04999999999999982,
+      "scale": [
+        6.835780312951665,
+        6.835780312951665,
+        6.835780312951665
+      ]
+    },
+    "lotus": {
+      "sizeMeters": 0.6,
+      "width": 0.5999999999999999,
+      "depth": 0.5728319308759118,
+      "height": 0.24799543270059085,
+      "minY": 0.05000000000000002,
+      "scale": [
+        0.315907687678516,
+        0.315907687678516,
+        0.315907687678516
+      ]
+    },
+    "lion": {
+      "sizeMeters": 2.5,
+      "width": 1.7816628667422885,
+      "depth": 2.4999999999999996,
+      "height": 2.030067388087394,
+      "minY": 0.050000000000000044,
+      "scale": [
+        1.316322928545353,
+        1.316322928545353,
+        1.316322928545353
+      ]
+    },
+    "crane": {
+      "sizeMeters": 0.5,
+      "width": 0.27129827325252187,
+      "depth": 0.2709972564861719,
+      "height": 0.49999999999999994,
+      "minY": 0.04999999999999999,
+      "scale": [
+        0.26312839622131345,
+        0.26312839622131345,
+        0.26312839622131345
+      ]
+    },
+    "fish": {
+      "sizeMeters": 0.8,
+      "width": 0.6272140644423133,
+      "depth": 0.8,
+      "height": 0.3368569929368531,
+      "minY": 0.05000000000000002,
+      "scale": [
+        0.4208860475481342,
+        0.4208860475481342,
+        0.4208860475481342
+      ]
+    }
+  },
+  "errors": []
+}

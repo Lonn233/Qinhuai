@@ -1,0 +1,41 @@
+{
+  "checks": [
+    {
+      "active": 0,
+      "sceneVisible": true,
+      "sceneObjects": 161,
+      "selected": 1,
+      "thumbnailsReady": true
+    },
+    {
+      "active": 1,
+      "sceneVisible": true,
+      "sceneObjects": 161,
+      "selected": 1,
+      "thumbnailsReady": true
+    },
+    {
+      "active": 2,
+      "sceneVisible": true,
+      "sceneObjects": 161,
+      "selected": 1,
+      "thumbnailsReady": true
+    },
+    {
+      "active": 3,
+      "sceneVisible": true,
+      "sceneObjects": 161,
+      "selected": 1,
+      "thumbnailsReady": true
+    },
+    {
+      "active": 4,
+      "sceneVisible": true,
+      "sceneObjects": 161,
+      "selected": 1,
+      "thumbnailsReady": true
+    }
+  ],
+  "mobileOverflow": false,
+  "errors": []
+}

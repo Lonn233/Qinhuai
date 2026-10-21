@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "checks": [
+    "real keyboard movement / pointer capture",
+    "distance and look-away hide interaction",
+    "empty / wrong answer, hint, modal movement pause, input keys",
+    "all five raycast → E → answer → success → catalog → return loops",
+    "solved riddle reopens without duplicate unlock",
+    "podium collision / world boundary",
+    "both eras, day/night, overview and safe return preserve progress",
+    "reload restores five unlocked catalog entries",
+    "390px responsive layout",
+    "zero browser runtime / console errors"
+  ],
+  "errors": []
+}

@@ -1,0 +1,2 @@
+.study-categories{display:flex;gap:6px;align-items:center}.study-categories a{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:6px 14px;border:1px solid var(--line);color:#b6b9aa}.study-categories a[aria-current=page]{border-color:var(--gold);color:#f0d399;background:#302d24}.study-categories a:hover{border-color:#d4b879}
+@media(max-width:650px){.brand span{display:none}.study-categories{gap:4px}.study-categories a{padding:6px 10px;min-height:36px}header>a{display:none}}

@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "generatedAt": "2026-10-19T06:56:30.770Z",
+  "errors": [],
+  "pixels": [
+    {
+      "width": 1440,
+      "height": 900,
+      "colors": 304,
+      "range": 238,
+      "lost": false,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "colors": 416,
+      "range": 238,
+      "lost": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "colors": 221,
+      "range": 238,
+      "lost": false,
+      "overflow": false
+    }
+  ],
+  "verified": [
+    "binding commits and consumes only after animation",
+    "cancelled binding leaves inventory untouched",
+    "each rib has three visible bound joints",
+    "unglued paper rejected on desktop and touch",
+    "out-of-order glue persists across actual reload",
+    "retry and interrupted adhesion consume no paper",
+    "continuous out-of-order adhesion, undo, redo and reload"
+  ]
+}

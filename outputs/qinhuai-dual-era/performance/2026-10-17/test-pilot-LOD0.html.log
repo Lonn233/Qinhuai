@@ -1,0 +1,16 @@
+✔ raw data blocks round-trip with independently padded base64 and UI yields (157.4953ms)
+✔ gzip data streams decompress to the original bytes (11.0456ms)
+✔ missing, corrupt and truncated assets fail visibly instead of hanging (2.5427ms)
+✔ unsupported native decompression produces an actionable error (0.3923ms)
+✔ asset queue is sequential and survives synchronous and asynchronous failures (76.9648ms)
+✔ startup UI shows real errors, does not overwrite them, and releases the overlay on success (2.723ms)
+Verified 4 unchanged GLBs; 988 inert blocks; largest executable 1709060 characters
+✔ built offline HTML has small executable scripts and exact selected GLB payloads (2301.8834ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2649.613

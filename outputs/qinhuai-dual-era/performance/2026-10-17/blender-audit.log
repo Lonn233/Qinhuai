@@ -1,0 +1,17 @@
+PILOT Importing original GLB; untouched source E:\soft\project\codex-Qinhuai\outputs\qinhuai-dual-era\Meshy_AI_kuixingge_1016044736_texture.glb
+10:42:41 | INFO: Data are loaded, start creating Blender stuff
+10:42:41 | INFO: Blender create Mesh node 0
+10:42:54 | INFO: glTF import finished in 12.78s
+Info: Saved as "kuixing_high.blend"
+PILOT Saved non-destructive original Blender source
+E:\soft\project\codex-Qinhuai\outputs\qinhuai-dual-era\tools\blender_kuixing_pilot.py:86: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene.world=bpy.data.worlds.new('Comparison_World');scene.world.use_nodes=True;scene.world.node_tree.nodes['Background'].inputs['Color'].default_value=(.72,.78,.85,1);scene.world.node_tree.nodes['Background'].inputs['Strength'].default_value=.45
+PILOT Rendering source front
+Malloc returns null: len=324113856 in C:\Users\blender\git\blender-v520\blender.git\source\blender\blenlib\BLI_array.hh:476, total 2093098240
+Attempt to free nullptr pointer
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 02:38:20)
+Error   : Microsoft C++ Exception
+Writing: C:\Users\Lonn\AppData\Local\Temp\kuixing_high.crash.txt
+Address : 0x00007FFA0419055C
+Module  : KERNELBASE.dll
+Thread  : 0000b1b0

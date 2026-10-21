@@ -1,0 +1,34 @@
+const {chromium}=require('C:/Users/Lonn/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const fs=require('node:fs'),assert=require('node:assert/strict');
+(async()=>{const {PRESETS}=await import('../game/building-study/profiles.mjs');const old={...PRESETS[4],key:'old',label:'原收藏外溢兼容'};
+const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,timeout:30000,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--disable-gpu-sandbox']});try{
+console.log('browser ready');const page=await browser.newPage({viewport:{width:1200,height:820}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+await page.addInitScript(old=>{if(!localStorage.getItem('ss-qa')){localStorage.setItem('qinhuai.building-light-studies.v1',JSON.stringify({version:1,items:[old]}));localStorage.setItem('ss-qa','1');}},old);
+const ready=async(b='matou')=>page.waitForFunction(b=>window.__BUILDING_STUDY__?.building===b&&!document.querySelector('#controls').disabled,b,{timeout:120000});
+const set=async(id,value)=>{await page.locator('#'+id).fill(String(value));await page.locator('#'+id).dispatchEvent('change');};
+page.setDefaultTimeout(60000);page.setDefaultNavigationTimeout(30000);console.log('navigate');await page.goto('http://127.0.0.1:4180/building-light-study.html?building=matou');await ready();
+console.log('ready',await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceLayer.stats));
+assert.equal(await page.locator('[data-surface-zone]').count(),6);for(const zone of ['eave','roof','facade','sign'])assert.equal(await page.locator('#region-'+zone+' [data-surface-zone='+zone+']').count(),1);assert.equal(await page.locator('#window-light-controls [data-surface-zone=window]').count(),1);assert.equal(await page.locator('[data-preset]').count(),6);
+await page.locator('.saved-library').evaluate(e=>e.open=true);await page.locator('[data-saved-key=old]').click();
+const initial=await page.evaluate(()=>({settings:window.__BUILDING_STUDY__.settings,window:window.__BUILDING_STUDY__.windowSettings,red:window.__BUILDING_STUDY__.redLanterns.stats}));
+async function view(){await page.evaluate(()=>{const a=window.__BUILDING_STUDY__;a.controls.target.set(-40.9,12.1,-3.8);a.camera.position.set(-39,14,6.5);a.controls.update();});await page.waitForTimeout(300);}
+await view();await page.locator('#viewport').screenshot({path:'work/window-spill-coverage-20261019/full-off.png'});
+await page.locator('[data-surface-zone=window]').evaluate(e=>e.open=true);await page.locator('#ss-window-enabled').check();console.log('window on');
+await set('ss-window-distance-number',20);await set('ss-window-intensity-number',4);await set('ss-window-elevation-number',-40);
+await page.waitForTimeout(700);await page.locator('#viewport').screenshot({path:'work/window-spill-coverage-20261019/full-window-on.png'});
+await set('ss-window-distance-number',.5);await page.waitForTimeout(300);await page.locator('#viewport').screenshot({path:'work/window-spill-coverage-20261019/full-window-short.png'});await set('ss-window-distance-number',20);
+await set('ss-window-elevation-number',60);await page.waitForTimeout(300);await page.locator('#viewport').screenshot({path:'work/window-spill-coverage-20261019/full-window-up.png'});await set('ss-window-elevation-number',-40);
+const stats=await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceLayer.stats);assert.ok(stats.active);assert.ok(stats.lights===stats.coverage.window&&stats.coverage.window>100);
+assert.deepEqual(await page.evaluate(()=>({settings:window.__BUILDING_STUDY__.settings,window:window.__BUILDING_STUDY__.windowSettings,red:window.__BUILDING_STUDY__.redLanterns.stats})),initial);
+for(const zone of ['eave','roof','facade','trim']){await page.locator(`[data-surface-zone=${zone}]`).evaluate(e=>e.open=true);await page.locator(`#ss-${zone}-enabled`).check();}
+await set('roof',.15);await set('facade',.2);console.log('all on',await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceLayer.stats));
+assert.ok(await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceLayer.stats.zones.filter(z=>z==='window').length===window.__BUILDING_STUDY__.surfaceLayer.stats.available.window));
+console.log('save');const savedState=await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceSettings);await page.locator('#save-name').fill('各区域环境外溢');await page.locator('#wl-save').click();const records=await page.evaluate(()=>JSON.parse(localStorage.getItem('qinhuai.building-light-studies.v1')).items);assert.deepEqual(records[0],old);assert.deepEqual(records[1].surfaceSpill,savedState);
+console.log('reload');await page.reload();console.log('reloaded');await ready();assert.deepEqual(await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceSettings),savedState);
+await page.locator('.saved-library').evaluate(e=>e.open=true);await page.locator('[data-saved-key=old]').click();assert.equal(await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceLayer.stats.active),false);assert.equal(await page.evaluate(()=>window.__BUILDING_STUDY__.renderer.shadowMap.enabled),false);
+await page.locator(`[data-saved-key="${records[1].key}"]`).click();await page.locator('#light-toggle').click();assert.equal(await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceLayer.stats.active),false);await page.locator('#light-toggle').click();
+console.log('pavilion');await page.locator('#building-select').selectOption('pavilion');await ready('pavilion');assert.equal(await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceLayer.stats.active),false);
+console.log('temple');await page.locator('#building-select').selectOption('temple');await ready('temple');await page.locator('[data-surface-zone=sign]').evaluate(e=>e.open=true);await page.locator('#ss-sign-enabled').check();assert.ok(await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceLayer.stats.zones.includes('sign')));console.log('temple sign on');
+console.log('matou');await page.locator('#building-select').selectOption('matou');await ready();assert.deepEqual(await page.evaluate(()=>window.__BUILDING_STUDY__.surfaceSettings),savedState);
+await view();await page.locator('[data-surface-zone=window]').evaluate(e=>{e.open=true;e.scrollIntoView({block:'start'});});console.log('ui screenshot');await page.screenshot({path:'work/window-spill-coverage-20261019/full-ui.png'});assert.deepEqual(errors,[]);fs.writeFileSync('work/window-spill-coverage-20261019/full-qa.json',JSON.stringify({passed:true,stats,savedState,errors},null,2));console.log('PASS: distributed window coverage, per-zone UI, legacy saves, reload, drafts, master switch, GPU shaders');
+}catch(error){console.error('QA FAILED',error);throw error;}finally{await Promise.race([browser.close(),new Promise(r=>setTimeout(r,5000))]);}})().catch(e=>{console.error(e);process.exit(1)});

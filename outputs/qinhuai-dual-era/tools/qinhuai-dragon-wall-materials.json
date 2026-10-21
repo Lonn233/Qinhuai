@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "sourceTexture": "FuziTemple0004.jpg",
+  "evidence": "All six source FBX nodes have no material connections. Front-face UV outlines match the left dragon and central pearl in FuziTemple0004.jpg; the second dragon uses the source mirrored geometry.",
+  "front": {
+    "nodes": [
+      "FuziTemple0665",
+      "FuziTemple0668",
+      "FuziTemple0670"
+    ],
+    "name": "Qinhuai_DragonWall_PhotoRelief",
+    "roughness": 0.88,
+    "metallic": 0,
+    "specular": 0.15
+  },
+  "edge": {
+    "nodes": [
+      "FuziTemple0664",
+      "FuziTemple0666",
+      "FuziTemple0667"
+    ],
+    "name": "Qinhuai_DragonWall_ReliefEdges",
+    "colorSRGB": "#a29146",
+    "roughness": 0.9,
+    "metallic": 0,
+    "specular": 0.15
+  },
+  "note": "Photo texture restores verified original front UV mapping. Solid ochre is a deliberate replacement for unmapped extrusion edges, not a recovered original material."
+}

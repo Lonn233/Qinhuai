@@ -1,0 +1,91 @@
+{
+  "checks": [
+    "All five user colours and intensities are defaults, including stale effect URL",
+    "All five real models load together with independent light uniforms and current draft dimensions",
+    "First-person WASD movement works at a fixed 1.65m eye level",
+    "Drag-to-look works without pointer lock permission",
+    "Five quick-view stations keep true first-person scale",
+    "Returning restores studio draft and default-colour reset does not alter size",
+    "Switching through all models actually applies each saved default",
+    "Mobile controls, responsive layout, re-entry and Escape close work",
+    "Defaults survive reload and closing during loading cancels safely"
+  ],
+  "models": [
+    {
+      "id": "lion",
+      "sizeMeters": 2.5,
+      "width": 1.7816628667422885,
+      "depth": 2.5,
+      "height": 2.0300673880873936,
+      "position": [
+        -6.900000000000001,
+        0.05,
+        -3
+      ],
+      "power": 0.71,
+      "color": "#fffaf2",
+      "base": "柔彩透亮"
+    },
+    {
+      "id": "mountain",
+      "sizeMeters": 14,
+      "width": 14,
+      "depth": 12.848548424985045,
+      "height": 10.631518790780662,
+      "position": [
+        0,
+        0.05,
+        10
+      ],
+      "power": 0.93,
+      "color": "#fffbf5",
+      "base": "盈彩明灯"
+    },
+    {
+      "id": "fish",
+      "sizeMeters": 0.8,
+      "width": 0.6272140644423133,
+      "depth": 0.8,
+      "height": 0.3368569929368531,
+      "position": [
+        -2.0091685666288566,
+        0.7000000000000001,
+        -6
+      ],
+      "power": 0.53,
+      "color": "#fffcf6",
+      "base": "均匀柔光"
+    },
+    {
+      "id": "crane",
+      "sizeMeters": 0.5,
+      "width": 0.27129827325252187,
+      "depth": 0.2709972564861719,
+      "height": 0.5,
+      "position": [
+        2.590831433371143,
+        1.05,
+        -6
+      ],
+      "power": 1.12,
+      "color": "#fffbf5",
+      "base": "盈彩明灯"
+    },
+    {
+      "id": "lotus",
+      "sizeMeters": 0.6,
+      "width": 0.6,
+      "depth": 0.5728319308759118,
+      "height": 0.24799543270059085,
+      "position": [
+        7.190831433371143,
+        0.7000000000000001,
+        -3
+      ],
+      "power": 1.35,
+      "color": "#fffdf8",
+      "base": "通体彩光"
+    }
+  ],
+  "errors": []
+}

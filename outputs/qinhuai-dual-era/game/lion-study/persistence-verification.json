@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "Legacy localStorage migrated to file without deleting browser original",
+    "Save acknowledgement follows actual disk write",
+    "Clearing localStorage does not remove file-backed presets",
+    "Server restart preserves saved presets",
+    "Fresh browser context sees shared file presets",
+    "Stale browser migration cannot resurrect a deleted preset",
+    "Offline state disables save without blocking live tuning",
+    "Retry reconnects to persistent data",
+    "Mobile sidebar remains usable without horizontal overflow"
+  ],
+  "errors": []
+}

@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "mobile": false,
+      "stage": "lining_upper",
+      "seatedCamera": true,
+      "faces": 6
+    },
+    {
+      "mobile": false,
+      "stage": "lining_lower",
+      "seatedCamera": true,
+      "faces": 6
+    },
+    {
+      "mobile": true,
+      "stage": "lining_upper",
+      "seatedCamera": true,
+      "faces": 6
+    },
+    {
+      "mobile": true,
+      "stage": "lining_lower",
+      "seatedCamera": true,
+      "faces": 6
+    }
+  ],
+  "errors": []
+}

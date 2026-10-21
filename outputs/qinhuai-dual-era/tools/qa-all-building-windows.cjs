@@ -1,0 +1,27 @@
+const assert=require('node:assert/strict'),fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path');
+const {createServer}=require('../game/serve.cjs');
+const {chromium}=require('C:/Users/Lonn/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+(async()=>{
+ const dataDir=await fs.mkdtemp(path.join(os.tmpdir(),'qinhuai-all-windows-')),server=createServer({dataDir});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--disable-gpu-sandbox']}),page=await browser.newPage({viewport:{width:1280,height:800}}),errors=[],dir='work/all-building-windows-20261020',id='building-FuziTemple0928',key='qinhuai.main-building-lights.v1';
+ page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+ await page.addInitScript(()=>{if(!localStorage.getItem('all-windows-seed')){localStorage.setItem('qinhuai.main-building-lights.v1',JSON.stringify({version:1,future:'preserve',buildings:{'building-FuziTemple0928':{future:42},'building-FuziTemple0751':{windowFloors:{first:{brightness:1.7}}}},presets:[{id:'keep-old',name:'原有收藏',building:'building-FuziTemple0751',settings:{brightness:.8}}]}));localStorage.setItem('all-windows-seed','1');}});
+ const open=async selector=>page.locator(selector).evaluate(el=>{for(let p=el.parentElement;p;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;});
+ const input=async(selector,value)=>{await open(selector);await page.locator(selector).fill(value);await page.locator(selector).dispatchEvent(selector.endsWith('hex')?'change':'input');};
+ try{
+  await page.goto('http://127.0.0.1:'+server.address().port+'/qinhuai-modern-import.html?time=night&view=gate&gateLight=gold&tile=all',{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>window.__QINHUAI_STARTUP__?.phase==='场景已加载'&&window.__QINHUAI_IMPORT__?.loadedTileIds.length===5,null,{timeout:240000});console.log('All map tiles loaded');
+  const audit=await page.evaluate(()=>{const a=window.__QINHUAI_IMPORT__,r=a.nightLighting.environmentSpill,rig=a.nightLighting.buildingAdjustments,fixtures=[];a.nightLighting.root.traverse(o=>{if(o.userData.nightFixture)fixtures.push({name:o.name,count:o.count});});return {tiles:a.loadedTileIds,catalog:r.buildings.length,coverage:r.buildings.map(b=>({id:b.id,...rig.getWindowAvailability(b.id)})),fixtures};});
+  assert.ok(audit.fixtures.length>0);assert.ok(audit.fixtures.every(f=>f.name.startsWith('Source-aligned boat lights')),'Only boat fixtures remain');assert.ok(audit.coverage.filter(b=>b.total).length>25);await page.screenshot({path:dir+'/gate-no-outline-strips.png',timeout:30000});
+  await page.locator('#environment-auto-focus').uncheck();
+  for(const b of audit.coverage){await page.locator('#environment-building').selectOption(b.id);assert.ok(await page.locator('#buildingWindowFloors').isVisible());assert.equal(await page.locator('#window-first-brightness-value').isDisabled(),!b.first,b.id);assert.equal(await page.locator('#window-second-brightness-value').isDisabled(),!b.second,b.id);}
+  assert.equal(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).buildings['building-FuziTemple0928'].windowFloors,key),undefined,'Read-only UI browsing does not migrate saves');
+  await page.locator('#environment-building').selectOption(id);await input('#window-first-hex','#ff8855');await input('#window-second-hex','#55aaff');await input('#window-first-spill-hex','#77ff99');await input('#window-first-spill-distance-value','7.5');await input('#window-first-spill-angle-value','70');await open('#window-first-spill-enabled');await page.locator('#window-first-spill-enabled').check();
+  const uniforms=await page.evaluate(id=>{const r=window.__QINHUAI_IMPORT__.nightLighting.buildingAdjustments;return ['first','second'].map(f=>r.getUniform(id,'window-'+f).value.toArray());},id);assert.ok(uniforms[0][0]>uniforms[0][2]);assert.ok(uniforms[1][2]>uniforms[1][0]);
+  await input('#buildingLightName','街区分层窗光');await page.locator('#buildingLightSave').click();
+  let disk;for(let i=0;i<100;i++){try{disk=JSON.parse(await fs.readFile(path.join(dataDir,'main-scene-settings.json'),'utf8'));if(JSON.parse(disk.entries[key]).presets.length===2)break;}catch{}await page.waitForTimeout(250);}
+  const saved=JSON.parse(disk.entries[key]);assert.equal(saved.future,'preserve');assert.equal(saved.presets[0].id,'keep-old');assert.equal(saved.buildings[id].future,42);assert.equal(saved.buildings['building-FuziTemple0751'].windowFloors.first.brightness,1.7);assert.equal(saved.buildings[id].windowFloors.first.spill.distance,7.5);
+  await page.locator('#environment-focus').click();await page.waitForFunction(()=>document.querySelector('#environment-focus').getAttribute('aria-busy')==='false');await page.screenshot({path:dir+'/street-window-controls.png',timeout:30000});
+  assert.deepEqual(errors,[]);await fs.writeFile(dir+'/browser-qa.json',JSON.stringify({ok:true,dataDir,audit,uniforms,errors},null,2));console.log('PASS all catalog controls, actual window availability, no building tubes, boat fixtures retained, generic colored windows, save-as, file persistence and legacy preservation');
+ }finally{await browser.close();await new Promise(r=>{server.close(r);server.closeAllConnections();});}
+})().catch(e=>{console.error(e);process.exitCode=1;});

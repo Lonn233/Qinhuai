@@ -1,0 +1,605 @@
+[
+  {
+    "file": "Meshy_AI_kuixingge_1016044736_texture.glb",
+    "bytes": 205823700,
+    "sha256": "f6ac2f7eecb4e667bc301d2d1a41d39e5b9a8a25e9ceda34add0d4f46e091c4d",
+    "meshes": 1,
+    "primitives": [
+      {
+        "vertices": 3625100,
+        "triangles": 6752372,
+        "mode": 4,
+        "attributes": [
+          "POSITION",
+          "NORMAL",
+          "TEXCOORD_0"
+        ],
+        "material": 0,
+        "bounds": {
+          "min": [
+            -0.7185360193252563,
+            -0.9507070183753967,
+            -0.6201120018959045
+          ],
+          "max": [
+            0.7175970077514648,
+            0.9497789740562439,
+            0.6193029880523682
+          ]
+        }
+      }
+    ],
+    "vertices": 3625100,
+    "triangles": 6752372,
+    "geometryBufferBytes": 197031664,
+    "materials": 1,
+    "doubleSidedMaterials": 1,
+    "images": [
+      {
+        "bytes": 3844130,
+        "sha256": "17720b16b32c5556fdf024dcada1d74ac05cef2122b9db55159af4b1b9131970",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 2418570,
+        "sha256": "6a750a51b58ff5a790241ac823e40cbd22b1771421db9d7145743176f4946bee",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 2527067,
+        "sha256": "5d01f5512868d389f634233a2da71e62d9a95c38c198b4d1b79a7bddbf8dc47b",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "sceneNodeCount": 1,
+    "note": "Unique file primitives, NOT per-frame submitted triangles or browser VRAM."
+  },
+  {
+    "file": "qiao.glb",
+    "bytes": 26808396,
+    "sha256": "9aa1d18490682e454f30b6b458685abfd1cef33fe39ebf32be2c4c53a747ba4b",
+    "meshes": 1,
+    "primitives": [
+      {
+        "vertices": 320312,
+        "triangles": 560350,
+        "mode": 4,
+        "attributes": [
+          "POSITION",
+          "NORMAL",
+          "TEXCOORD_0"
+        ],
+        "material": 0,
+        "bounds": {
+          "min": [
+            -0.9519090056419373,
+            -0.14249299466609955,
+            -0.3298029899597168
+          ],
+          "max": [
+            0.950767993927002,
+            0.15556199848651886,
+            0.3288710117340088
+          ]
+        }
+      }
+    ],
+    "vertices": 320312,
+    "triangles": 560350,
+    "geometryBufferBytes": 16974184,
+    "materials": 1,
+    "doubleSidedMaterials": 1,
+    "images": [
+      {
+        "bytes": 4367777,
+        "sha256": "5e0e9d069cf6850a3f114251a542fe327eddf60889d0d99b6ebb01b975bad3b8",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 1979998,
+        "sha256": "1105e9d3d5055d37c5427c1986a7d968a65b3f8fef60fd289a944e1d4e7a341e",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 3484180,
+        "sha256": "c68a70516eb8c47580d7ed56c7f4eb02f8d9984caaca71a64f0ebb56244df897",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "sceneNodeCount": 1,
+    "note": "Unique file primitives, NOT per-frame submitted triangles or browser VRAM."
+  },
+  {
+    "file": "hehua_1.glb",
+    "bytes": 14693852,
+    "sha256": "8be77261210f690e21ce4a575e355fddfaf1afd7a1c3b36516628a996ca43baa",
+    "meshes": 1,
+    "primitives": [
+      {
+        "vertices": 141595,
+        "triangles": 260194,
+        "mode": 4,
+        "attributes": [
+          "POSITION",
+          "NORMAL",
+          "TEXCOORD_0"
+        ],
+        "material": 0,
+        "bounds": {
+          "min": [
+            -0.9511669874191284,
+            -0.4112449884414673,
+            -0.890595018863678
+          ],
+          "max": [
+            0.950855016708374,
+            0.4132240116596222,
+            0.8927559852600098
+          ]
+        }
+      }
+    ],
+    "vertices": 141595,
+    "triangles": 260194,
+    "geometryBufferBytes": 7653368,
+    "materials": 1,
+    "doubleSidedMaterials": 1,
+    "images": [
+      {
+        "bytes": 1895063,
+        "sha256": "0f2232cb6c7dbc09e73031189ee663927716176ae9114c1719d079f330f11e48",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 3805939,
+        "sha256": "1ac881b4c84ca7e8e53b219a934ef2554c48ede23cfa2919a40bf9e66c0da322",
+        "mime": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 1337759,
+        "sha256": "28f9e98fc83a339b8ed2602452a22a21c52e0248c0d692801ccc78d34df1b70c",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "sceneNodeCount": 1,
+    "note": "Unique file primitives, NOT per-frame submitted triangles or browser VRAM."
+  },
+  {
+    "file": "hehua-main.glb",
+    "bytes": 40959044,
+    "sha256": "ff793d2bca1b5c4855166ae841be4168b812c0bd09ebcd1d52b00c9abc4fcd4c",
+    "meshes": 1,
+    "primitives": [
+      {
+        "vertices": 634125,
+        "triangles": 1169780,
+        "mode": 4,
+        "attributes": [
+          "POSITION",
+          "NORMAL",
+          "TEXCOORD_0"
+        ],
+        "material": 0,
+        "bounds": {
+          "min": [
+            -0.9505280256271362,
+            -0.4008199870586395,
+            -0.9055070281028748
+          ],
+          "max": [
+            0.9496830105781555,
+            0.3852759897708893,
+            0.909512996673584
+          ]
+        }
+      }
+    ],
+    "vertices": 634125,
+    "triangles": 1169780,
+    "geometryBufferBytes": 34329360,
+    "materials": 1,
+    "doubleSidedMaterials": 1,
+    "images": [
+      {
+        "bytes": 1639445,
+        "sha256": "7660ff2c3099dd88423a81be8f25d4503a4b070ec1db036c15462146e05d0fdd",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 3821807,
+        "sha256": "920e4fa9d0af8dad7f9f5ec0c00f297c5dcb6c42672762d5199d228391859604",
+        "mime": "image/png",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 1166697,
+        "sha256": "7d809a3e565f0502ff407dc8765d87926962d8e6f07c3e22bff3f48c5480b0d1",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "sceneNodeCount": 1,
+    "note": "Unique file primitives, NOT per-frame submitted triangles or browser VRAM."
+  },
+  {
+    "file": "assets/kuixing-pilot/export/kuixing_LOD0.glb",
+    "bytes": 38163476,
+    "sha256": "4867f1529203a8aee21147f55bc1b83a750d20aca43d41b14d8f6452a0eeb00c",
+    "meshes": 1,
+    "primitives": [
+      {
+        "vertices": 580363,
+        "triangles": 899990,
+        "mode": 4,
+        "attributes": [
+          "POSITION",
+          "NORMAL",
+          "TEXCOORD_0"
+        ],
+        "material": 0,
+        "bounds": {
+          "min": [
+            -0.7185360193252563,
+            -0.9506869912147522,
+            -0.6201120018959045
+          ],
+          "max": [
+            0.7175970077514648,
+            0.9497789740562439,
+            0.6193029880523682
+          ]
+        }
+      }
+    ],
+    "vertices": 580363,
+    "triangles": 899990,
+    "geometryBufferBytes": 29371496,
+    "materials": 1,
+    "doubleSidedMaterials": 1,
+    "images": [
+      {
+        "bytes": 3844130,
+        "sha256": "17720b16b32c5556fdf024dcada1d74ac05cef2122b9db55159af4b1b9131970",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 2418570,
+        "sha256": "6a750a51b58ff5a790241ac823e40cbd22b1771421db9d7145743176f4946bee",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 2527067,
+        "sha256": "5d01f5512868d389f634233a2da71e62d9a95c38c198b4d1b79a7bddbf8dc47b",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "sceneNodeCount": 1,
+    "note": "Unique file primitives, NOT per-frame submitted triangles or browser VRAM."
+  },
+  {
+    "file": "assets/kuixing-pilot/export/kuixing_LOD1.glb",
+    "bytes": 16071336,
+    "sha256": "8a87fa59b658d88837076393badecfc8922ac2ef873b2db0554a92057876f2e0",
+    "meshes": 1,
+    "primitives": [
+      {
+        "vertices": 152489,
+        "triangles": 199976,
+        "mode": 4,
+        "attributes": [
+          "POSITION",
+          "NORMAL",
+          "TEXCOORD_0"
+        ],
+        "material": 0,
+        "bounds": {
+          "min": [
+            -0.7185360193252563,
+            -0.9506610035896301,
+            -0.6201120018959045
+          ],
+          "max": [
+            0.7175970077514648,
+            0.9497789740562439,
+            0.6193029880523682
+          ]
+        }
+      }
+    ],
+    "vertices": 152489,
+    "triangles": 199976,
+    "geometryBufferBytes": 7279360,
+    "materials": 1,
+    "doubleSidedMaterials": 1,
+    "images": [
+      {
+        "bytes": 3844130,
+        "sha256": "17720b16b32c5556fdf024dcada1d74ac05cef2122b9db55159af4b1b9131970",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 2418570,
+        "sha256": "6a750a51b58ff5a790241ac823e40cbd22b1771421db9d7145743176f4946bee",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 2527067,
+        "sha256": "5d01f5512868d389f634233a2da71e62d9a95c38c198b4d1b79a7bddbf8dc47b",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "sceneNodeCount": 1,
+    "note": "Unique file primitives, NOT per-frame submitted triangles or browser VRAM."
+  },
+  {
+    "file": "assets/kuixing-pilot/export/kuixing_LOD1_tex1024.glb",
+    "bytes": 11609788,
+    "sha256": "3cddc84cb6d7fa8cdfaf5628d51d0620191aefab21171e76ceb858bb30302424",
+    "meshes": 1,
+    "primitives": [
+      {
+        "vertices": 152489,
+        "triangles": 199976,
+        "mode": 4,
+        "attributes": [
+          "POSITION",
+          "NORMAL",
+          "TEXCOORD_0"
+        ],
+        "material": 0,
+        "bounds": {
+          "min": [
+            -0.7185360193252563,
+            -0.9506610035896301,
+            -0.6201120018959045
+          ],
+          "max": [
+            0.7175970077514648,
+            0.9497789740562439,
+            0.6193029880523682
+          ]
+        }
+      }
+    ],
+    "vertices": 152489,
+    "triangles": 199976,
+    "geometryBufferBytes": 7279360,
+    "materials": 1,
+    "doubleSidedMaterials": 1,
+    "images": [
+      {
+        "bytes": 1938684,
+        "sha256": "be15114a6adfba6f08e9feb8f9d9e9db33d41e71af0842d214b22ad5bc21810f",
+        "mime": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "bytes": 1119704,
+        "sha256": "179052f861b3dedb41108792bbb4ae588e71782b9175f033a36c42ca5424a26c",
+        "mime": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      },
+      {
+        "bytes": 1269839,
+        "sha256": "576c109fa2b27234415d0963583ef8256e96ca813898f5d2ff1b9210d10988dc",
+        "mime": "image/png",
+        "size": [
+          1024,
+          1024
+        ]
+      }
+    ],
+    "sceneNodeCount": 1,
+    "note": "Unique file primitives, NOT per-frame submitted triangles or browser VRAM."
+  },
+  {
+    "file": "assets/kuixing-pilot/export/kuixing_LOD2.glb",
+    "bytes": 13672236,
+    "sha256": "25377c243586d4c2ed7efe74ccdbf29d2fa0382350854ba5c2515ee0641a75cb",
+    "meshes": 1,
+    "primitives": [
+      {
+        "vertices": 104236,
+        "triangles": 128726,
+        "mode": 4,
+        "attributes": [
+          "POSITION",
+          "NORMAL",
+          "TEXCOORD_0"
+        ],
+        "material": 0,
+        "bounds": {
+          "min": [
+            -0.7185360193252563,
+            -0.9506610035896301,
+            -0.6201120018959045
+          ],
+          "max": [
+            0.7175970077514648,
+            0.9497789740562439,
+            0.6193029880523682
+          ]
+        }
+      }
+    ],
+    "vertices": 104236,
+    "triangles": 128726,
+    "geometryBufferBytes": 4880264,
+    "materials": 1,
+    "doubleSidedMaterials": 1,
+    "images": [
+      {
+        "bytes": 3844130,
+        "sha256": "17720b16b32c5556fdf024dcada1d74ac05cef2122b9db55159af4b1b9131970",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 2418570,
+        "sha256": "6a750a51b58ff5a790241ac823e40cbd22b1771421db9d7145743176f4946bee",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "bytes": 2527067,
+        "sha256": "5d01f5512868d389f634233a2da71e62d9a95c38c198b4d1b79a7bddbf8dc47b",
+        "mime": "image/jpeg",
+        "size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "sceneNodeCount": 1,
+    "note": "Unique file primitives, NOT per-frame submitted triangles or browser VRAM."
+  },
+  {
+    "file": "assets/kuixing-pilot/export/kuixing_LOD2_tex512.glb",
+    "bytes": 6026524,
+    "sha256": "915cbfee1cde2c92e1e89db224514406aa3416ee00db29aa13b19d34d7b3e562",
+    "meshes": 1,
+    "primitives": [
+      {
+        "vertices": 104236,
+        "triangles": 128726,
+        "mode": 4,
+        "attributes": [
+          "POSITION",
+          "NORMAL",
+          "TEXCOORD_0"
+        ],
+        "material": 0,
+        "bounds": {
+          "min": [
+            -0.7185360193252563,
+            -0.9506610035896301,
+            -0.6201120018959045
+          ],
+          "max": [
+            0.7175970077514648,
+            0.9497789740562439,
+            0.6193029880523682
+          ]
+        }
+      }
+    ],
+    "vertices": 104236,
+    "triangles": 128726,
+    "geometryBufferBytes": 4880264,
+    "materials": 1,
+    "doubleSidedMaterials": 1,
+    "images": [
+      {
+        "bytes": 538018,
+        "sha256": "018eff201503dc6829158800e01de9d9c7099eaf5031ac95d1bfb797ce3cf0b0",
+        "mime": "image/png",
+        "size": [
+          512,
+          512
+        ]
+      },
+      {
+        "bytes": 297820,
+        "sha256": "bf14049277b75b0f855aa32170e14f8461c17c572e372e1879b707cc8e93bb4b",
+        "mime": "image/png",
+        "size": [
+          512,
+          512
+        ]
+      },
+      {
+        "bytes": 308227,
+        "sha256": "dffe9530caa7d0d0817b434f14886884532e51b7768a0ede3aad701bcda45d35",
+        "mime": "image/png",
+        "size": [
+          512,
+          512
+        ]
+      }
+    ],
+    "sceneNodeCount": 1,
+    "note": "Unique file primitives, NOT per-frame submitted triangles or browser VRAM."
+  }
+]

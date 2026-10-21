@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "checks": [
+    "one failed model does not block other lanterns",
+    "failed model retry succeeds",
+    "blocked localStorage stays playable and displays session-only warning",
+    "coarse pointer direction controls actually move player",
+    "mobile catalog has no horizontal overflow",
+    "both original lotus variants present",
+    "one scene canvas",
+    "no browser runtime errors"
+  ],
+  "stats": {
+    "lotusKinds": [
+      "one",
+      "main"
+    ],
+    "lotusCount": 12,
+    "loaded": 5,
+    "canvasCount": 1
+  },
+  "errors": []
+}

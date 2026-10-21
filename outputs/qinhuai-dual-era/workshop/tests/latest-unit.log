@@ -1,0 +1,93 @@
+npm warn Unknown user config "electron_mirror". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> qinhuai-reference-district@1.0.0 test:workshop
+> node --test workshop/tests/*.test.mjs
+
+(node:46612) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///E:/soft/project/codex-Qinhuai/outputs/qinhuai-dual-era/workshop/craft-book.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\E:\soft\project\codex-Qinhuai\outputs\qinhuai-dual-era\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ craft book covers every process once, in actual gameplay order (3.0254ms)
+✔ craft book explains spatial E actions, time compression and the two cuts (0.7541ms)
+✔ bending needs a selected strip; held left bends continuously and right releases (4.2249ms)
+✔ overbend cannot bind; paper wrapping finishes before committing evidence (0.964ms)
+✔ rings are inventory until explicitly installed; ribs require all three rings (6.0545ms)
+✔ ring placement and inventory survive undo redo and save reload (4.1782ms)
+✔ old v2 saves keep previously installed rings; new rings remain inventory (1.4046ms)
+✔ corrupt stock, impossible ring placement and duplicate consumption are rejected (0.4515ms)
+✔ hands have five articulated digits, mirrored anatomy and bounded draw calls (38.0249ms)
+✔ poses deform the same geometry and rotated grips keep contact with the tool (8.7293ms)
+✔ palm and sleeve surfaces have outward normals (4.1782ms)
+✔ shared skeletons and geometry are disposed once when leaving the workbench (6.8325ms)
+✔ all manual stages require gestures; drying stays a timed material process (3.4659ms)
+✔ bending requires fixing the left end and allows correcting overbend (1.3226ms)
+✔ a misplaced or angled component cannot be fixed by holding (0.7987ms)
+✔ dye depth and time affect color; pale paper can redip, overdye requires reset (2.0546ms)
+✔ pressing requires alignment before contact produces a visible imprint (0.5824ms)
+✔ stationary and off-line tools do not cut or bind; valid paths accumulate (1.0486ms)
+✔ curling too far can be corrected without replacing the paper (0.8729ms)
+✔ final inspection requires dwell on every point, cancellation stops accumulating (0.537ms)
+✔ handwork evidence follows save, undo and redo; invalid numbers reject saves (5.9437ms)
+✔ every stage synchronizes and ghost clones contain serializable metadata (718.4804ms)
+✔ explosion, frame-only and per-part visibility restore exact transforms (50.982ms)
+✔ all geometry stays finite and body petals cover the large ring radius (65.7159ms)
+✔ lining, six flower heads, decorations and LED follow their individual steps (50.134ms)
+✔ paper sequence separates first square cut and post-press silhouette cuts (10.9769ms)
+✔ square contour requires a continuous accurate trace and explicit retry after failure (1.016ms)
+✔ petal contour requires a continuous accurate trace and explicit retry after failure (0.5761ms)
+✔ leaf contour requires a continuous accurate trace and explicit retry after failure (0.4199ms)
+✔ dye requires explicit start/lift, pointer release never changes phase, simulated timing gates hanging (1.0854ms)
+✔ short immersion can be continued without resetting its timer or gradient (0.4877ms)
+✔ roller runs full cycle, rejects repeated starts and stops automatically (0.4043ms)
+✔ discard is undoable and does not consume a successful batch; dye profile persists through drying/press/cut (6.2267ms)
+✔ pre-paper-revision saves at shaping reopen on contour cutting, late saves preserve work (14.0039ms)
+✔ square cutting accepts a 0.07 offset from the outline (0.6433ms)
+✔ square cutting tolerates sparse mouse events along the contour (0.3114ms)
+✔ square cutting still rejects a shortcut through the middle (0.2188ms)
+✔ petal cutting accepts a 0.07 offset from the outline (0.3809ms)
+✔ petal cutting tolerates sparse mouse events along the contour (0.2715ms)
+✔ petal cutting still rejects a shortcut through the middle (0.2791ms)
+✔ leaf cutting accepts a 0.07 offset from the outline (0.3602ms)
+✔ leaf cutting tolerates sparse mouse events along the contour (0.3015ms)
+✔ leaf cutting still rejects a shortcut through the middle (0.2398ms)
+✔ larger cutting start handle accepts an imprecise grab (0.5223ms)
+(node:49456) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///E:/soft/project/codex-Qinhuai/outputs/qinhuai-dual-era/workshop/paper-visuals.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\E:\soft\project\codex-Qinhuai\outputs\qinhuai-dual-era\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ bath and rack use the identical dye gradient with a nearly white top and darker bottom (17.24ms)
+✔ press winding begins empty, winds with rotating rollers and removes loose supply at the end (6.3909ms)
+✔ fresh state is valid; wrong tools never advance (3.8292ms)
+✔ complete all eight phases and 23 manual steps; preserve unique paper identities (11.0993ms)
+✔ wet paper is not allowed into the press (0.4267ms)
+✔ undo, redo, branch and stage-reset maintain valid data (2.2168ms)
+✔ reject corrupt or inconsistent saves (2.7739ms)
+✔ preview includes every component but is unlit by default (1.3851ms)
+✔ malformed paper records are rejected without throwing (0.5702ms)
+✔ test skip completes exactly one manual stage and preserves materials through the full chain (33.448ms)
+✔ skip preserves partial bamboo identities and starts a new undo branch (1.2141ms)
+✔ skip assembles only missing rings and ribs with immediate per-rib binding (2.221ms)
+✔ skip finishes nonsequential lining without duplicating panels and undoes atomically (1.7471ms)
+✔ skip drying fast-forwards the remaining wait but does not press any paper (1.4331ms)
+✔ each installed rib is bound immediately and no batch-binding stage remains (0.7147ms)
+✔ lining rejects unglued, invalid and duplicate panels without consuming paper (0.7915ms)
+✔ glue and paper are separate undoable operations, including nonsequential panels and reload (1.6112ms)
+✔ older v2 saves migrate partial ribs, old binding and existing paper without mutation (1.1709ms)
+✔ corrupt glue and installed-panel records are rejected (0.8077ms)
+✔ contour cutting cannot substitute for shaping; both paper families retain identities (2.105ms)
+✔ drying waits for the last green sheet, including after undo and redo (1.3762ms)
+✔ reject malformed leaves, skipped lining, and shaped paper without shaping work (4.5652ms)
+✔ legacy migration keeps only compatible frame progress and never completes new steps (1.1027ms)
+✔ only final lantern inspection remains and every retired boundary advances directly (6.4445ms)
+✔ old numeric stage indexes migrate at every active step without losing material progress (23.1678ms)
+✔ partial retired inspections skip ahead and discard only retired evidence (6.0147ms)
+✔ pre-binding-revision saves migrate using the old stage order before removing inspections (0.8565ms)
+✔ migration rejects invalid revision, skipped stages and corrupt retired evidence (1.3792ms)
+ℹ tests 72
+ℹ suites 0
+ℹ pass 72
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2424.0791

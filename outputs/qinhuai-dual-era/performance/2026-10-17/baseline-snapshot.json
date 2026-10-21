@@ -1,0 +1,62 @@
+{
+  "createdAt": "2026-10-17T02:39:11.880Z",
+  "baselineDir": "E:/soft/project/codex-Qinhuai/work/perf-baseline-20261017",
+  "files": [
+    {
+      "file": "index.html",
+      "bytes": 304635071,
+      "sha256": "27bd32d95a412c9d9a76d7c03336e8cdeb3873ba3a37a2ec45454622612871c9"
+    },
+    {
+      "file": "model-source.js",
+      "bytes": 79221,
+      "sha256": "0f361f38034fbe67f0885973a11ee130e7140c624b20f7b6e360f53e8d453472"
+    },
+    {
+      "file": "page-template.html",
+      "bytes": 18076,
+      "sha256": "eae0cf81723fec138d405c5b17ef9d69ec487fd9c774c409165db200678b0f46"
+    },
+    {
+      "file": "build.cjs",
+      "bytes": 4140,
+      "sha256": "7f35c5a16182ae98ab8debe91ae77600cba5e74a124d5f1a754af93d6b791307"
+    },
+    {
+      "file": "embedded-assets.js",
+      "bytes": 2043,
+      "sha256": "8d5facb808189b5f57f947e80c3ac060c239e3edf1714e8af72db09b56913102"
+    },
+    {
+      "file": "pavilion-lighting.js",
+      "bytes": 7615,
+      "sha256": "e051067f54bc73822e469ee38ff2337c39e770d55312183557641185d9d96ccc"
+    },
+    {
+      "file": "pavilion-light-profiles.js",
+      "bytes": 32899,
+      "sha256": "ad3993c091554353decb9d6638bb0c8cb573ce0ec9cab2aca302e1fd181b0e2e"
+    },
+    {
+      "file": "ming-architecture.js",
+      "bytes": 9972,
+      "sha256": "11f29058ffc7f0b22abd3292a5c42bd5e56a011d05e462d09f935e7b8e0b0f2a"
+    },
+    {
+      "file": "package.json",
+      "bytes": 352,
+      "sha256": "7b5b7f1e223f9839569b37998255aac3225183373565dc8c43117f5694321664"
+    },
+    {
+      "file": "test-loading.cjs",
+      "bytes": 9393,
+      "sha256": "59cf4a064b557535219e0abe1e3295fae8e2ae1945f13a278bcdc587f0c7e20d"
+    },
+    {
+      "file": "test-startup.cjs",
+      "bytes": 8759,
+      "sha256": "eaddb28da079aefe904e9bf68b79ccb9130d358e300ac370b6043d75696cccea"
+    }
+  ],
+  "notes": "Frozen original code and self-contained HTML, before this performance task. Unfinished model-assets.js/runtime-assets.cjs were not imported by the original build."
+}

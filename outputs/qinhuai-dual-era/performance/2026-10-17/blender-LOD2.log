@@ -1,0 +1,16 @@
+10:51:39 | INFO: Data are loaded, start creating Blender stuff
+10:51:39 | INFO: Blender create Mesh node 0
+10:51:39 | INFO: glTF import finished in 0.26s
+Info: Saved as "kuixing_LOD2.blend"
+INFO Draco is available, use library at E:\blender\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at E:\blender\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+10:51:39 | INFO: Starting glTF 2.0 export
+10:51:39 | INFO: Extracting primitive: Mesh_0
+10:51:39 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+10:51:39 | INFO: Primitives created: 1
+10:51:39 | INFO: Finished glTF 2.0 export in 0.3418612480163574 s
+
+{"blender": "5.2.1 LTS", "level": "LOD2", "input": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\assets\\kuixing-pilot\\export\\kuixing_LOD2.glb", "blend": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\assets\\kuixing-pilot\\optimized\\kuixing_LOD2.blend", "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\assets\\kuixing-pilot\\export\\blender_roundtrip\\kuixing_LOD2.glb", "vertices_in_blender": 104236, "triangles_in_blender": 128707, "seconds": 0.9253633000043919, "output_bytes": 13682940, "approved": false, "note": "Blender-exported candidate is a separate QA deliverable; runtime pilot uses canonical GLB with byte-identical source maps."}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 02:38:20)
+
+Blender quit

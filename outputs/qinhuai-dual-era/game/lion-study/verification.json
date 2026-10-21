@@ -1,0 +1,32 @@
+{
+  "results": [
+    {
+      "active": 0,
+      "title": "原色微光",
+      "selected": 1
+    },
+    {
+      "active": 1,
+      "title": "均匀柔光",
+      "selected": 1
+    },
+    {
+      "active": 2,
+      "title": "暖纱透光",
+      "selected": 1
+    },
+    {
+      "active": 3,
+      "title": "立体漫光",
+      "selected": 1
+    },
+    {
+      "active": 4,
+      "title": "柔晕夜灯",
+      "selected": 1
+    }
+  ],
+  "rotates": "true",
+  "mobileOverflow": false,
+  "errors": []
+}

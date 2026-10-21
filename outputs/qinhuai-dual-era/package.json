@@ -1,0 +1,43 @@
+{
+  "name": "qinhuai-reference-district",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Three-reference Qinhuai riverside architectural district reconstruction",
+  "scripts": {
+    "build": "node build.cjs",
+    "test": "node --max-old-space-size=512 --test test-loading.cjs test-startup.cjs test-performance-tools.cjs",
+    "build:pilot": "node tools/build-pilot-pages.cjs",
+    "build:game": "node game/build.cjs",
+    "start:game": "node game/serve.cjs",
+    "test:game": "node --test game/tests/*.test.mjs",
+    "prepare:game-assets": "node game/prepare-assets.cjs",
+    "test:game:browser": "node game/tests/browser-e2e.cjs",
+    "build:workshop": "node workshop/build.cjs",
+    "start:workshop": "node workshop/serve.cjs",
+    "test:workshop": "node --test workshop/tests/*.test.mjs",
+    "test:workshop:browser": "node workshop/tests/browser.cjs",
+    "build:import": "node tools/build-import-viewer.cjs",
+    "test:import-startup": "node tools/test-import-startup.cjs",
+    "test:import-walking": "node tools/test-import-walking.cjs",
+    "test:workshop:audio": "node workshop/tests/audio-browser.cjs",
+    "test:workshop:handwork": "node workshop/tests/handwork-browser.cjs",
+    "test:workshop:craft": "node workshop/tests/craft-browser.cjs",
+    "build:light-study": "esbuild game/lion-study/study.js --bundle --minify --format=iife --target=chrome100 --outfile=game/lion-study/study.bundle.js",
+    "test:light-storage": "node --test game/tests/preset-store.test.mjs",
+    "test:light-storage:browser": "node game/tests/preset-storage-browser.cjs",
+    "test:light-size": "node --test game/tests/model-size.test.mjs game/tests/preset-store.test.mjs",
+    "test:light-size:browser": "node game/tests/model-size-browser.cjs",
+    "test:light-walk": "node --test game/tests/walk-preview.test.mjs",
+    "test:light-walk:browser": "node game/tests/walk-preview-browser.cjs",
+    "test:scene-storage": "node --test game/tests/main-scene-store.test.mjs",
+    "test:scene-storage:browser": "node game/tests/main-scene-storage-browser.cjs",
+    "start:scene-storage": "node game/scene-storage-server.cjs"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10",
+    "meshoptimizer": "^1.3.0"
+  }
+}

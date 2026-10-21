@@ -1,0 +1,24 @@
+{
+  "layoutChecks": [
+    {
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "pageScroll": 0,
+      "sidebarScroll": 52
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false
+    }
+  ],
+  "checks": [
+    "Desktop preview and controls use approximately 6:1 columns",
+    "All nine preset buttons are inside the right sidebar",
+    "Brightness, color, save, apply and delete work in the sidebar",
+    "1366×768 has no page scrolling; only 52px of sidebar overflow",
+    "390px mobile has no horizontal overflow"
+  ],
+  "errors": []
+}

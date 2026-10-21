@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "generatedAt": "2026-10-18T18:49:04.860Z",
+  "mobileDetailModes": [
+    "lining_lower",
+    "lining_upper",
+    "paper_dye",
+    "petal_pressing",
+    "petal_shaping",
+    "petal_assembly",
+    "final_inspection"
+  ],
+  "errors": [],
+  "angle": {
+    "sameScene": true,
+    "sameCamera": true,
+    "degrees": 45.00000000000001
+  },
+  "memory": {
+    "before": {
+      "geometries": 494,
+      "textures": 7
+    },
+    "after": {
+      "geometries": 494,
+      "textures": 7
+    }
+  },
+  "verified": [
+    "camera interpolates into original scene at 45 degrees",
+    "left bend / right release / overbend rejection",
+    "paper wrapping then inventory, no exit",
+    "matching ring sockets, rib prerequisites, continuous drop",
+    "inventory undo redo and reload",
+    "touch three rings and assembly, no overflow",
+    "seven later touch modes on the same perspective workplane",
+    "20 entry / retry cycles without GPU growth"
+  ]
+}
