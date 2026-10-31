@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {createTempleVisit,TEMPLE_PORTAL as P} from '../import-temple-visit.mjs';
+const events=[];let release,fail=true,visible=false;
+const visit=createTempleVisit({stop:()=>events.push('stop'),fade:async b=>events.push(b?'black':'reveal'),load:async()=>{events.push('load');await new Promise(r=>release=r);if(fail)throw Error('network');},teleport:async entering=>events.push(entering?'enter':'exit'),setVisible:v=>visible=v});
+visit.update({x:0,y:P.ground,z:0},true);assert.equal(await visit.activate(),false);
+visit.update({...P.outside,y:P.ground},true);const attempt=visit.activate();await new Promise(r=>setTimeout(r,0));assert.equal(visit.snapshot().busy,true);assert.equal(await visit.activate(),false);release();assert.equal(await attempt,false);assert.equal(visit.snapshot().inside,false);assert.equal(visible,false);assert.equal(visit.snapshot().busy,false);
+fail=false;visit.update({...P.outside,y:P.ground},true);const retry=visit.activate();await new Promise(r=>setTimeout(r,0));release();assert.equal(await retry,true);assert.equal(visible,true);assert.equal(visit.snapshot().inside,true);
+assert.ok(events.indexOf('black')<events.indexOf('load'));assert.ok(events.lastIndexOf('load')<events.indexOf('enter'));
+visit.update({...P.inside,y:P.ground},false);assert.equal(await visit.activate(),false);
+visit.update({...P.inside,y:P.ground},true);assert.equal(await visit.activate(),true);assert.equal(visible,false);assert.equal(visit.snapshot().inside,false);assert.equal(events.filter(e=>e==='load').length,2);
+console.log('PASS: proximity, mode gating, reentry lock, failure recovery, blackout ordering, exit');

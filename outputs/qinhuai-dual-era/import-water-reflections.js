@@ -1,3 +1,4 @@
+import {lampSetting,lampGain} from './import-lantern-settings.mjs';
 import {BRIDGE_ID,BRIDGE_NODES,BRIDGE_PRESET} from './import-bridge-config.mjs';
 import {normalizeBuilding} from './import-building-controls.mjs';
 import * as THREE from 'three';
@@ -162,8 +163,9 @@ export class ImportWaterReflections {
  }
  apply(settings,{matou,pavilion,styles,buildingAdjustments={}}){
   const p=normalizeMapLights(settings);for(const [k,u] of Object.entries(this.controls))applyWaterControls(u,p,k);
-  const color=new THREE.Color();
+  const color=new THREE.Color(),boat=lampSetting(this,'boat');
   for(const {kind,mesh,sources} of this.batches){
+   if(kind==='boat')mesh.visible=!this.playBoatsHidden&&boat.modelVisible;
    const colors=mesh.geometry.getAttribute('sourceColor'),powers=mesh.geometry.getAttribute('sourcePower');
    sources.forEach((source,i)=>{
     const study=source.style==='matou'?matou:source.style==='pavilion'?pavilion:null;
@@ -177,6 +179,7 @@ export class ImportWaterReflections {
      const setting=normalizeBuilding(buildingAdjustments[BRIDGE_ID]),part=setting.parts[source.role],base=BRIDGE_PRESET[source.role];
      color.set(part.inheritColor?base.color:part.color);power=.055*base.energy*(setting.enabled&&part.enabled?setting.brightness*part.brightness:0);
     }
+    if(kind==='boat'){power*=lampGain(boat);if(!boat.inheritColor)color.set(boat.color);}
     colors.setXYZ(i,color.r,color.g,color.b);powers.setX(i,power);
    });colors.needsUpdate=powers.needsUpdate=true;
   }

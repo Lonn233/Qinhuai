@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import { createDyeProcess, dyeClock, dyeQuality } from '../js/dye-process.js';
+const inventory = { paper: 0, wetPaper: 0, dyedPaper: 0, copper: 0 };
+const dye = createDyeProcess(inventory);
+const mode = () => dye.snapshot().mode;
+assert.equal(dyeQuality(119.999), 'light'); assert.equal(dyeQuality(120), 'ready');
+assert.equal(dyeQuality(180), 'ready'); assert.equal(dyeQuality(180.001), 'dark'); assert.equal(dyeClock(125), '02:05');
+assert.equal(dye.act('immerse'), false); assert.equal(dye.act('rack'), false);
+dye.act('pick'); assert.equal(inventory.paper, 1); assert.equal(dye.snapshot().stock, 5);
+dye.back(); assert.equal(inventory.paper, 0); assert.equal(dye.snapshot().stock, 6);
+dye.act('pick'); dye.act('bowl'); dye.act('immerse'); dye.update(3); dye.act('pause');
+assert.equal(dye.snapshot().seconds, 60); dye.update(50); assert.equal(dye.snapshot().seconds, 60);
+assert.equal(dye.act('rack'), false); dye.act('immerse'); dye.update(3); dye.act('pause');
+assert.equal(dye.snapshot().seconds, 120); assert.equal(dye.act('rack'), true);
+assert.equal(dye.snapshot().timerVisible, false); assert.equal(dye.snapshot().rackCount, 1);
+assert.equal(dye.act('dry'), false); assert.equal(dye.act('collect'), false);
+dye.act('pick'); dye.act('bowl'); dye.act('immerse'); dye.update(9.1); dye.act('pause');
+assert.equal(dye.snapshot().quality, 'dark'); assert.equal(dye.act('rack'), false); assert.equal(dye.act('discard'), true);
+assert.equal(dye.snapshot().discarded, 1); assert.equal(dye.snapshot().stock, 5); assert.equal(inventory.wetPaper, 1);
+dye.back(); assert.equal(dye.snapshot().quality, 'dark'); assert.equal(inventory.wetPaper, 2); dye.act('discard');
+let n=0; while(dye.snapshot().rackCount < 6 && n++ < 80) dye.skip();
+assert.equal(mode(), 'readyToDryAll'); assert.equal(dye.act('collect'), false);
+dye.act('dry'); assert.equal(mode(), 'dryingAll'); dye.update(7.99); assert.equal(dye.act('collect'), false);
+dye.update(.02); assert.equal(mode(), 'collectDyed');
+for (let i = 0; i < 6; i++) { assert.equal(dye.act('collect'), true); assert.equal(inventory.dyedPaper, i + 1); }
+assert.equal(mode(), 'dyeDone'); assert.equal(inventory.wetPaper, 0);
+assert.equal(dye.snapshot().rackCount, 0); assert.equal(dye.snapshot().stock, 0);// Once the press consumes paper, an old dye undo cannot restore/duplicate it.
+inventory.dyedPaper -= 2; assert.equal(dye.back(),false);
+dye.reset(); assert.equal(inventory.dyedPaper,0); assert.equal(dye.snapshot().stock,6);
+console.log('PASS dye timing, thresholds, pause/resume, discard/retry, batch drying, sequential pickup, undo/skip, conservation');

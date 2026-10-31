@@ -2,7 +2,7 @@ const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const {createPresetStore,createPresetAPI}=require('./preset-store.cjs');
 const {createSceneStore,createSceneAPI}=require('./main-scene-store.cjs');
 const root=path.resolve(__dirname,'..');
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.glb':'model/gltf-binary','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.mp3':'audio/mpeg'};
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.glb':'model/gltf-binary','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.mp3':'audio/mpeg','.wav':'audio/wav'};
 function createServer({dataDir=process.env.LANTERN_DATA_DIR||path.join(root,'.local-data'),indexPage='/lantern-festival.html'}={}){
  const privateDir=path.resolve(dataDir),api=createPresetAPI(createPresetStore(privateDir)),sceneAPI=createSceneAPI(createSceneStore(privateDir));
  return http.createServer(async(req,res)=>{

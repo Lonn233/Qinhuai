@@ -1,0 +1,301 @@
+{
+  "version": 1,
+  "master": "./story/assets/master.glb",
+  "finishedLantern": null,
+  "audio": {
+    "ACT1_001": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT1_001.wav"
+      ],
+      "source": "[soft......生出来的。.wav",
+      "sha256": "5351034f11d9ca3a94387043636420ef3ea5d68d86bea58826ba08b6c5e62aaa",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT1_002": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT1_002.wav"
+      ],
+      "source": "学灯，先不......回来找我。.wav",
+      "sha256": "69aae6e20716fea57d627e7fb6e83d5f3cef18c89554576837b9fcb619b4714d",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "RIDDLE_INTRO": {
+      "verified": false,
+      "files": [
+        "./story/assets/audio/RIDDLE_INTRO.wav"
+      ],
+      "verification": "已接入；语音内容尚未逐条核听，请体验时确认。"
+    },
+    "ACT2_RIDDLE_001": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_RIDDLE_001.wav"
+      ],
+      "source": "[joyf......猜中几道？.wav",
+      "sha256": "89a62dc05dfe9b4617c1355d58250fe6fcda498f9d1677caa75ca36f27131128",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT2_RIDDLE_002": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_RIDDLE_002.wav"
+      ],
+      "source": "[exci......我来试试！.wav",
+      "sha256": "9b92e16f091a0720784da0c2b311c3085e11fcb850f7eecb27883a30fc113cbd",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT2_RIDDLE_003": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_RIDDLE_003.wav"
+      ],
+      "source": "[joyf......一次就好！.wav",
+      "sha256": "df04b377c3e4d9e8acabf8f3f115595777f34b667216e491b9c7052ebe2b2b13",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT2_RIDDLE_CORRECT_A": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_RIDDLE_CORRECT_A.wav"
+      ],
+      "source": "[exci......猜谜高手！.wav",
+      "sha256": "cafe794baa376418b47ecb6cd81ee14ebc4fdc432da5b3a7c2cd962458362027",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT2_RIDDLE_CORRECT_B": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_RIDDLE_CORRECT_B.wav"
+      ],
+      "source": "答对啦！你......继续猜中！.wav",
+      "sha256": "931ee2dae75b9b5ecd5ac807d457d5fb8d865f4319daa4d9f9af6f3819f043e9",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT2_RIDDLE_WRONG_A": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_RIDDLE_WRONG_A.wav"
+      ],
+      "source": "[soft......的线索吧！.wav",
+      "sha256": "f82cceb86eb59466fce192c8405062ad28919bc9ef62a69f3d01dd6a6eb01e03",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT2_RIDDLE_WRONG_B": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_RIDDLE_WRONG_B.wav"
+      ],
+      "source": "[soft......猜出来啦！.wav",
+      "sha256": "9537ecc9f1ccd70b9525d551b3c6dba21422571796c6aecb018427006d450d67",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "RIDDLE_CORRECT_A": {
+      "verified": false,
+      "files": [
+        "./story/assets/audio/RIDDLE_CORRECT_A.wav"
+      ],
+      "verification": "已接入；语音内容尚未逐条核听，请体验时确认。"
+    },
+    "RIDDLE_CORRECT_B": {
+      "verified": false,
+      "files": [
+        "./story/assets/audio/RIDDLE_CORRECT_B.wav"
+      ],
+      "verification": "已接入；语音内容尚未逐条核听，请体验时确认。"
+    },
+    "RIDDLE_WRONG_A": {
+      "verified": false,
+      "files": [
+        "./story/assets/audio/RIDDLE_WRONG_A.wav"
+      ],
+      "verification": "已接入；语音内容尚未逐条核听，请体验时确认。"
+    },
+    "RIDDLE_WRONG_B": {
+      "verified": false,
+      "files": [
+        "./story/assets/audio/RIDDLE_WRONG_B.wav"
+      ],
+      "verification": "已接入；语音内容尚未逐条核听，请体验时确认。"
+    },
+    "RIDDLE_COMPLETE": {
+      "verified": false,
+      "files": [
+        "./story/assets/audio/RIDDLE_COMPLETE.wav"
+      ],
+      "verification": "已接入；语音内容尚未逐条核听，请体验时确认。"
+    },
+    "OBSERVE_chrysanthemum": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/OBSERVE_chrysanthemum.wav"
+      ],
+      "source": "[soft......慢了下来。.wav",
+      "sha256": "04b957d80a16a1003facd9ef90811f9d7b85b3a0adba2959048abbb49f0cb935",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT4_HANG_004": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT4_HANG_004.wav"
+      ],
+      "source": "[joyf......开的荷花。.wav",
+      "sha256": "7d9cf4a814c3f987dfbb091486714e4066f9dc00d37d261154bb6ce718650303",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT4_HANG_005": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT4_HANG_005.wav"
+      ],
+      "source": "[soft......亮堂一下。.wav",
+      "sha256": "8707b7d1222790988b9f16b24f8713241732bb7d38f0a3c5a5e0e5ae6e92a550",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT4_HANG_006": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT4_HANG_006.wav"
+      ],
+      "source": "[soft......，便很好。.wav",
+      "sha256": "b93457cfd61775c9b87fc46dc785c98eb78043d26cb98330b09e6ef8e0c97801",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "OBSERVE_lion": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/OBSERVE_lion.mp3"
+      ],
+      "source": "[soft......要跃起来。.mp3",
+      "sha256": "0bc35dc1dfa3edd8fb18c1c862a213ce75c03f88e24ee7030f2e57d891251ec9",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "OBSERVE_gongming": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/OBSERVE_gongming.wav"
+      ],
+      "source": "灯火映着功......更近一步。.wav",
+      "sha256": "b17e63522cd602e9c043303953ec67616b3c47bbb7165c87bb4501a79795ace7",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "OBSERVE_tengma": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/OBSERVE_tengma.mp3"
+      ],
+      "source": "[soft......前的劲儿。.mp3",
+      "sha256": "4809c4f9317fbd1637d025be35da9f381c110baa995cdba1268f972db810d9a0",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "OBSERVE_mountain": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/OBSERVE_mountain.wav"
+      ],
+      "source": "远看是一座......观的景象。.wav",
+      "sha256": "4ae473eafdf2a03eb8e7a6d87e64051072250212691db0b0cbe8b5b1c560a0f9",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "OBSERVE_lotus-main": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/OBSERVE_lotus-main.wav"
+      ],
+      "source": "这盏荷花灯......夜色之中。.wav",
+      "sha256": "fcb549f45f871012f2d436a105a3d9debc07ab8a2e7bccbd3d9cc9e032da2e23",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "OBSERVE_lotus-one": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/OBSERVE_lotus-one.wav"
+      ],
+      "source": "[soft......移开眼睛。.wav",
+      "sha256": "6c0e196d8de0246785205c0de380196de1c936696c5f86592641661da4133bed",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT2_002": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_002.mp3"
+      ],
+      "source": "回来了？这......出些门道？.mp3",
+      "sha256": "0cbbd287e541a295f3248723c383b6062c35161923d5f7ad726c74f9e011ef66",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT2_003": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_003.mp3"
+      ],
+      "source": "[emph......样成形的。.mp3",
+      "sha256": "9c13190cb2c21106c8193fdb52475b5cccaef1560e42fbe2ea6c0daa3ab14591",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT2_004": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT2_004.mp3"
+      ],
+      "source": "好。看灯，......的荷花灯。.mp3",
+      "sha256": "a29413de4237d8a8fb6f03a28c048b247751aa7e6a357a1cd857f259651457ce",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT4_HANG_001": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT4_HANG_001.wav"
+      ],
+      "source": "[soft......人细看的。.wav",
+      "sha256": "1a47047411b0ece9c1c6b57ffb05fbfb9c289255b094d72554fd0b26c7b3a299",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT4_HANG_002": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT4_HANG_002.wav"
+      ],
+      "source": "[exci......里的模样。.wav",
+      "sha256": "b97d12a70f7902ba99b4e21d71cfe6f7da122c781b718c6ea4c2d1b32c2a7dfa",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    },
+    "ACT4_HANG_003": {
+      "ready": true,
+      "verified": false,
+      "files": [
+        "./story/assets/audio/ACT4_HANG_003.wav"
+      ],
+      "source": "[soft......看的一面。.wav",
+      "sha256": "646b632db6422354af4b0d71b00644011fde222b53b150d2d5989c737af9afe8",
+      "verification": "按用户提供的新版剧本与录音文件名对应接入；尚未人工逐句听审。"
+    }
+  },
+  "note": "finishedLantern 等待用户提供另一项目的成品；禁止使用水灯替代。当前主线及猜灯谜共 25 条配音已按 2026-10-23 提供的录音接入，主角使用新版录音；旧 RIDDLE_* 条目仅保留兼容，不参与当前对白播放。录音尚待用户逐句听审。",
+  "riddleHost": "./story/assets/riddle-host.glb"
+}

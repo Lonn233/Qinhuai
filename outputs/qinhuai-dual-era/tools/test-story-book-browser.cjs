@@ -1,0 +1,52 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+const {chromium}=require('C:/Users/Lonn/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {PNG}=require('C:/Users/Lonn/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/pngjs');
+const {createServer}=require('../game/serve.cjs');
+const {readGlb,triangles,hash}=require('./prepare-book-assets.cjs');
+const manifest=require('../assets/story-book/manifest.json'),ids=manifest.map(m=>m.id);
+function imageHashes(glb){return glb.doc.images.map(image=>{const view=glb.doc.bufferViews[image.bufferView];return hash(glb.bin.subarray(view.byteOffset||0,(view.byteOffset||0)+view.byteLength));});}
+function checkPixels(bytes){
+ const image=PNG.sync.read(bytes),colors=new Set();let red=0,green=0;
+ for(let i=0;i<image.data.length;i+=4){const [r,g,b,a]=image.data.subarray(i,i+4);if(a<128)continue;colors.add(`${r>>4},${g>>4},${b>>4}`);if(r>g*1.3&&r>b*1.3)red++;if(g>r*1.15&&g>b*1.1)green++;}
+ assert.ok(colors.size>60,'model has textured, nonblank pixels');assert.ok(red>100,'model retains red/pink pigment');
+ return {colors:colors.size,red,green};
+}
+function signature(){
+ const menu=document.documentElement.dataset.shell==='menu',root=document.querySelector(menu?'.catalog-book-dialog':'.story-modal-card');
+ const result={};for(const selector of ['h2','.story-book','.story-book-front h3','.story-book-index button','.story-book-page h3','.story-book-model']){const el=root.querySelector(selector);if(!el)continue;const r=el.getBoundingClientRect(),s=getComputedStyle(el);result[selector]={width:r.width,height:r.height,font:s.fontFamily,size:s.fontSize,spacing:s.letterSpacing,lineHeight:s.lineHeight};}return result;
+}
+(async()=>{
+ const root=path.resolve(__dirname,'..'),startup=fs.readFileSync(path.join(root,'import-viewer-startup.js'),'utf8');
+ const productionEntry=startup.match(/await import\('\.\/([^'?]+\.bundle\.js)\?v=/)?.[1];
+ assert.equal(productionEntry,'qinhuai-modern-import.bundle.js','production entry uses the bundle rebuilt from current sources');
+ assert.ok(fs.readFileSync(path.join(root,productionEntry),'utf8').includes('./assets/story-book/'),'production bundle contains the original-resolution book viewer');
+ for(const entry of manifest){const asset=readGlb(path.join('assets/story-book',entry.id+'.glb')),original=readGlb(entry.source);assert.equal(hash(original.bytes),entry.sourceSha256,'original source unchanged');assert.equal(hash(asset.bytes),entry.sha256);assert.equal(triangles(asset.doc),entry.triangles);assert.ok(entry.triangles>=triangles(original.doc));assert.deepEqual(asset.doc.materials,original.doc.materials);assert.deepEqual(imageHashes(asset),imageHashes(original),'original texture bytes retained');}
+ console.log('PASS all seven assets retain full geometry, original materials/textures and unchanged source files');
+ const server=createServer({dataDir:fs.mkdtempSync(path.join(os.tmpdir(),'qinhuai-book-'))});await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
+ const bundle=require('esbuild').buildSync({stdin:{contents:`import {createLanternBook} from './story/book.js';let book;window.mountBook=(observed,mode='game')=>{book?.dispose();document.documentElement.dataset.shell=mode;document.querySelector('#storyUI').hidden=mode==='menu';document.querySelector('#menuShell').hidden=mode!=='menu';const target=document.querySelector(mode==='menu'?'.menu-dialog-body':'#storyModalContent');book=createLanternBook(observed);target.replaceChildren(book);};window.closeBook=()=>{book?.dispose();book?.remove();};`,resolveDir:process.cwd()},bundle:true,format:'esm',write:false}).outputFiles[0].text;
+ try{
+  browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});const p=await browser.newPage({viewport:{width:1440,height:980}});p.setDefaultTimeout(120000);const errors=[],requests=[];p.on('pageerror',e=>errors.push(e.message));p.on('request',r=>{if(r.url().endsWith('.glb'))requests.push(r.url());});
+  await p.route('**/__book-test.js',r=>r.fulfill({contentType:'text/javascript',body:bundle}));
+  await p.route('**/__book-test.html',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html lang="zh-CN" data-shell="game"><meta charset="utf-8"><link rel="stylesheet" href="story/story.css"><link rel="stylesheet" href="main-menu.css"><style>body{margin:0;background:#253631;height:100vh}[hidden]{display:none!important}</style><div id="storyUI"><div id="storyModal" class="story-book-modal"><div class="story-modal-card"><button id="storyModalClose" class="story-close" aria-label="关闭" onclick="closeBook()">×</button><h2>秦淮灯谱</h2><div id="storyModalContent"></div></div></div></div><div id="menuShell" hidden><div class="menu-modal"><section class="menu-dialog catalog-book-dialog"><header><h2>秦淮灯谱</h2><button class="menu-close">×</button></header><div class="menu-dialog-body"></div></section></div></div><script type="module" src="__book-test.js"></script></html>'}));
+  await p.goto(`http://127.0.0.1:${server.address().port}/__book-test.html`);await p.waitForFunction(()=>window.mountBook);await p.evaluate(()=>mountBook(['lion','gongming']));
+  const active=()=>p.locator(documentMode==='menu'?'#menuShell':'#storyUI');let documentMode='game';
+  assert.equal(await active().locator('.is-unlocked').count(),2);assert.equal(await active().locator('.is-locked').count(),5);assert.equal(requests.length,0,'overview must not preload seven models');
+  await active().locator('[data-lamp="mountain"]').evaluate(e=>e.click());assert.equal(requests.length,0);assert.equal(await active().locator('.story-book-page').count(),0);await p.screenshot({path:'work/story-book-overview.png'});
+  const desktopGame=await p.evaluate(signature);await p.evaluate(()=>mountBook(['lion','gongming'],'menu'));documentMode='menu';assert.deepEqual(await p.evaluate(signature),desktopGame,'desktop menu/game fonts and book dimensions match');await p.screenshot({path:'work/story-book-menu.png'});
+  await p.evaluate(()=>mountBook(['lion','gongming']));documentMode='game';
+  const ready=()=>p.waitForFunction(()=>document.querySelector('[data-state="loading"]')===null&&document.querySelector('[data-state="ready"]')!==null);
+  await active().locator('[data-lamp="lion"]').click();await ready();assert.equal(await active().locator('.story-book-model').getAttribute('data-triangles'),String(manifest[0].triangles));assert.equal(await active().locator('.story-book-reading section').count(),4);assert.ok((await active().locator('.story-book-reading').innerText()).length>350);
+  const canvas=active().locator('.story-book-model canvas'),before=await canvas.screenshot();console.log('Lion pixels',checkPixels(before));const box=await canvas.boundingBox();await p.mouse.move(box.x+box.width*.5,box.y+box.height*.5);await p.mouse.down();await p.mouse.move(box.x+box.width*.75,box.y+box.height*.55,{steps:12});await p.mouse.up();const after=await canvas.screenshot();assert.ok(!before.equals(after),'mouse drag changes actual model');
+  await p.screenshot({path:'work/story-book-lion.png'});await canvas.focus();await p.keyboard.press('ArrowRight');assert.ok(!(await canvas.screenshot()).equals(after),'keyboard orbit changes view');
+  await p.evaluate(()=>window.__oldHost=document.querySelector('.story-book-model'));await active().locator('.story-book-turn button').last().click();await ready();assert.equal(await p.evaluate(()=>__oldHost.dataset.state),'disposed');assert.equal(await p.evaluate(()=>__oldHost.querySelectorAll('canvas').length),0);assert.equal(await active().locator('.story-book-page h3').textContent(),'贡院题名灯');assert.equal(await active().locator('.story-book-turn button').last().isDisabled(),true);
+  await p.evaluate(ids=>mountBook(ids),ids);
+  for(const entry of manifest){await active().locator(`[data-lamp="${entry.id}"]`).click();await ready();assert.equal(await active().locator('.story-book-model').getAttribute('data-triangles'),String(entry.triangles));if(entry.id==='lotus-main'){console.log('Lotus pixels',checkPixels(await active().locator('canvas').screenshot()));await p.screenshot({path:'work/story-book-lotus.png'});}await active().locator('.story-book-back').click();assert.equal(await active().locator('.story-book-model canvas').count(),0);}
+  console.log('PASS seven full-resolution models load lazily; locked entries, drag/keyboard orbit and page-turn disposal');
+  await p.route('**/lotus-one.glb',r=>r.fulfill({status:503,body:'test failure'}));await active().locator('[data-lamp="lotus-one"]').click();await p.waitForFunction(()=>document.querySelector('.story-book-model')?.dataset.state==='error');assert.equal(await active().locator('.story-book-reading section').count(),4);await p.unroute('**/lotus-one.glb');await active().getByRole('button',{name:'重新载入',exact:true}).click();await ready();
+  await p.setViewportSize({width:390,height:844});await p.screenshot({path:'work/story-book-mobile.png'});assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await active().locator('.story-book-page h3').scrollIntoViewIfNeeded();await p.screenshot({path:'work/story-book-mobile-reading.png'});
+  await p.evaluate(()=>{window.__oldHost=document.querySelector('.story-book-model');closeBook();});assert.equal(await p.evaluate(()=>__oldHost.dataset.state),'disposed');assert.equal(await active().locator('.story-book canvas').count(),0);
+  await p.evaluate(()=>mountBook(['lion','gongming']));const mobileGame=await p.evaluate(signature);await p.evaluate(()=>mountBook(['lion','gongming'],'menu'));documentMode='menu';assert.deepEqual(await p.evaluate(signature),mobileGame,'mobile menu/game fonts and dimensions match');await active().locator('[data-lamp="lion"]').click();await ready();checkPixels(await active().locator('canvas').screenshot());await p.screenshot({path:'work/story-book-menu-mobile.png'});
+  await p.evaluate(()=>closeBook());assert.deepEqual(errors,[]);assert.ok(requests.every(url=>url.includes('/assets/story-book/')),'book never requests simplified scene assets');
+  console.log('PASS retry, mobile overflow, colored menu model, menu/game style parity and close disposal');
+ }finally{if(browser)await browser.close();server.closeAllConnections();await new Promise(r=>server.close(r));}
+})().catch(e=>{console.error(e);process.exitCode=1;});

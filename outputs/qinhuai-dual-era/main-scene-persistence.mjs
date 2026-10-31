@@ -4,10 +4,10 @@ export const SCENE_KEYS = [
  'qinhuai.building-light-studies.v1','qinhuai.building-light-current.v1',
  'qinhuai.building-manual-spill.v1','qinhuai-building-soft-spill-v2',
  'qinhuai.red-lantern-light.v1','qinhuai.lantern-light-studies.v1',
- 'qinhuai.lantern-light-studies.file-cache.v1','qinhuai:main-map:toolbar-collapsed:v1','qinhuai.dragon-wall-light.v1','qinhuai.main-building-lights.v1'
+ 'qinhuai.lantern-light-studies.file-cache.v1','qinhuai:main-map:toolbar-collapsed:v1','qinhuai.dragon-wall-light.v1','qinhuai.main-building-lights.v1','qinhuai.main-lantern-lights.v1','qinhuai.scene-lantern-placements.v1'
 ];
 const API='/api/main-scene-settings',META='qinhuai.main-scene-file-sync.v1';
-const labels=['地图光效','逐建筑外溢 / 颜色','建筑收藏预设','建筑当前参数','手动外溢另存','建筑柔光','红灯笼','花灯旧收藏','花灯文件缓存','菜单展开状态','龙墙分区灯光及方案','主地图逐建筑灯效及方案'];
+const labels=['地图光效','逐建筑外溢 / 颜色','建筑收藏预设','建筑当前参数','手动外溢另存','建筑柔光','红灯笼','花灯旧收藏','花灯文件缓存','菜单展开状态','龙墙分区灯光及方案','主地图逐建筑灯效及方案','主地图花灯与挂灯光效及方案','场景新增灯具及摆位'];
 export function readSceneSnapshot(storage){const out={};for(const key of SCENE_KEYS){const raw=storage.getItem(key);if(raw!==null)out[key]=raw;}return out;}
 export function planSync(local,remote,baseline){
  const changes=[],restore={},conflicts=[];

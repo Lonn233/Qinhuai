@@ -86,6 +86,7 @@ export function installImportPerformanceAudit(api) {
       pose: { position: camera.position.toArray(), quaternion: camera.quaternion.toArray(), projection: camera.projectionMatrix.toArray() },
       loadedTileIds: api.loadedTileIds, timeOfDay: api.timeOfDay, controlMode: api.controlMode,
       performanceSettings: api.performanceSettings,
+      nearLanternModels: api.nearLanternStats,
       rendererSettings: { exposure: renderer.toneMappingExposure, toneMapping: renderer.toneMapping,
         shadowEnabled: renderer.shadowMap.enabled, shadowType: renderer.shadowMap.type,
         mapLights: api.mapLightSettings, bloom: api.bloomSettings } });

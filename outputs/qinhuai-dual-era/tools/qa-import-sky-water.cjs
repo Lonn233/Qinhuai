@@ -33,7 +33,7 @@ const {chromium} = require('C:/Users/Lonn/.cache/codex-runtimes/codex-primary-ru
     await page.waitForFunction(() => [9, 10, 5, 6].every(id => window.__QINHUAI_IMPORT__.loadedTileIds.some(value => Number(value) === id)), null, {timeout: 120000});
     console.log('Scene ready; testing sky presets and real water');
     await page.locator('#toolbarToggle').click();
-    await page.evaluate(() => window.__QINHUAI_IMPORT__.focusNightView('festivalWater'));
+    await page.evaluate(() => { window.__QINHUAI_IMPORT__.setWaterMode('flow'); window.__QINHUAI_IMPORT__.focusNightView('festivalWater'); });
     async function capture(name) {
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       const png = await page.screenshot({path: path.join(out, name + '.png'), timeout: 90000});

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>灯具名称确认图</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 32px; background: #101317; color: #f1eee8; font-family: "Microsoft YaHei UI", "Noto Sans CJK SC", sans-serif; }
+    main { width: 1280px; margin: 0 auto; }
+    h1 { margin: 0 0 24px; font-size: 30px; font-weight: 600; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    figure { margin: 0; overflow: hidden; background: #080a0d; border: 1px solid #282d32; }
+    canvas { display: block; width: 100%; height: 610px; }
+    figcaption { min-height: 78px; padding: 11px 18px 14px; border-top: 1px solid #282d32; background: #161a1e; }
+    .name { font-size: 23px; line-height: 1.35; font-weight: 600; }
+    .type { margin-top: 3px; color: #9da5aa; font-size: 14px; }
+  </style>
+  <script type="importmap">
+    {"imports":{"three":"/project/codex-Qinhuai/outputs/qinhuai-dual-era/node_modules/three/build/three.module.js","three/addons/":"/project/codex-Qinhuai/outputs/qinhuai-dual-era/node_modules/three/examples/jsm/"}}
+  </script>
+</head>
+<body>
+  <main>
+    <h1>灯具名称确认</h1>
+    <section class="grid">
+      <figure><canvas id="column"></canvas><figcaption><div class="name">石座立式宫灯</div><div class="type">原始模型 · 正面展示</div></figcaption></figure>
+      <figure><canvas id="drum"></canvas><figcaption><div class="name">盘鼓灯</div><div class="type">原始模型 · 正面展示</div></figcaption></figure>
+      <figure><canvas id="pink"></canvas><figcaption><div class="name">粉彩立式宫灯</div><div class="type">原始模型 · 正面展示</div></figcaption></figure>
+      <figure><canvas id="rack"></canvas><figcaption><div class="name">宫灯灯架</div><div class="type">原始模型 · 正面展示</div></figcaption></figure>
+    </section>
+  </main>
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const assets = [
+      ['column', '/inspiration/灯会/model/柱台灯.glb'],
+      ['drum', '/inspiration/灯会/model/鼓灯.glb'],
+      ['pink', '/inspiration/灯会/model/粉花灯.glb'],
+      ['rack', '/inspiration/灯会/model/灯架灯.glb']
+    ];
+    const loader = new GLTFLoader();
+    const renders = assets.map(async ([id, url]) => {
+      const canvas = document.getElementById(id);
+      const renderer = new THREE.WebGLRenderer({canvas, antialias: true, preserveDrawingBuffer: true});
+      renderer.setPixelRatio(1);
+      renderer.setSize(640, 610, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.05;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color('#080a0d');
+      scene.add(new THREE.HemisphereLight(0xe8efff, 0x47372b, 2.15));
+      const key = new THREE.DirectionalLight(0xffe2c2, 3.1);
+      key.position.set(3, 5, 5);
+      scene.add(key);
+      const fill = new THREE.DirectionalLight(0xb7d2ff, 1.55);
+      fill.position.set(-4, 2, 3);
+      scene.add(fill);
+      const rim = new THREE.DirectionalLight(0xffcc8a, 2.2);
+      rim.position.set(0, 4, -4);
+      scene.add(rim);
+
+      const gltf = await loader.loadAsync(url);
+      const model = gltf.scene;
+      scene.add(model);
+      const bounds = new THREE.Box3().setFromObject(model);
+      const center = bounds.getCenter(new THREE.Vector3());
+      const size = bounds.getSize(new THREE.Vector3());
+      model.position.sub(center);
+
+      const span = Math.max(size.x, size.y, size.z, 0.1);
+      const aspect = 640 / 610;
+      const halfH = span * 0.69;
+      const camera = new THREE.OrthographicCamera(-halfH * aspect, halfH * aspect, halfH, -halfH, 0.01, span * 20);
+      camera.position.set(0, 0, span * 4.5);
+      camera.lookAt(0, 0, 0);
+      camera.updateProjectionMatrix();
+
+      const floor = new THREE.Mesh(
+        new THREE.PlaneGeometry(span * 8, span * 8),
+        new THREE.ShadowMaterial({opacity: 0.18})
+      );
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.y = -size.y * 0.53;
+      floor.position.z = -span * 0.15;
+      scene.add(floor);
+      renderer.render(scene, camera);
+      return id;
+    });
+    await Promise.all(renders);
+    document.documentElement.dataset.renderComplete = 'true';
+  </script>
+</body>
+</html>

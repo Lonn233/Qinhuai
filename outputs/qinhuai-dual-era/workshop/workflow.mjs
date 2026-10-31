@@ -4,7 +4,8 @@ const statuses=['raw','wet','dry','pressed','formed','installed'];
 const LINING_IDS=['lining_lower','lining_upper'];
 const clone=value=>JSON.parse(JSON.stringify(value));
 const records=ids=>ids.map(id=>({id,status:'raw',readyAt:0}));
-const emptyLining=()=>Object.fromEntries(LINING_IDS.map(id=>[id,{glued:[],installed:[]}]));
+const emptyLining=()=>Object.fromEntries(LINING_IDS.map(id=>[id,{soaked:[],glued:[],installed:[],trimmed:[]}]));
+function upgradeLining(state){state.lining??=emptyLining();for(const id of LINING_IDS){const p=state.lining[id]??(state.lining[id]={glued:[],installed:[]});p.soaked??=[...p.glued];p.trimmed??=(id==='lining_lower'?[...p.installed]:[]);}}
 
 export function createState(){
   return {version:3,processRevision:3,dyeWaste:0,stage:0,counts:Object.fromEntries(STAGES.map(s=>[s.id,0])),papers:records(PAPER_IDS),leaves:records(LEAF_IDS),lining:emptyLining(),complete:false,lit:false,actions:0,frameItems:{placedRings:[],usedStrips:[],madeRings:[],collectedStrips:[16,17,18],shortStrips:[],shortBinding:0}};
@@ -36,9 +37,14 @@ export function applyAction(state,tool,now=Date.now(),evidence=null){
   if(tool!==stage.tool)return {ok:false,message:'请使用当前工序指定的工具。'};
   if(LINING_IDS.includes(stage.id)){
     const panel=evidence?.panel;
-    if(!Number.isInteger(panel)||panel<0||panel>=stage.total||!state.lining[stage.id].glued.includes(panel))return {ok:false,message:'请先在该位置涂抹浆糊。'};
-    if(state.lining[stage.id].installed.includes(panel))return {ok:false,message:'这片材料已经贴好。'};
-    state.lining[stage.id].installed.push(panel);
+    const lining=state.lining[stage.id];
+    if(!Number.isInteger(panel)||panel<0||panel>=stage.total||!lining.soaked.includes(panel))return {ok:false,message:'请先蘸浆，再刷胶。'};
+    if(!lining.glued.includes(panel))return {ok:false,message:'请先在该位置刷胶。'};
+    if(lining.installed.includes(panel))return {ok:false,message:'这片材料已经贴好。'};
+    lining.installed.push(panel);state.actions++;
+    if(stage.id==='lining_lower')return {ok:true,stage:stage.id,message:'白布已贴合，请裁去边缘多余部分。',needsTrim:true};
+    counts[stage.id]++;if(counts[stage.id]>=stage.total)completeStage(state);
+    return {ok:true,stage:stage.id,message:counts[stage.id]>=stage.total?'红色内衬完成。':'红色内衬已贴好 '+counts[stage.id]+' / '+stage.total};
   }
   if(stage.id==='bamboo_prep'){
     const ringType=evidence?.ringType??counts.bamboo_prep;
@@ -60,6 +66,15 @@ export function applyAction(state,tool,now=Date.now(),evidence=null){
 export function applyGlue(state,id,panel){
   if(!LINING_IDS.includes(id)||currentStage(state).id!==id||!Number.isInteger(panel)||panel<0||panel>=currentStage(state).total)return false;
   const panels=state.lining[id];if(panels.installed.includes(panel)||panels.glued.includes(panel))return false;panels.glued.push(panel);state.actions++;return true;
+}
+export function applySoak(state,id,panel){
+  if(!LINING_IDS.includes(id)||currentStage(state).id!==id||!Number.isInteger(panel)||panel<0||panel>=currentStage(state).total)return false;
+  const p=state.lining[id];if(p.installed.includes(panel)||p.soaked.includes(panel))return false;p.soaked.push(panel);state.actions++;return true;
+}
+export function applyTrim(state,id,panel){
+  if(id!=='lining_lower'||currentStage(state).id!==id||!Number.isInteger(panel)||panel<0||panel>=currentStage(state).total)return false;
+  const p=state.lining[id];if(!p.installed.includes(panel)||p.trimmed.includes(panel))return false;
+  p.trimmed.push(panel);state.counts[id]++;state.actions++;if(state.counts[id]>=currentStage(state).total)completeStage(state);return true;
 }
 export function applyRingPlacement(state,index){
   const stage=currentStage(state);
@@ -84,12 +99,14 @@ export function validateState(state){
   return true;
 }
 export function migrateLegacyState(){return null;}
-export function restoreState(saved){return validateState(saved)?cloneState(saved):createState();}
+export function restoreState(saved){if(!validateState(saved))return createState();const state=cloneState(saved);upgradeLining(state);return state;}
 export function makeFinishedState(){const workflow=new Workflow();while(!workflow.state.complete)workflow.skipStage(Date.now()+CONFIG.dryDuration);workflow.state.lit=false;return workflow.state;}
 export class Workflow {
-  constructor(state=createState()){this.state=validateState(state)?cloneState(state):createState();this.history=[];this.future=[];}
+  constructor(state=createState()){this.state=validateState(state)?cloneState(state):createState();upgradeLining(this.state);this.history=[];this.future=[];}
   act(tool,now=Date.now(),evidence=null){const before=cloneState(this.state),result=applyAction(this.state,tool,now,evidence);if(result.ok){this.history.push(before);this.future=[];}return result;}
   glue(id,panel){const before=cloneState(this.state);if(!applyGlue(this.state,id,panel))return false;this.history.push(before);this.future=[];return true;}
+  soak(id,panel){const before=cloneState(this.state);if(!applySoak(this.state,id,panel))return false;this.history.push(before);this.future=[];return true;}
+  trim(id,panel){const before=cloneState(this.state);if(!applyTrim(this.state,id,panel))return false;this.history.push(before);this.future=[];return true;}
   installRing(index){const before=cloneState(this.state);if(!applyRingPlacement(this.state,index))return false;this.history.push(before);this.future=[];return true;}
   collectStrip(index){const before=cloneState(this.state);if(!collectStrip(this.state,index))return false;this.history.push(before);this.future=[];return true;}
   finishPreparation(){return finishPreparation(this.state);}
@@ -104,9 +121,9 @@ export class Workflow {
       let guard=0;
       while(!this.state.complete&&currentStage(this.state).id===stage.id&&guard++<=stage.total){
         let evidence=null;
-        if(LINING_IDS.includes(stage.id)){const panel=Array.from({length:stage.total},(_,i)=>i).find(i=>!this.state.lining[stage.id].installed.includes(i));applyGlue(this.state,stage.id,panel);evidence={panel};}
+        if(LINING_IDS.includes(stage.id)){const panel=Array.from({length:stage.total},(_,i)=>i).find(i=>!this.state.lining[stage.id].installed.includes(i));applySoak(this.state,stage.id,panel);applyGlue(this.state,stage.id,panel);evidence={panel};}
         if(stage.id==='bamboo_prep')evidence={ringType:this.state.counts.bamboo_prep};
-        const result=applyAction(this.state,stage.tool,now,evidence);if(!result.ok){this.state=before;return result;}
+        const result=applyAction(this.state,stage.tool,now,evidence);if(!result.ok){this.state=before;return result;}if(stage.id==='lining_lower')applyTrim(this.state,stage.id,evidence.panel);
       }
     }
     this.history.push(before);this.future=[];return {ok:true,stage:stage.id,message:'已跳过：'+stage.name};

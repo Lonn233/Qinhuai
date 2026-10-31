@@ -14,7 +14,7 @@ function maskReference(texture){
 // Uses the measured eave/ridge distance volumes from the imported city. All
 // emission stays on source materials; no duplicate luminous roof geometry.
 export function createBuildingLighting(root,manifest,fields,masks,{regionalPolicy=true,mode='default'}={}){
- const isMatou=mode==='matou';
+ const isMatou=mode==='matou',isTower=mode==='tower0369';
  const regionGLSL=regionalPolicy?REGION_GLSL:`float bsRegion(vec3 p){return 2.;} float bsCorridorEave(vec3 p){return 0.;}`;
  const uniforms={tint:{value:new THREE.Color()},roofTint:{value:new THREE.Color()},levels:{value:new THREE.Vector4()},width:{value:1.4},shape:{value:new THREE.Vector4(1,0,0,.85)},retention:{value:1},sign:{value:0},facadeTint:{value:new THREE.Color()},windowTint:{value:new THREE.Color()},trimTint:{value:new THREE.Color()}};
  const createWindowUniforms=()=>({wlState:{value:new THREE.Vector4(1,1,0,0)},wlColor:{value:new THREE.Color()},wlBeam:{value:new THREE.Vector4(6,1.5,110*Math.PI/360,.65)},wlAim:{value:new THREE.Vector2()}});
@@ -73,27 +73,32 @@ varying vec3 vBsWorld; uniform vec3 bsTint; uniform vec3 bsRoofTint; uniform vec
        // The source volume combines ridges and eaves. Upper emphasis is a
        // soft height band, not a separately segmented ridge geometry.
        float bsUpper=${field?'smoothstep(.6,.9,clamp((vBsWorld.y-bsRoofHeight.x)/bsRoofHeight.y,0.,1.))':'0.0'};
-       float bsFalloff=pow(bsEdge,max(bsWidth,.1));
+       float bsFalloff=pow(bsEdge,max(bsWidth${isTower?'*5.':''},.1));
        bsFalloff=mix(bsFalloff,smoothstep(0.,1.,bsFalloff),bsShape.z);
        float bsContour=bsLevels.x*bsFalloff*mix(1.,bsShape.x,bsUpper);
        float bsBottom=(1.-smoothstep(-.35,.02,bsN.y))*bsShape.y;
        // Independently colored light contributions overlap smoothly on the original roof.
        vec3 bsRoofLight=bsRoofTint*bsLevels.y*bsTop;
-       vec3 bsEaveLight=bsTint*bsContour*(bsTop+bsBottom);
+       vec3 bsEaveLight=bsTint*bsContour*(bsTop+bsBottom)${isTower?'*.12':''};
        // Courtyard galleries: real longitudinal eaves only. The original
        // distance field also contains ridges; do not use it in these galleries.
        if(bsPolicy==1.){
         bsRoofLight=vec3(0.);
         bsEaveLight=bsTint*bsLevels.x*bsCorridorEave(vBsWorld)*bsTop;
        }
-       totalEmissiveRadiance=mix(vec3(1.),bsPigment,bsRetention)*bsResponse*(bsRoofLight+bsEaveLight);
+       totalEmissiveRadiance=mix(vec3(1.),bsPigment,bsRetention)*${isTower?'max(.38,bsResponse)':'bsResponse'}*(bsRoofLight+bsEaveLight);
       `:window?`
        float bsWindowMask=1.;
        ${mask?'#ifdef USE_MAP\nbsWindowMask=texture2D(bsMask,vMapUv).r;\n#endif':''}
        totalEmissiveRadiance=bsAlbedo*mix(bsWindowTint,wlColor,wlState.w)*bsLevels.w*bsWindowMask;
       `:sign?`totalEmissiveRadiance=bsAlbedo*bsWindowTint*bsSign;`:`
        float bsWall=1.-smoothstep(.55,.9,abs(bsN.y));
-       totalEmissiveRadiance=bsAlbedo*bsFacadeTint*bsLevels.z*bsWall;
+       ${isTower?`
+       // Warm pale plaster panels without flattening the dark timber texture.
+       float bsPanel=smoothstep(.12,.65,bsLuma);
+       diffuseColor.rgb*=mix(vec3(.52,.28,.12),vec3(1.,.72,.37),bsPanel);
+       totalEmissiveRadiance=mix(bsAlbedo*.35,vec3(1.25),bsPanel)*bsFacadeTint*bsLevels.z*bsWall;
+       `:'totalEmissiveRadiance=bsAlbedo*bsFacadeTint*bsLevels.z*bsWall;'}
       `}
       ${window?'totalEmissiveRadiance*=windowLightProfile(vBsWorld,bsN);':''}
       // Permanent regional limits survive presets, brightness and saved settings.

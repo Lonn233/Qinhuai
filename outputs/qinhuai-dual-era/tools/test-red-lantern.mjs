@@ -13,6 +13,9 @@ for(const p of layout.placements){const group=layout.groups.find(g=>g.id===p.gro
 for(let i=0;i<layout.placements.length;i++)for(let j=0;j<i;j++){const a=layout.placements[i].mount,b=layout.placements[j].mount;assert.ok(Math.hypot(a[0]-b[0],a[2]-b[2])>=.69999,'mount spacing');}
 assert.deepEqual(normalizeRedLantern({brightness:Infinity,temperature:'bad',enabled:'false'}),RED_LANTERN_DEFAULTS);
 assert.equal(normalizeRedLantern({brightness:-1,temperature:9000,halo:8}).brightness,0);
+assert.equal(normalizeRedLantern().brightness,.85);
+assert.equal(normalizeRedLantern({brightness:6}).brightness,6);
+assert.equal(normalizeRedLantern({brightness:99}).brightness,6);
 assert.equal(normalizeRedLantern({temperature:9000}).temperature,6500);
 assert.ok(temperatureRGB(1800)[2]<temperatureRGB(6500)[2]);
 console.log('Red lantern assets, scope, spacing, source integrity and settings: PASS',layout.placements.length,'lamps');

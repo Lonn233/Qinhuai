@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict'),fs=require('node:fs/promises'),os=require('node:os'),path=require('node:path');
+const {chromium}=require('C:/Users/Lonn/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {createServer}=require('../game/serve.cjs');
+(async()=>{
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'qinhuai-lantern-save-')),server=createServer({dataDir:dir});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+ const url='http://127.0.0.1:'+server.address().port+'/lantern-save-test.html';
+ const html='<div id="scenePersistence"></div><div id="lanternLightControls"></div><script type="module">import {mountScenePersistence} from "./main-scene-persistence.mjs";import {mountLanternControls} from "./import-lantern-controls.mjs";import {normalizeLantern} from "./import-lantern-settings.mjs";window.save=mountScenePersistence();await save.ready;const rig={saved:{},loadSettings(s){this.saved=s;},getSettings(id){return normalizeLantern(this.saved[id]);},setSettings(id,p){this.saved[id]=p;},baseColor(){return "#ffe0a1";}};window.controls=mountLanternControls(document.querySelector("#lanternLightControls"),{rig,storage:localStorage});window.ready=true;</script>';
+ try{
+  const context=await browser.newContext();await context.route('**/lantern-save-test.html',r=>r.fulfill({contentType:'text/html',body:html}));const page=await context.newPage();await page.goto(url);await page.waitForFunction(()=>window.ready);
+  await page.evaluate(()=>{const s=document.querySelector('#lantern-group');s.value='courtyard';s.dispatchEvent(new Event('change',{bubbles:true}));const b=document.querySelector('#lantern-brightness');b.value='.5';b.dispatchEvent(new Event('input',{bubbles:true}));document.querySelector('#lantern-preset-name').value='浏览器验证方案';document.querySelector('#lantern-preset-save').click();});
+  await page.waitForFunction(()=>window.save.status.state==='saved'&&!window.save.status.unconfirmed);const disk=JSON.parse(await fs.readFile(path.join(dir,'main-scene-settings.json'),'utf8'));assert.equal(JSON.parse(disk.entries['qinhuai.main-lantern-lights.v1']).presets[0].name,'浏览器验证方案');
+  await context.close();const clean=await browser.newContext();await clean.route('**/lantern-save-test.html',r=>r.fulfill({contentType:'text/html',body:html}));const p=await clean.newPage();await p.goto(url);await p.waitForFunction(()=>window.ready);const restored=await p.evaluate(()=>JSON.parse(localStorage.getItem('qinhuai.main-lantern-lights.v1')));assert.equal(restored.groups.courtyard.brightness,.5);assert.equal(restored.presets[0].name,'浏览器验证方案');console.log('PASS named lantern preset saved on disk and restored into empty browser:',dir);
+ }finally{await browser.close();await new Promise(r=>{server.close(r);server.closeAllConnections();});}
+})().catch(e=>{console.error(e);process.exitCode=1;});

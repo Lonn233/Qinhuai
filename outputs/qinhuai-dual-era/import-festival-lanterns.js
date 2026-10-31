@@ -1,17 +1,44 @@
+import {loadLargeLanternLods,SingleLanternLod} from './import-large-lantern-lod.mjs';
 import * as THREE from 'three';
+import {chrysanthemumAssetUrl} from './chrysanthemum-model.mjs';
+import {loadLionLodData,LionLodBatches} from './import-lion-lod.mjs';
+import {applyClothLight} from './import-lantern-settings.mjs';
 import {groundControls,applyGroundControls,waterControls,applyWaterControls,WATER_UNIFORMS} from './import-light-effects.mjs';
 import {normalizeMapLights} from './import-light-controls.mjs';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {clothMaterial} from './game/lion-study/cloth-material.js';
 import {presets} from './game/lion-study/lighting-presets.js';
 import {DEFAULT_LIGHTS} from './game/lion-study/defaults.cjs';
-import layout from './assets/qinhuai-modern-import/festival/layout.json' with {type:'json'};
+import sourceLayout from './assets/qinhuai-modern-import/festival/layout.json' with {type:'json'};
+
+export const WATER_KINDS = new Set(['lotus-main','lotus-one','chrysanthemum']);
+// Shared by placement, interaction and navigation; units here are map units.
+export const DOCK_OBSERVATIONS=Object.freeze([
+  {kind:'chrysanthemum',placementId:'dock-water-1',x:-15.4,z:-11.5,lampX:-15.4,lampZ:-4},
+  {kind:'lotus-main',placementId:'dock-water-2',x:-13.4,z:-11.5,lampX:-14.6,lampZ:-2.4},
+  {kind:'lotus-one',placementId:'dock-water-3',x:-11.4,z:-11.5,lampX:-13.4,lampZ:-.8},
+]);
+// Keep the surveyed source coordinates so the river reads as one continuous
+// festival route instead of concentrating every floating lantern at the dock.
+// The three fixed dock lamps are added separately because they are story targets
+// and are viewed from the upper promenade above the former boat berths.
+const riverPlacements=sourceLayout.placements.map(p=>({...p}));
+for(const observation of DOCK_OBSERVATIONS){
+  const source=sourceLayout.placements.find(p=>p.kind===observation.kind);
+  if(!source)throw Error(`缺少水灯资源：${observation.kind}`);
+  riverPlacements.push({
+    ...source,
+    id:observation.placementId,
+    x:observation.lampX,
+    z:observation.lampZ,
+  });
+}
+const layout={...sourceLayout,placements:riverPlacements};
 
 export const FESTIVAL_LAYOUT = layout;
 export const MAP_UNITS_PER_METER = layout.mapUnitsPerMeter;
 export const FESTIVAL_PLACEMENTS = layout.placements;
 const ASSETS = new URL('./assets/qinhuai-modern-import/festival/', import.meta.url);
-export const WATER_KINDS = new Set(['lotus-main','lotus-one','chrysanthemum']);
 export function lightingFor(kind) {
   // Both lotus shapes use the confirmed lotus tuning. The new chrysanthemum has
   // no saved studio preset yet; explicitly inherit lotus rather than invent one.
@@ -20,7 +47,7 @@ export function lightingFor(kind) {
   return {...light, shape: presets.find(p => p.name === light.base).shape, inherited: kind === 'chrysanthemum'};
 }
 export function pointInWater(x,z) {
-  return layout.water.triangles.some(([a,b,c]) => {
+  return sourceLayout.water.triangles.some(([a,b,c]) => {
     const cross=(p,q)=>(q[0]-p[0])*(z-p[1])-(q[1]-p[1])*(x-p[0]);
     if(Math.abs((b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]))<1e-9)return false;
     const u=cross(a,b),v=cross(b,c),w=cross(c,a);
@@ -35,7 +62,7 @@ export function mountainSettings(input={}) {
   const finite=(value,fallback)=>Number.isFinite(Number(value)) ? Number(value) : fallback;
   // Even at 15 m, its bounding circle remains inside the surveyed vacant plot.
   return {sizeMeters:THREE.MathUtils.clamp(finite(input.sizeMeters,13),8,15),
-    rotation:THREE.MathUtils.euclideanModulo(finite(input.rotation,180),360)};
+    rotation:THREE.MathUtils.euclideanModulo(finite(input.rotation,90),360)};
 }
 export function reflectionMaterial(source, uniforms, mask, water) {
   return new THREE.ShaderMaterial({
@@ -100,12 +127,14 @@ function groundSpillMaterial(uniforms, ground) {
   });
 }
 
+const loadFestivalAsset=kind=>new GLTFLoader().loadAsync(kind==='chrysanthemum'?chrysanthemumAssetUrl():
+  (['lion','mountain'].includes(kind)?new URL(`./game/assets/${kind}.glb`,import.meta.url):new URL(`${kind}-low.glb`,ASSETS)).href);
 export class ImportFestivalLanterns {
-  constructor(parent,{load=kind=>new GLTFLoader().loadAsync(new URL(`${kind}-low.glb`,ASSETS).href),
+  constructor(parent,{load=loadFestivalAsset,loadLionLods=load===loadFestivalAsset?loadLionLodData:null,loadLargeLods=load===loadFestivalAsset?loadLargeLanternLods:null,
     loadMask=()=>new THREE.TextureLoader().loadAsync(new URL('water-mask.png',ASSETS).href)}={}) {
     this.root=new THREE.Group();this.root.name='Festival lanterns - study defaults';parent.add(this.root);
     this.waterRoot=new THREE.Group();this.waterRoot.name='River-only floating lanterns';this.root.add(this.waterRoot);
-    this.load=load;this.loadMask=loadMask;this.entries=new Map();this.pending=new Map();this.tiles=new Map();
+    this.load=load;this.loadMask=loadMask;this.loadLionLods=loadLionLods;this.loadLargeLods=loadLargeLods;this.entries=new Map();this.pending=new Map();this.tiles=new Map();
     this.mapLightSettings=normalizeMapLights();
     this.groundLights={lion:groundControls(),mountain:groundControls()};
     this.waterLights={lotus:waterControls(),chrysanthemum:waterControls()};
@@ -146,6 +175,14 @@ export class ImportFestivalLanterns {
       sourceResources.forEach(r=>r.dispose());
       const entry={kind,parts,resources,uniforms,tuning,batches:[],reflectionMaterials:[]};
       if(this.disposed){this.disposeEntry(entry);return null;}
+      if(kind==='mountain'&&this.loadLargeLods){
+        try{entry.largeLodData=await this.loadLargeLods(kind);}catch(error){entry.largeLodError=String(error.message||error);console.warn('Mountain LOD fallback',error);}
+        if(this.disposed){this.disposeEntry(entry);return null;}
+      }
+      if(kind==='lion'&&this.loadLionLods){
+        try{entry.lodData=await this.loadLionLods();}catch(error){entry.lodError=String(error.message||error);console.warn('Lion LOD unavailable; keeping original model',error);}
+        if(this.disposed){this.disposeEntry(entry);return null;}
+      }
       this.entries.set(kind,entry);return entry;
     })().finally(()=>this.pending.delete(kind));
     this.pending.set(kind,promise);return promise;
@@ -187,6 +224,12 @@ export class ImportFestivalLanterns {
           entry.batches.push({mesh,placements});this.root.add(mesh);
         }
         this.updateMatrices(entry);
+        if(kind==='mountain'&&entry.largeLodData){
+          try{entry.largeLod=new SingleLanternLod(kind,entry.batches[0].mesh,entry.largeLodData,entry.resources);}catch(error){entry.largeLodError=String(error.message||error);console.warn('Mountain LOD fallback',error);}
+        }
+        if(kind==='lion'&&entry.lodData){
+          try{entry.lod=new LionLodBatches(entry,entry.lodData,this.root,MAP_UNITS_PER_METER);}catch(error){entry.lodError=String(error.message||error);console.warn('Lion LOD fallback',error);}
+        }
       }
       this.errors.delete(tile);this.setState();
     })().catch(error=>{this.tiles.delete(tile);this.errors.set(tile,String(error.message||error));throw error;});
@@ -208,14 +251,19 @@ export class ImportFestivalLanterns {
   setState({night=this.night,wireframe=this.wireframe,waterVisible=this.waterVisible}={}) {
     this.night=night;this.wireframe=wireframe;this.waterVisible=waterVisible;this.waterRoot.visible=waterVisible;
     for(const entry of this.entries.values()){
-      entry.uniforms.uClothPower.value=night&&!wireframe?entry.tuning.power:0;
+      applyClothLight(this,entry.kind,entry,night&&!wireframe);
       for(const part of entry.parts)for(const m of [part.material].flat())m.wireframe=wireframe;
-      for(const {mesh} of entry.batches)if(mesh.userData.festivalReflection||mesh.userData.festivalSpill)mesh.visible=night&&!wireframe;
+      for(const {mesh} of entry.batches){
+        const visible=this.lightControls?.[entry.kind]?.modelVisible!==false;mesh.userData.lanternModelVisible=visible;
+        mesh.visible=visible&&(mesh.userData.festivalReflection||mesh.userData.festivalSpill?night&&!wireframe:mesh.count>0);
+      }
     }
   }
-  update(time) {if(this.night&&this.waterVisible)for(const e of this.entries.values())for(const m of e.reflectionMaterials)m.uniforms.time.value=time;}
+  update(time,camera) {this.entries.get('lion')?.lod?.update(camera,time);this.entries.get('mountain')?.largeLod?.update(camera,time);if(this.night&&this.waterVisible)for(const e of this.entries.values())for(const m of e.reflectionMaterials)m.uniforms.time.value=time;}
   get stats(){return {lamps:[...this.entries.values()].reduce((n,e)=>n+(e.batches[0]?.placements.length||0),0),
     batches:[...this.entries.values()].reduce((n,e)=>n+e.batches.length,0),
+    mountainLod:this.entries.get('mountain')?.largeLod?.stats||null,mountainLodError:this.entries.get('mountain')?.largeLodError||null,
+    lionLod:this.entries.get('lion')?.lod?.stats||null,lionLodError:this.entries.get('lion')?.lodError||null,
     kinds:[...this.entries.keys()],errors:Object.fromEntries(this.errors),mountain:{...this.mountain},night:this.night};}
   disposeEntry(entry){for(const {mesh} of entry.batches){mesh.removeFromParent();mesh.dispose();}for(const r of entry.resources){r.dispose();if(r.isTexture)r.source?.data?.close?.();}}
   dispose(){this.disposed=true;this.root.removeFromParent();for(const e of this.entries.values())this.disposeEntry(e);this.entries.clear();this.mask?.dispose();this.root.clear();this.tiles.clear();}

@@ -8,6 +8,13 @@ const smooth = t => { t=Math.max(0,Math.min(1,t)); return t*t*(3-2*t); };
 export function spatialEmitterSample(x,y,z,e,p,out={}) {
  const dx=x-e.x,dz=z-e.z,forward=dx*e.nx+dz*e.nz;
  out.weight=0;
+ if(e.omni){
+  const vx=e.x-x,vy=e.y-y,vz=e.z-z,d=Math.hypot(vx,vy,vz),surface=Math.max(0,d-(e.radius||0));
+  if(p.distance<=0||p.decayDistance<=0||surface>=p.distance)return out;
+  const f=Math.max(.02,p.feather),fade=1-smooth((surface/p.distance-(1-f))/f);
+  out.weight=Math.exp(-surface/p.decayDistance)*fade;
+  const inv=1/Math.max(.001,d);out.x=vx*inv;out.y=vy*inv;out.z=vz*inv;return out;
+ }
  if(p.distance<=0||p.decayDistance<=0||forward<-.25)return out;
  const side=dx*(-e.nz)+dz*e.nx,along=Math.max(-e.halfWidth,Math.min(e.halfWidth,side));
  const sx=e.x-e.nz*along,sz=e.z+e.nx*along,sy=e.y??13.5;
@@ -32,7 +39,7 @@ export class EnvironmentVolume {
  }
  begin(bounds){this.origin.set(bounds.x,8,bounds.y);this.span.set(bounds.z,48,bounds.w);this.accum.fill(0);}
  addChannel({p,color,energy,emitters,cacheKey}){
-  const signature=JSON.stringify([this.origin.toArray(),this.span.toArray(),p.distance,p.decayDistance,p.feather,p.angle??90,emitters.map(e=>[e.x,e.y??13.5,e.z,e.nx,e.nz,e.halfWidth,e.halfHeight??.6])]);
+  const signature=JSON.stringify([this.origin.toArray(),this.span.toArray(),p.distance,p.decayDistance,p.feather,p.angle??90,emitters.map(e=>[e.x,e.y??13.5,e.z,e.nx,e.nz,e.halfWidth,e.halfHeight??.6,e.omni??false,e.radius??0])]);
   const key=cacheKey??signature;let kernel=this.cache.get(key);
   if(kernel?.signature!==signature){
    kernel=this.buildKernel(emitters,p);kernel.signature=signature;
@@ -51,7 +58,7 @@ export class EnvironmentVolume {
   this.kernelBuilds++;
   const [nx,ny,nz]=this.size,o=this.origin,s=this.span,steps=[s.x/nx,s.y/ny,s.z/nz],dims=this.size,touched=[],sample={};
   for(let ei=0;ei<emitters.length;ei++){
-   const e=emitters[ei],r=p.distance,ey=e.y??13.5;
+   const e=emitters[ei],r=p.distance+(e.radius||0),ey=e.y??13.5;
    const ext=[Math.abs(e.nz)*e.halfWidth+r,r,Math.abs(e.nx)*e.halfWidth+r],center=[e.x,ey,e.z],origin=[o.x,o.y,o.z];
    const lo=center.map((v,j)=>Math.max(0,Math.floor((v-ext[j]-origin[j])/steps[j]))),hi=center.map((v,j)=>Math.min(dims[j]-1,Math.ceil((v+ext[j]-origin[j])/steps[j])));
    for(let iz=lo[2];iz<=hi[2];iz++)for(let iy=lo[1];iy<=hi[1];iy++)for(let ix=lo[0];ix<=hi[0];ix++){

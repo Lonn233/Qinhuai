@@ -1,0 +1,168 @@
+html[data-shell="menu"],html[data-shell="loading"]{background:#101719}
+html:not([data-shell="game"]) :is(#app,#buildingLabels,#toolbar,#perf,#progress,#errors,#mainMusicToggle,#templePrompt,#templeCurtain,#help,#storyUI){display:none!important}
+#storyMenu{display:none!important}
+#menuShell{position:fixed;inset:0;z-index:5000;color:#f5e3bb;font-family:"KaiTi","STKaiti","Noto Serif SC","SimSun",serif;letter-spacing:0;background:#152326 url('./menu-assets/background.png') center/cover no-repeat;overflow:auto}
+#menuShell[hidden],#menuShell [hidden]{display:none!important}
+#menuShell *{box-sizing:border-box;font-family:inherit;letter-spacing:0}
+#menuShell::before{content:"";position:fixed;inset:0;background:linear-gradient(90deg,rgba(13,15,11,.82) 0%,rgba(13,15,11,.7) 20%,rgba(13,15,11,.28) 34%,rgba(13,15,11,.04) 48%,transparent 62%);pointer-events:none}
+html[data-shell="loading"] #menuShell::before{opacity:0}
+.menu-home{position:relative;min-height:100%;padding:10.5vh 0 64px clamp(44px,7.72vw,160px)}
+.menu-composition{width:370px;max-width:calc(100vw - 70px)}
+.menu-eyebrow{display:flex;align-items:center;gap:22px;font-size:19px;height:24px;white-space:nowrap;margin:0 0 32px -33px}
+.menu-eyebrow::before,.menu-eyebrow::after{content:"";height:1px;width:50px;flex-shrink:0;background:linear-gradient(90deg,transparent,#f5e3bb90)}
+.menu-eyebrow::after{transform:rotate(180deg)}
+.menu-title{position:relative;width:365px;max-width:100%;margin:0 0 12px 11px;line-height:1}
+.menu-title>img:first-child{display:block;width:100%;height:auto;filter:drop-shadow(0 2px 10px #14180e40)}
+.menu-title .menu-seal{position:absolute;left:75.6%;top:31.5%;width:24px;height:36px;object-fit:contain}
+.menu-tagline{font-size:20px;line-height:1.6;white-space:nowrap;margin:0 0 57px 24px;text-shadow:0 1px 3px #0005}
+.menu-options{position:relative;display:flex;flex-direction:column;gap:12px;width:246px;margin-left:24px}
+.menu-options::before{content:"";position:absolute;left:-24px;top:-82px;bottom:20px;width:1px;background:linear-gradient(transparent,#f5e3bb80 20%,#f5e3bb80 90%,transparent)}
+#menuShell button{border:0;border-radius:0;background:transparent;color:inherit;cursor:pointer;font-size:23px;padding:10px 0;text-align:left;transition:color .15s,background-color .15s}
+#menuShell button:hover{color:#fff2cb}
+#menuShell button:focus-visible{outline:2px solid #ffe1a6;outline-offset:5px}
+#menuShell button:disabled{opacity:.45;cursor:default}
+#menuShell .menu-options button{position:relative;display:flex;align-items:center;gap:20px;width:246px;height:54px;padding:0 22px;font-size:27px;flex-shrink:0}
+.menu-options button::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:linear-gradient(90deg,#f5e3bb60,#f5e3bb35,transparent)}
+#menuShell .menu-options button.is-active{background:linear-gradient(90deg,#ecd3a212,#ecd3a206)}
+.menu-options button.is-active::before{content:"";position:absolute;inset:0;background:url('./menu-assets/active-border.png') center/100% 100% no-repeat;pointer-events:none}
+.menu-marker{position:absolute;left:-31px;top:20px;width:14px;height:14px;background:url('./menu-assets/diamond.png') center/9px 10px no-repeat}
+.menu-options .is-active .menu-marker{left:-37px;top:12px;width:27px;height:30px;background-image:url('./menu-assets/double-diamond.png');background-size:contain;filter:drop-shadow(0 0 4px #eacb7d60)}
+.menu-chevron{opacity:.55;object-fit:contain;flex-shrink:0}
+.menu-options .is-active .menu-chevron{margin-left:auto;opacity:1}
+#menuShell .menu-options button:last-child{margin-top:22px}
+.menu-options button:last-child::after{display:none}
+.menu-note{position:relative;margin:20px 0 0 24px;font-size:16px;max-width:340px;line-height:1.6}
+.menu-note:empty{display:none}
+#menuShell .menu-music{position:absolute;right:3.3%;bottom:6%;width:194px;min-height:49px;display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 12px;font-size:17px;background:#14170de0;box-shadow:0 1px 5px #0005}
+.menu-music::before{content:"";position:absolute;inset:0;background:url('./menu-assets/music-border.png') center/100% 100% no-repeat;pointer-events:none}
+.menu-music>img{object-fit:contain;flex-shrink:0}
+.menu-music [data-music-label]{white-space:nowrap}
+.menu-music[aria-pressed="false"] .menu-equalizer{opacity:.35}
+.menu-loading{position:relative;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:50px 24px 12vh;background:linear-gradient(0deg,#000 0%,rgba(0,0,0,.8) 28%,transparent 85%);text-align:center;color:#fff}
+.menu-loading h2{font-size:44px;font-weight:400;margin:0 0 28px}
+.menu-track{height:6px;background:#ffffff40;width:min(520px,84vw);overflow:hidden}
+.menu-track i{height:100%;display:block;width:0;background:#fff;transition:width .3s}
+.menu-loading p{min-height:24px;font-size:18px;max-width:700px;overflow-wrap:anywhere}
+.menu-modal{position:fixed;inset:0;background:#000a;display:grid;place-items:center;padding:20px;z-index:1}
+.menu-dialog{background:#182324;border:1px solid #ffffff50;padding:24px 30px;width:min(740px,100%);max-height:90vh;overflow:auto;border-radius:4px}
+.menu-save-intro,.menu-empty-saves,.save-confirm-copy{margin:0 0 16px;color:#dfd2b7;font-size:16px;line-height:1.7}
+.menu-dialog header{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #ffffff30;margin-bottom:20px}
+.menu-save-slots{display:grid;gap:10px}
+.menu-save-slot{position:relative!important;display:grid;grid-template-columns:82px 1fr auto;grid-template-rows:auto auto;align-items:center;gap:5px 14px;width:100%;min-height:78px;padding:12px 16px!important;border:1px solid #d6b36a45!important;background:linear-gradient(110deg,#d2ad6220,#152325bd 72%)!important;color:#f4e4c4!important;text-align:left!important}
+.menu-save-slot:hover{border-color:#e6c47b!important;background:linear-gradient(110deg,#d2ad6233,#1e302f)!important}
+.menu-save-slot strong{font-size:19px;font-weight:400;grid-column:2;grid-row:1}
+.menu-save-slot>span:last-of-type{grid-column:2;grid-row:2;color:#b9ae97;font-size:13px;line-height:1.4}
+.menu-save-slot small{grid-column:3;grid-row:1 / span 2;color:#e2c27f;font-size:13px;white-space:nowrap}
+.menu-save-slot .save-slot-number{grid-column:1;grid-row:1 / span 2;color:#d7b56f;font-size:14px;border-right:1px solid #d6b36a45}
+.save-confirm-actions{display:flex;justify-content:flex-end;gap:18px;border-top:1px solid #d6b36a45;padding-top:14px}
+.save-confirm-actions button{padding:8px 12px!important;color:#f1d5a3!important;font-size:18px!important}
+.save-confirm-actions [data-confirm]{border:1px solid #d6b36a75!important;background:#d6b36a16!important}
+@media(max-width:560px){.menu-save-slot{grid-template-columns:66px minmax(0,1fr);gap:5px 10px;padding:10px 12px!important}.menu-save-slot strong{font-size:16px}.menu-save-slot small{grid-column:2;grid-row:3}.menu-save-slot>span:last-of-type{font-size:12px}}
+.menu-dialog h2{font-weight:400;font-size:28px;margin:0 0 12px}
+#menuShell .menu-close{font-size:30px;padding:0 8px}
+.menu-setting{display:flex;align-items:center;gap:18px;justify-content:space-between;min-height:64px;font-size:20px}
+.menu-setting input[type="range"]{width:min(220px,40vw);accent-color:#e3c48b}
+.menu-setting input[type="checkbox"]{width:22px;height:22px;accent-color:#e3c48b}.menu-setting-divider{margin-top:12px;padding-top:14px;border-top:1px solid #e3c48b40;color:#e3c48b;font-size:14px}
+.menu-setting-demo{min-height:72px;font-size:16px}
+.menu-setting-demo>span{display:grid;gap:5px}
+.menu-setting-demo strong{font-weight:500}
+.menu-setting-demo small{max-width:330px;color:#d5c9b5;font-size:12px;line-height:1.5}
+.menu-book{display:grid;grid-template-columns:150px 1fr;gap:24px;line-height:1.8;font-size:18px}
+#menuShell .menu-book nav button{font-size:18px;display:block;padding:8px 0}
+.menu-book article h3{font-weight:400;font-size:26px;margin-top:0}.menu-book article h4{font-size:20px;margin-bottom:5px}.menu-book article p{margin-top:0}
+.menu-pages{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:18px}
+#menuShell .menu-pages button{font-size:18px}
+@media(max-height:820px) and (min-width:701px){.menu-home{padding-top:6vh}.menu-eyebrow{margin-bottom:20px}.menu-title{width:280px;margin-bottom:12px}.menu-tagline{font-size:18px;margin-bottom:30px}.menu-options{gap:6px}#menuShell .menu-options button{height:48px;font-size:25px}.menu-marker{top:17px}.menu-options .is-active .menu-marker{top:9px}#menuShell .menu-options button:last-child{margin-top:10px}}
+@media(max-width:700px){#menuShell{background-position:57% center}#menuShell::before{background:linear-gradient(90deg,#0e110db3,#0e110d60 70%,#0e110d20)}.menu-home{padding:36px 0 24px 42px}.menu-composition{width:300px;max-width:calc(100vw - 62px)}.menu-eyebrow{font-size:15px;gap:12px;margin:0 0 20px -18px}.menu-eyebrow::before,.menu-eyebrow::after{width:25px}.menu-title{width:270px;margin:0 0 12px}.menu-title .menu-seal{width:20px;height:35px}.menu-tagline{font-size:16px;margin:0 0 32px 6px;white-space:normal}.menu-options{width:230px;margin-left:16px;gap:8px}.menu-options::before{top:-55px}#menuShell .menu-options button{width:230px;height:48px;font-size:25px}.menu-marker{top:17px}.menu-options .is-active .menu-marker{top:9px}#menuShell .menu-options button:last-child{margin-top:8px}#menuShell .menu-music{position:relative;right:auto;bottom:auto;margin:32px 24px 0 auto}.menu-book{grid-template-columns:1fr}.menu-book nav{display:flex;flex-wrap:wrap;gap:10px}.menu-dialog{padding:20px}.menu-loading h2{font-size:36px}}
+@media(prefers-reduced-motion:reduce){#menuShell button,.menu-track i{transition:none}}
+
+/* The home catalog mirrors the in-game catalog: every lantern stays visible,
+   while the saved observation state controls its card and detail content. */
+.menu-dialog.catalog-dialog{width:min(1120px,100%);padding:28px 32px 22px;background:#162426;border-color:#d6b36a70}
+.catalog-heading{margin-bottom:22px}
+.catalog-heading p{margin:0;color:#d7c7a5;line-height:1.65;font-size:16px}
+.catalog-kicker,.detail-category{margin:0 0 7px;color:#d8b36b!important;font-size:14px!important;letter-spacing:.12em!important}
+.catalog-title-row{display:flex;align-items:baseline;justify-content:space-between;gap:20px;border-bottom:1px solid #d7bb7b45;padding-bottom:11px;margin-bottom:10px}
+.catalog-title-row h3{margin:0;font-size:30px;font-weight:400;color:#f8e7bf}
+.catalog-progress{color:#d8b36b;font-size:16px;white-space:nowrap}
+.catalog-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+#menuShell .catalog-card{position:relative;display:flex;flex-direction:column;align-items:stretch;min-width:0;padding:10px;background:#203234;border:1px solid #d7bb7b35;text-align:left;color:#f5e3bb;transition:transform .15s,border-color .15s,background-color .15s,box-shadow .15s}
+#menuShell .catalog-card:hover{transform:translateY(-2px);border-color:#e9c77caa;background:#294043}
+#menuShell .catalog-card:focus-visible{outline:2px solid #ffe1a6;outline-offset:3px}
+#menuShell .catalog-card.selected{border-color:#eac77b;box-shadow:0 0 0 1px #eac77b55,0 8px 20px #0005;background:#2b4140}
+.card-number{color:#d8b36b;font-size:12px;letter-spacing:.14em;line-height:1;margin-bottom:7px}
+.card-art{position:relative;display:grid;place-items:center;aspect-ratio:1.45 / 1;overflow:hidden;background:radial-gradient(circle at 50% 42%,#8e633a70,#1a292a 70%);border:1px solid #ead5a832}
+.card-art img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 8px #0008);transition:filter .15s,opacity .15s}
+.catalog-card.locked .card-art img,.detail-art.is-locked img{filter:grayscale(1) brightness(.32) contrast(.8) drop-shadow(0 8px 8px #0008);opacity:.72}
+.card-art.is-missing::after{content:'灯影';color:#d7c7a5;font-size:20px;letter-spacing:.15em}
+.card-name{display:block;margin-top:10px;min-height:24px;font-size:17px;line-height:1.4;overflow-wrap:anywhere}
+.card-status{display:block;margin-top:4px;color:#bda979;font-size:13px;line-height:1.4}
+.catalog-detail{display:grid;grid-template-columns:minmax(180px,30%) 1fr;gap:25px;padding:20px 0 4px;border-top:1px solid #d7bb7b45;line-height:1.75}
+.detail-art{width:100%;align-self:start;aspect-ratio:1.45 / 1;min-height:160px}
+.detail-copy{min-width:0}
+.detail-copy h4{margin:0 0 5px;font-size:25px;font-weight:400;color:#f8e7bf}
+.detail-caption{margin:0 0 13px;color:#f0d8a5;font-size:17px}
+.catalog-section{margin-top:14px}
+.catalog-section h5{margin:0 0 3px;color:#d8b36b;font-size:16px;font-weight:400}
+.catalog-section p{margin:0;color:#d8d0bd;font-size:15px;line-height:1.75}
+.catalog-locked-copy{margin:10px 0 0;color:#c6b99f;font-size:16px;line-height:1.8}
+.catalog-footer{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid #d7bb7b2b;color:#9f9a89;font-size:13px;line-height:1.5}
+@media(max-width:860px){.menu-dialog.catalog-dialog{padding:24px 20px 18px}.catalog-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-detail{grid-template-columns:minmax(150px,32%) 1fr;gap:18px}}
+@media(max-width:560px){.menu-dialog.catalog-dialog{padding:20px 14px 16px}.catalog-title-row{align-items:flex-start;flex-direction:column;gap:4px}.catalog-title-row h3{font-size:26px}.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-card{padding:8px!important}.card-name{font-size:15px}.card-status{font-size:12px}.catalog-detail{grid-template-columns:1fr;gap:12px}.detail-art{width:58%;min-height:0}.detail-copy h4{font-size:23px}.catalog-section p{font-size:14px}.catalog-footer{align-items:flex-start;flex-direction:column;gap:8px}}
+
+/* The home catalog uses the same book component as the in-game encyclopedia. */
+#menuShell .catalog-book-dialog{position:relative;width:min(1140px,96vw);max-width:none;max-height:94dvh;padding:20px 26px 28px;background:#30291f;border-color:#9f8055;border-radius:0;box-shadow:0 8px 50px #120d0955;font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",serif;font-size:14px;font-weight:400;-webkit-font-smoothing:antialiased}
+#menuShell .catalog-book-dialog>header{display:block;border:0;margin:0}
+#menuShell .catalog-book-dialog h2{font-size:20px;font-weight:400;letter-spacing:0;margin:0 0 16px;color:#e7d1a7}
+#menuShell .catalog-book-dialog .menu-close{position:absolute;right:10px;top:10px;font:inherit;font-size:25px;padding:2px 12px;border:0;background:transparent;color:#fff4df}
+#menuShell .catalog-book-dialog .menu-dialog-body{line-height:1.9;font-size:15px;color:#e8dcc6}
+#menuShell .catalog-book-dialog .story-book button{font:inherit;border-radius:0}
+#menuShell .catalog-book-dialog .story-book-index button{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;border-bottom:1px solid #aa8e5c40;background:transparent;color:#543e27;padding:13px 2px;min-height:54px}
+#menuShell .catalog-book-dialog .story-book-index button.is-unlocked:hover{background:#9f4f2510;color:#8b3828}
+#menuShell .catalog-book-dialog .story-book-index button.is-locked{color:#867762;opacity:.5}
+#menuShell .catalog-book-dialog .story-book-back,#menuShell .catalog-book-dialog .story-book-model-actions button,#menuShell .catalog-book-dialog .story-book-turn button{color:#795b36;background:transparent;border:0}
+#menuShell .catalog-book-dialog .story-book-back{align-self:flex-start;padding:0 0 18px;font-size:13px}
+#menuShell .catalog-book-dialog .story-book-model-actions button{border-bottom:1px solid #b99d6b;padding:4px 2px;font-size:12px}
+#menuShell .catalog-book-dialog .story-book-turn button{padding:7px 0;font-size:13px}
+#menuShell .catalog-book-dialog .story-book-turn button:disabled{opacity:.35;cursor:default}
+#menuShell .catalog-book-dialog .story-book :focus-visible{outline:2px solid #9b5238;outline-offset:3px}
+.menu-dialog.catalog-book-dialog .story-book{width:100%}
+.menu-modal:has(.catalog-book-dialog){padding:24px}
+@media(max-width:700px){.menu-modal:has(.catalog-book-dialog){padding:10px}#menuShell .catalog-book-dialog{width:100%;max-height:95dvh;padding:18px 12px 24px}#menuShell .catalog-book-dialog .story-book-index button{gap:9px;min-height:48px;padding:10px 0}}
+
+/* Save slots use the supplied Qinhuai lantern-festival paper UI assets. */
+/* Keep the title in the paper area to the right of the painted flowers. */
+#menuShell .menu-dialog.save-dialog{position:relative;width:min(1000px,94vw);max-height:min(720px,88dvh);padding:76px 74px 58px;border:0;border-radius:0;background:#ead9b6 url('./menu-assets/save-ui/panel-bg.png') center/100% 100% no-repeat;box-shadow:0 18px 60px #160f0d88;color:#6c3425;overflow:auto;font-family:"Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",serif;font-size:16px}
+#menuShell .menu-dialog.save-dialog::before{content:"";position:absolute;top:19px;left:28px;width:calc(100% - 56px);height:78px;background:url('./menu-assets/save-ui/branch.png') left top/contain no-repeat;pointer-events:none}
+#menuShell .menu-dialog.save-dialog::after{content:"";position:absolute;right:17px;bottom:27px;width:90px;height:210px;background:url('./menu-assets/save-ui/tassel.png') center/contain no-repeat;pointer-events:none;opacity:.92}
+#menuShell .save-dialog header{position:static;min-height:54px;display:flex;align-items:flex-end;padding:0 0 16px 28%;margin:0 0 20px;border:0;background:url('./menu-assets/save-ui/divider.png') center bottom/100% 9px no-repeat}
+#menuShell .save-dialog header h2{flex:1;min-width:0;text-align:center;margin:0;color:#7d3829;font-size:31px;font-weight:600;line-height:1.25;text-shadow:0 1px 0 #fff1c8}
+#menuShell .save-dialog .menu-close{position:absolute;right:1%;top:3.5%;width:8%;height:13%;min-width:48px;min-height:48px;max-width:76px;max-height:76px;padding:0!important;font-size:0;color:transparent;background:transparent}
+#menuShell .save-dialog .menu-close:hover{filter:none;color:transparent}
+#menuShell .save-dialog .menu-close:focus-visible{outline:2px solid #8d452c;outline-offset:2px}
+#menuShell .save-dialog .menu-dialog-body{position:relative;z-index:1;min-height:120px;color:#6b3828}
+#menuShell .save-dialog .menu-save-intro,#menuShell .save-dialog .menu-empty-saves,#menuShell .save-dialog .save-confirm-copy{margin:0 0 18px;padding:14px 18px;background:url('./menu-assets/save-ui/light-panel.png') center/100% 100% no-repeat;color:#70412d;font-size:17px;line-height:1.7;text-align:center}
+#menuShell .save-dialog .menu-save-slots{display:grid;gap:14px}
+#menuShell .save-dialog .menu-save-slot{position:relative!important;isolation:isolate;display:grid;grid-template-columns:84px minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;gap:5px 16px;width:100%;min-height:92px;padding:16px 22px!important;border:0!important;background:#d7b77a url('./menu-assets/save-ui/slot-bg.png') center/100% 100% no-repeat!important;color:#623524!important;text-align:left!important;box-shadow:0 5px 12px #62352422;transition:transform .15s,filter .15s}
+#menuShell .save-dialog .menu-save-slot:hover{transform:translateY(-2px);filter:brightness(1.06)}
+#menuShell .save-dialog .menu-save-slot:focus-visible{outline:2px solid #8d452c;outline-offset:3px}
+#menuShell .save-dialog .menu-save-slot strong{grid-column:2;grid-row:1;font-size:20px;font-weight:600;color:#713526}
+#menuShell .save-dialog .menu-save-slot>span:last-of-type{grid-column:2;grid-row:2;color:#8a573d;font-size:14px;line-height:1.4}
+#menuShell .save-dialog .menu-save-slot small{grid-column:3;grid-row:1 / span 2;color:#9a5a2e;font-size:14px;white-space:nowrap}
+#menuShell .save-dialog .menu-save-slot .save-slot-number{grid-column:1;grid-row:1 / span 2;display:flex;align-items:center;justify-content:center;min-height:52px;padding-right:14px;border-right:1px solid #8d5c3280;color:#a04b2d;font-size:16px;font-weight:600}
+#menuShell .save-dialog .save-confirm-actions{position:relative;display:flex;justify-content:center;gap:18px;margin-top:4px;padding:20px 0 4px;border-top:0;background:url('./menu-assets/save-ui/divider.png') center top/100% 9px no-repeat}
+#menuShell .save-dialog .save-confirm-actions button{min-width:126px;padding:10px 18px!important;border:1px solid #9a5732!important;background:#f1dfb8cc!important;color:#713524!important;font-size:17px!important;text-align:center!important;box-shadow:0 2px 5px #60301e22}
+#menuShell .save-dialog .save-confirm-actions button:hover{background:#f7e8c8!important;color:#873a28!important}
+#menuShell .save-dialog .save-confirm-actions [data-confirm]{background:#93452f!important;color:#fff0c9!important;border-color:#713524!important}
+#menuShell .save-dialog .save-confirm-actions [data-confirm]:hover{background:#aa5738!important}
+#menuShell .save-dialog .menu-dialog-body::after{content:"";position:absolute;left:2px;bottom:-46px;width:190px;height:78px;background:url('./menu-assets/save-ui/petals.png') left bottom/contain no-repeat;pointer-events:none;opacity:.8}
+@media(max-width:700px){#menuShell .menu-dialog.save-dialog{width:calc(100vw - 20px);max-height:94dvh;padding:68px 30px 48px}#menuShell .menu-dialog.save-dialog::before{left:14px;width:calc(100% - 28px);top:14px;height:62px}#menuShell .menu-dialog.save-dialog::after{right:2px;bottom:18px;width:62px;height:160px;opacity:.62}#menuShell .save-dialog header{margin-bottom:16px}#menuShell .save-dialog header h2{font-size:27px}#menuShell .save-dialog .menu-save-slot{grid-template-columns:62px minmax(0,1fr);gap:5px 11px;min-height:82px;padding:13px 15px!important}#menuShell .save-dialog .menu-save-slot strong{font-size:17px}#menuShell .save-dialog .menu-save-slot>span:last-of-type{font-size:12px}#menuShell .save-dialog .menu-save-slot small{grid-column:2;grid-row:3;font-size:12px}#menuShell .save-dialog .menu-save-slot .save-slot-number{padding-right:8px;font-size:14px}#menuShell .save-dialog .menu-save-intro,#menuShell .save-dialog .menu-empty-saves,#menuShell .save-dialog .save-confirm-copy{font-size:15px;padding:11px 12px}}
+@media(max-width:420px){#menuShell .menu-dialog.save-dialog{padding:62px 18px 38px}#menuShell .save-dialog .menu-save-slot{padding:11px 12px!important}#menuShell .save-dialog .save-confirm-actions{gap:9px}#menuShell .save-dialog .save-confirm-actions button{min-width:0;flex:1;padding:9px 8px!important;font-size:15px!important}}
+
+/* Loading screen follows the lantern reference while retaining the shared menu type. */
+.menu-loading{position:relative;min-height:100%;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px 20px;text-align:center;color:#f4ead8;background:rgba(5,9,10,.62)}
+.menu-loading h2{font-size:clamp(34px,5vw,46px);font-weight:400;line-height:1.3;margin:0 0 29px;color:#f1d5a3;text-shadow:0 1px 3px #24150c,0 2px 10px #0009}
+.menu-track{height:6px;width:min(520px,84vw);overflow:hidden;background:#ffffff40;border:0;box-shadow:none}
+.menu-track i{height:100%;display:block;width:0;background:#f4f2ec;box-shadow:0 0 7px #ffffff70;transition:width .3s}
+.menu-loading p{min-height:24px;margin:16px 0 0;font-size:17px;line-height:1.6;max-width:min(700px,84vw);overflow-wrap:anywhere;color:#f1d5a3;text-shadow:0 1px 3px #24150c,0 1px 6px #000b}
+@media(max-width:700px){.menu-loading{padding:24px 20px}.menu-loading h2{margin-bottom:25px}.menu-track{width:min(520px,84vw)}}

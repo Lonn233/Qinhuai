@@ -1,0 +1,47 @@
+const fs=require('node:fs/promises'),assert=require('node:assert/strict');
+const {chromium}=require('C:/Users/Lonn/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+(async()=>{let browser;const timer=setTimeout(()=>{console.error('QA timeout');browser?.close().finally(()=>process.exit(1));},200000);try{
+ await fs.mkdir('work/temple-entry',{recursive:true});
+ browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:process.env.QINHUAI_QA_SOFTWARE?['--use-angle=swiftshader','--enable-unsafe-swiftshader']:['--use-angle=d3d11']});
+ const page=await browser.newPage({viewport:{width:960,height:600}}),errors=[],requests=[];
+ page.on('console',m=>{if(m.type()==='error')console.log('CONSOLE',m.text());});
+ page.on('pageerror',e=>{errors.push(e.message);console.log('ERROR',e.message);});
+ page.on('response',r=>{if(r.url().includes('/courtyard-rack-lanterns/'))requests.push({url:r.url(),status:r.status()});});
+ await page.route('**/api/main-scene-settings**',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({version:1,revision:0,entries:{}})}));
+ if(process.env.QINHUAI_QA_FOCUSED)await page.route('**/assets/qinhuai-modern-import/manifest.json',async r=>{const manifest=JSON.parse(await fs.readFile('assets/qinhuai-modern-import/manifest.json','utf8'));manifest.tiles=manifest.tiles.filter(t=>t.id===9);await r.fulfill({status:200,contentType:'application/json',body:JSON.stringify(manifest)});});
+ await page.goto('http://127.0.0.1:4180/qinhuai-modern-import.html?time=night&view=courtyard&gateLight=gold&v=temple-entry-20261022',{waitUntil:'domcontentloaded'});
+ await page.locator('#menuShell [data-action="preview"]').click();
+ await page.waitForFunction(()=>window.__QINHUAI_STARTUP__?.error||window.__QINHUAI_STARTUP__?.phase==='准备完成',null,{timeout:180000}).catch(async e=>{console.log('STARTUP',await page.evaluate(()=>window.__QINHUAI_STARTUP__));throw e;});
+ assert.equal(await page.evaluate(()=>window.__QINHUAI_STARTUP__.error),null);
+ const initial=await page.evaluate(()=>{const a=window.__QINHUAI_IMPORT__;return {mode:a.controlMode,position:a.playerStats.position,labels:document.querySelector('#buildingNamesVisible').checked,racks:a.courtyardRackStats,music:a.mainMusic.snapshot()};});console.log('INITIAL',JSON.stringify(initial));
+ assert.equal(initial.mode,'firstPerson');assert.equal(initial.labels,false);assert.equal(initial.racks.ready,false);assert.equal(requests.length,0);
+ assert.ok(Math.abs(initial.position[0]+5.24)<.1&&Math.abs(initial.position[2]+11.8)<.1);
+ await page.locator('#toolbarToggle').click();await page.screenshot({path:'work/temple-entry/gate-spawn.png'});
+ await page.keyboard.press('KeyE');assert.equal(await page.evaluate(()=>window.__QINHUAI_IMPORT__.templeVisit.snapshot().inside),false);
+ // Fixed simulation ticks exercise real movement/collision independent of software-rendering FPS.
+ const route=await page.evaluate(()=>{const a=window.__QINHUAI_IMPORT__,keys=new Set(['ShiftLeft','KeyW']),route=[];a.player.stop();for(let i=0;i<900;i++){a.player.update(1/60,keys);a.templeVisit.update(a.player.position,true);if(i%60===0)route.push({position:a.playerStats.position,visit:a.templeVisit.snapshot()});if(a.templeVisit.snapshot().near)break;}a.player.stop();return route;});console.log('ROUTE',JSON.stringify(route));
+ await fs.writeFile('work/temple-entry/route.json',JSON.stringify(route,null,2));
+ await page.screenshot({path:'work/temple-entry/door-approach.png'});
+ assert.equal(await page.evaluate(()=>window.__QINHUAI_IMPORT__.templeVisit.snapshot().near),true,'must be able to walk from gate to portal');
+ const entering=!(await page.evaluate(()=>window.__QINHUAI_IMPORT__.templeVisit.snapshot().inside));
+ await page.keyboard.press('KeyE');await page.waitForFunction(()=>window.__QINHUAI_IMPORT__.templeVisit.snapshot().busy);await page.waitForTimeout(520);
+ if(entering)await page.waitForFunction(()=>{const text=document.querySelector('#templeLoadingPercent').textContent;return text!=='准备中'&&text!=='0%';},null,{timeout:30000});
+ const blackout=await page.evaluate(()=>({visible:!document.querySelector('#templeCurtain').hidden,black:document.querySelector('#templeCurtain').classList.contains('is-black'),title:document.querySelector('#templeTransitionText').textContent,percent:document.querySelector('#templeLoadingPercent').textContent,detail:document.querySelector('#templeLoadingDetail').textContent,width:document.querySelector('#templeLoadingBar').style.width}));
+ console.log('BLACKOUT',JSON.stringify(blackout));assert.equal(blackout.visible,true);assert.equal(blackout.black,true);assert.match(blackout.title,/夫子庙/);assert.ok(blackout.detail.length>0);
+ await page.screenshot({path:'work/temple-entry/blackout.png'});
+ await page.waitForFunction(()=>!window.__QINHUAI_IMPORT__.templeVisit.snapshot().busy,null,{timeout:40000});
+ const entered=await page.evaluate(()=>{const a=window.__QINHUAI_IMPORT__;return {visit:a.templeVisit.snapshot(),racks:a.courtyardRackStats,position:a.playerStats.position,trees:a.courtyardLanternStats,visible:a.courtyardRacks.root.visible};});console.log('ENTERED',JSON.stringify(entered));
+ assert.equal(entered.visit.error,null);assert.equal(entered.visit.inside,true);assert.equal(entered.racks.racks,1);assert.ok(entered.racks.lamps>=36);assert.equal(entered.visible,true);assert.equal(entered.trees.trees,8);assert.equal(requests.length,4);
+ await page.screenshot({path:'work/temple-entry/inside.png'});
+ // Walk beneath the canopy, then return to the entrance.
+ await page.evaluate(()=>{const a=window.__QINHUAI_IMPORT__;for(let i=0;i<100;i++)a.player.update(1/60,new Set(['ShiftLeft','KeyW']));a.player.stop();});
+ const under=await page.evaluate(()=>window.__QINHUAI_IMPORT__.playerStats.position);console.log('UNDER',under);assert.ok(under[2]<-28,'clear path beneath canopy');
+ await page.evaluate(()=>{const a=window.__QINHUAI_IMPORT__;for(let i=0;i<100;i++)a.player.update(1/60,new Set(['ShiftLeft','KeyS']));a.player.stop();a.templeVisit.update(a.player.position,true);});
+ await page.keyboard.press('KeyE');await page.waitForFunction(()=>!window.__QINHUAI_IMPORT__.templeVisit.snapshot().busy);assert.equal(await page.evaluate(()=>window.__QINHUAI_IMPORT__.templeVisit.snapshot().inside),false);
+ await page.keyboard.press('KeyE');await page.waitForFunction(()=>!window.__QINHUAI_IMPORT__.templeVisit.snapshot().busy);assert.equal(await page.evaluate(()=>window.__QINHUAI_IMPORT__.templeVisit.snapshot().inside),true);assert.equal(requests.length,4);
+ await page.locator('#mainMusicToggle').click();assert.equal(await page.evaluate(()=>window.__QINHUAI_IMPORT__.mainMusic.snapshot().enabled),false);
+ await page.locator('#mainMusicToggle').click();await page.waitForFunction(()=>!document.querySelector('#main-scene-music').paused);
+ const audio=await page.evaluate(()=>({state:window.__QINHUAI_IMPORT__.mainMusic.snapshot(),src:document.querySelector('#main-scene-music').getAttribute('src'),saved:JSON.parse(localStorage.getItem('qinhuai-main-music-v1'))}));assert.equal(audio.saved.enabled,true);
+ const gpu=await page.evaluate(()=>{const g=window.__QINHUAI_IMPORT__.renderer.getContext(),e=g.getExtension('WEBGL_debug_renderer_info');return e?g.getParameter(e.UNMASKED_RENDERER_WEBGL):g.getParameter(g.RENDERER);});
+ await fs.writeFile('work/temple-entry/browser.json',JSON.stringify({focused:!!process.env.QINHUAI_QA_FOCUSED,initial,blackout,entered,under,audio,gpu,requests,errors},null,2));assert.deepEqual(errors,[]);console.log('PASS',JSON.stringify({gpu,audio,blackout}));
+ }finally{clearTimeout(timer);await browser?.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

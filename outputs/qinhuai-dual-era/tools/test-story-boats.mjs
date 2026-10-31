@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import {ImportBoatLanterns} from '../import-boat-lanterns.js';
+const root=new THREE.Group(),fixture=new THREE.Mesh(new THREE.BoxGeometry(),new THREE.MeshBasicMaterial({color:0xffaa00}));fixture.userData.nightFixtureKind='boat';root.add(fixture);
+const reflections={apply(){this.visible=!this.playBoatsHidden&&this.lightControls.boat.modelVisible;}};
+const night={root,bindings:[],waterReflections:reflections,mapLightSettings:{},matouSelection:{settings:{}},pavilionSelection:{settings:{}},buildingAdjustments:{saved:{}}};
+const boats=new ImportBoatLanterns(night);boats.lightControls={boat:{modelVisible:true,enabled:true,brightness:1,inheritColor:true}};
+const meshes=Array.from({length:5},(_,i)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(),new THREE.MeshStandardMaterial());m.material.name='FuziTemple006'+(i+3);return m;});boats.registerTile(new Map(meshes.map((m,i)=>[i,m])));
+const before=JSON.stringify(boats.lightControls);boats.setState();assert.ok(meshes.every(m=>m.visible));boats.setPlayHidden(true);assert.ok(meshes.every(m=>!m.visible));assert.equal(fixture.visible,false);assert.equal(reflections.visible,false);boats.setState();assert.ok(meshes.every(m=>!m.visible));assert.equal(JSON.stringify(boats.lightControls),before);
+boats.setPlayHidden(false);assert.ok(meshes.every(m=>m.visible));assert.ok(fixture.visible&&reflections.visible);boats.lightControls.boat.modelVisible=false;boats.setPlayHidden(true);boats.setPlayHidden(false);assert.ok(meshes.every(m=>!m.visible));
+console.log('PASS boats: all five audited material groups hidden in play, fixture/reflection suppression, saved settings untouched, preview visibility restored');

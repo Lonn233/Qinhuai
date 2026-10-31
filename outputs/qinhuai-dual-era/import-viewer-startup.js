@@ -1,52 +1,47 @@
-// Paint the controls before loading/evaluating Three.js and compiling GPU programs.
+// The menu must not import the renderer until a player chooses a game mode.
 (() => {
-  const status = document.querySelector('#status');
-  const progress = document.querySelector('#progress');
-  const title = document.querySelector('#progressTitle');
-  const detail = document.querySelector('#progressText');
-  let timer;
+  let boot, resolveReady, rejectReady;
+  const signal = () => window.dispatchEvent(new CustomEvent('qinhuai-startup', {detail: {phase: startup.phase, error: startup.error}}));
   const startup = window.__QINHUAI_STARTUP__ = {
-    phase: '界面已显示，正在准备三维引擎', error: null,
-    stage(message) { this.phase = message; status.textContent = message; },
+    phase: '等待进入游戏', error: null, loaded: false,
+    stage(message) { this.phase = message; document.querySelector('#status').textContent = message; signal(); },
     fail(error) {
-      clearTimeout(timer);
       this.error = String(error?.message || error);
-      const panel = document.querySelector('#errors');
-      panel.style.display = 'block';
-      panel.textContent = '查看器启动或运行失败：' + this.error;
-      const retry = document.createElement('button'); retry.textContent = '重新加载';
-      retry.onclick = () => location.reload(); panel.appendChild(retry);
-      progress.classList.remove('show'); status.textContent = panel.textContent;
+      console.error('场景启动失败', error);
+      this.stage('场景加载失败，请重新加载。');
+      rejectReady?.(error instanceof Error ? error : new Error(this.error));
     },
-    ready() { clearTimeout(timer); if (!this.error) this.phase = '场景已加载'; },
-  };
-  const isNonFatalPointerLockError = error => /pointer.?lock|root document.*valid for pointer lock/i.test(String(error?.message || error));
-  window.addEventListener('error', event => {
-    if (event.error && !isNonFatalPointerLockError(event.error)) startup.fail(event.error);
-  });
-  window.addEventListener('unhandledrejection', event => {
-    if (!isNonFatalPointerLockError(event.reason)) startup.fail(event.reason);
-  });
-  progress.classList.add('show'); title.textContent = '正在启动查看器';
-  detail.textContent = '先显示操作界面，再初始化三维场景…';
-  timer = setTimeout(() => {
-    if (!startup.error && startup.phase !== '场景已加载') {
-      status.textContent = '当前阶段：' + startup.phase + '。等待较久时，请查看加载进度；多个旧的三维页面会同时占用显存。';
-    }
-  }, 45000);
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    setTimeout(async () => {
-      startup.stage('正在保护并读取浏览器已保存的设置…');
-      try {
-        const {mountScenePersistence} = await import('./main-scene-persistence.mjs?v=3');
-        window.__QINHUAI_SCENE_SAVE__ = mountScenePersistence();
-        await window.__QINHUAI_SCENE_SAVE__.ready;
-      } catch (error) {
-        const saveStatus=document.querySelector('#scenePersistence');
-        if(saveStatus)saveStatus.textContent='文件存档未连接，仍使用浏览器现有设置：'+error.message;
+    ready() { this.loaded = true; this.stage('场景已加载'); resolveReady?.(); },
+    async enter(mode, options = {}) {
+      if (!['play', 'preview'].includes(mode)) throw new Error('未知的游戏模式');
+      if (!boot) {
+        const engineReady = new Promise((resolve, reject) => { resolveReady = resolve; rejectReady = reject; });
+        // Attach a rejection handler before importing the engine.
+        engineReady.catch(() => {});
+        boot = (async () => {
+          this.stage('正在读取场景设置…');
+          try {
+            const {mountScenePersistence} = await import('./main-scene-persistence.mjs?v=3');
+            window.__QINHUAI_SCENE_SAVE__ = mountScenePersistence();
+            await window.__QINHUAI_SCENE_SAVE__.ready;
+          } catch (error) {
+            const label = document.querySelector('#scenePersistence');
+            console.warn('场景存档未连接', error);
+            if (label) label.textContent = '场景存档未连接，使用浏览器设置。';
+          }
+          this.stage('正在载入三维引擎…');
+          await import('./qinhuai-modern-import.bundle.js?v=story-ui-hotkeys-20261023');
+          await engineReady;
+        })();
       }
-      startup.stage('正在载入三维引擎…');
-      import('./qinhuai-modern-import.bundle.js?v=performance-47-spatial').catch(error => startup.fail(error));
-    }, 0);
-  }));
+      await boot;
+      if (this.error) throw new Error(this.error);
+      this.stage(mode === 'play' ? '正在准备人物与灯会旅程…' : '正在准备场景预览…');
+      await window.__QINHUAI_IMPORT__.story.enter(mode, options);
+      this.stage('准备完成');
+    },
+  };
+  const nonfatal = error => /pointer.?lock|root document.*valid for pointer lock/i.test(String(error?.message || error));
+  window.addEventListener('error', event => { if (boot && event.error && !nonfatal(event.error)) startup.fail(event.error); });
+  window.addEventListener('unhandledrejection', event => { if (boot && !nonfatal(event.reason)) startup.fail(event.reason); });
 })();

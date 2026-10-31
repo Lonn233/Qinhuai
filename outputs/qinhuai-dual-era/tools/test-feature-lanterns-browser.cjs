@@ -18,7 +18,7 @@ const {chromium} = require('C:/Users/Lonn/.cache/codex-runtimes/codex-primary-ru
    console.error(JSON.stringify({startup:await page.evaluate(()=>window.__QINHUAI_STARTUP__),errors,failures},null,2));
    throw error;
   }
-  await page.waitForFunction(()=>window.__QINHUAI_IMPORT__?.featureLanterns.stats.fish===2&&window.__QINHUAI_IMPORT__?.featureLanterns.stats.woman===1,null,{timeout:120000});
+  await page.waitForFunction(()=>window.__QINHUAI_IMPORT__?.featureLanterns.stats.fish===0&&window.__QINHUAI_IMPORT__?.featureLanterns.stats.woman===1&&window.__QINHUAI_IMPORT__?.bridgeLanterns.stats.ready,null,{timeout:120000});
   const ui = await page.evaluate(async()=>{
    const {mountBuildingControls,BUILDING_LIGHT_KEY}=await import('/import-building-controls.mjs');
    const initial={version:1,future:'keep',buildings:{'matou-north-west':{future:7},other:{brightness:2}},presets:[{id:'old',name:'原收藏',building:'matou-north-west',settings:{brightness:.5}}]};

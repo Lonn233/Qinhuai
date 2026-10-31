@@ -7,7 +7,7 @@ export function readSaved(raw,lanternIds,presetNames){
  try{
   const data=JSON.parse(raw);if(data?.version!==1||!Array.isArray(data.items))return [];
   const seen=new Set();return data.items.filter(p=>{
-   if(!p||typeof p.id!=='string'||!/^[a-zA-Z0-9_-]{1,80}$/.test(p.id)||seen.has(p.id)||!lanternIds.includes(p.lanternId)||!presetNames.includes(p.base)||typeof p.name!=='string'||!p.name.trim()||p.name.length>40||!Number.isFinite(p.power)||p.power<0||p.power>2.5||typeof p.color!=='string'||!/^#[0-9a-f]{6}$/i.test(p.color))return false;
+   if(!p||typeof p.id!=='string'||!/^[a-zA-Z0-9_-]{1,80}$/.test(p.id)||seen.has(p.id)||!lanternIds.includes(p.lanternId)||!presetNames.includes(p.base)||typeof p.name!=='string'||!p.name.trim()||p.name.length>40||!Number.isFinite(p.power)||p.power<0||p.power>5||typeof p.color!=='string'||!/^#[0-9a-f]{6}$/i.test(p.color))return false;
    if(p.sizeMeters!==undefined&&!validSize(p.lanternId,p.sizeMeters))return false;
    seen.add(p.id);return true;
   }).slice(0,500).map(({id,lanternId,base,name,power,color,sizeMeters})=>({id,lanternId,base,name,power,color,...(sizeMeters===undefined?{}:{sizeMeters})}));

@@ -1,4 +1,4 @@
-import {EnvironmentVolume,VOLUME_ENCODING} from './import-environment-volume.js';
+import {EnvironmentVolume,VOLUME_ENCODING,spatialEmitterSample} from './import-environment-volume.js';
 import {hasWindowFloors,normalizeWindowFloors,WINDOW_FLOORS} from './import-window-floors.mjs';
 import {normalizeGateGround,gateGroundWeight} from './import-gate-ground.mjs';
 import {BRIDGE_PRESET} from './import-bridge-config.mjs';
@@ -114,7 +114,7 @@ export function installEnvironmentReceiver(original,uniforms,{clone=true}={}){
 }
 export class ImportEnvironmentSpill {
  constructor(){
-  this.buildings=[];this.emitters=new Map();this.saved={};this.loaded=new Set();this.receivers=new Map();this.materials=new Map();this.sourceState={};this.onCatalogChange=null;this.onDiagnostics=null;
+  this.lanternChannels=[];this.buildings=[];this.emitters=new Map();this.saved={};this.loaded=new Set();this.receivers=new Map();this.materials=new Map();this.sourceState={};this.onCatalogChange=null;this.onDiagnostics=null;
   this.patched=new Map();this.installed=new WeakSet();this.volume=new EnvironmentVolume();this.night=false;
   this.active=false;this.dirty=true;this.configured=false;this.disposed=false;
   this.data=new Uint8Array(ENVIRONMENT_ATLAS_SIZE**2*4);this.accum=new Float32Array(ENVIRONMENT_ATLAS_SIZE**2*3);
@@ -132,6 +132,7 @@ export class ImportEnvironmentSpill {
   this.uniforms.envAtlasBounds.value.set(x,z,Math.max(...rs.map(r=>r[2]))+31-x,Math.max(...rs.map(r=>r[3]))+31-z);
   this.configured=true;this.stats.buildings=this.buildings.length;this.dirty=true;this.onCatalogChange?.();
  }
+ setLanternChannels(channels){this.lanternChannels=channels;this.dirty=true;}
  getCatalog(){return this.buildings.map(b=>({id:b.id,label:b.label,defaultEnabled:b.defaultEnabled}));}
  getFocusTarget(id){const b=this.buildings.find(b=>b.id===id);return b?{id:b.id,label:b.label,tiles:[...b.tiles],bounds:environmentFocusBounds(b,this.layout)}:null;}
  getSettings(id){const b=this.buildings.find(b=>b.id===id);return normalizeEnvironment(this.saved[id],b?.defaultEnabled??false);}
@@ -205,6 +206,25 @@ export class ImportEnvironmentSpill {
    }
    if(channels.length)activeSources++;
   }
+
+  // Actual lantern positions illuminate both ground and elevated receivers.
+  // Group maxima avoid over-bright accumulation from multipart GLBs / dense nets.
+  for(const channel of this.lanternChannels){
+   const {p,color,energy,emitters}=channel;
+   if(!p.enabled||!p.intensity||!p.distance||!p.decayDistance||!energy||!emitters.length)continue;
+   this.volume.addChannel(channel);
+   const weights=new Map(),sample={};
+   for(const e of emitters){
+    const r=p.distance+(e.radius||0),xMin=Math.max(0,Math.floor((e.x-r-x0)/width*size)),xMax=Math.min(size-1,Math.ceil((e.x+r-x0)/width*size));
+    const zMin=Math.max(0,Math.floor((e.z-r-z0)/height*size)),zMax=Math.min(size-1,Math.ceil((e.z+r-z0)/height*size));
+    for(let iz=zMin;iz<=zMax;iz++)for(let ix=xMin;ix<=xMax;ix++){
+     const weight=spatialEmitterSample(x0+(ix+.5)/size*width,11.9,z0+(iz+.5)/size*height,e,p,sample).weight;
+     const index=iz*size+ix;if(weight>(weights.get(index)||0))weights.set(index,weight);
+    }
+   }
+   for(const [index,weight] of weights){const k=index*3,power=weight*energy*p.intensity;this.accum[k]+=color.r*power;this.accum[k+1]+=color.g*power;this.accum[k+2]+=color.b*power;}
+  }
+  this.stats.lanternSources=this.lanternChannels.reduce((n,c)=>n+c.emitters.length,0);
 
   // The gate has an open passage. Perimeter emitters intentionally point
   // outward, so a separate center wash is needed beneath its three openings.

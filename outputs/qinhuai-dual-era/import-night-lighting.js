@@ -1,3 +1,4 @@
+import {ImportBoatLanterns} from './import-boat-lanterns.js';
 import {DRAGON_NODES} from './import-dragon-lighting.js';
 import {attachBridgeLighting} from './import-bridge-lighting.js';
 import {BRIDGE_NODES} from './import-bridge-config.mjs';
@@ -8,6 +9,9 @@ import {ImportWaterReflections} from './import-water-reflections.js';
 import {normalizeMapLights} from './import-light-controls.mjs';
 import {MATOU_GROUPS,matouGroupForNode,attachMatouStudy,readMatouStudy,loadMatouField,retainedMatouFixtureSegments} from './import-matou-study.js';
 import {attachTempleStudy,TEMPLE_STUDY_NODES,readTempleStudy,attachPavilionStudy,PAVILION_STUDY_NODES} from './import-temple-study.js';
+import {createTower0369Fixtures} from './import-tower0369-fixtures.js';
+import {attachTower0369Study} from './import-tower0369-study.js';
+import {TOWER0369_NODES,TOWER0369_PRESET} from './import-tower0369-config.mjs';
 
 // Additive night installation for the IMPORT VIEWER ONLY. No source GLB changes.
 // Paths are measured in source-world coordinates by build_import_night_layout.py.
@@ -240,6 +244,8 @@ export class ImportNightLighting {
     this.bridgeMaterials = [];
     this.templeStudies = [];
     this.pavilionStudies = [];
+    this.tower0369Studies = [];
+    this.tower0369Fixtures = [];
     this.matouStudies = [];
     this.matouFields = new Map();
     this.matouSelection = readMatouStudy();
@@ -264,6 +270,7 @@ export class ImportNightLighting {
     this.pending = null;
     this.disposed = false;
     this.buildingAdjustments.onChange=()=>this.applyMapLightSettings();
+    this.boatReflectionStyles=NIGHT_STYLE;this.boatLanterns=new ImportBoatLanterns(this);
     this.stats = { tiles: 0, segments: 0, batches: 0, boats: 0, washLights: 0, materialBindings: 0, wrappedRoofs: 0, volumeBytes: 0 };
   }
   async prepare() {
@@ -391,6 +398,7 @@ export class ImportNightLighting {
     const group = new THREE.Group(); group.name = `Night / tile-${id}`;
     const byName = new Map();
     object.traverse(mesh => { if (mesh.isMesh) byName.set(mesh.name, mesh); });
+    this.boatLanterns.registerTile(byName);
     const rules = new Map();
     for (const rule of tile.materials) {
       if(BRIDGE_NODES[rule.node])continue;
@@ -402,6 +410,7 @@ export class ImportNightLighting {
     for (const target of MATOU_GROUPS.filter(target => target.tile === Number(id))) {
       for (const name of target.nodes) if (!rules.has(name)) rules.set(name, []);
     }
+    for(const name of TOWER0369_NODES)if(byName.has(name)&&!rules.has(name))rules.set(name,[]);
     for (const [name, meshRules] of rules) {
       const mesh = byName.get(name); if (!mesh) continue;
       const matouGroup = matouGroupForNode(name);
@@ -419,6 +428,13 @@ export class ImportNightLighting {
         this.matouStudies.push(study);
         this.bindings.push({mesh, day: study.day, night: study.night, dayGeometry: study.dayGeometry, nightGeometry: study.nightGeometry});
         if (this.enabled) { mesh.material = study.night; mesh.geometry = study.nightGeometry; }
+        continue;
+      }
+      if (TOWER0369_NODES.has(name)) {
+        const study=attachTower0369Study(mesh,tile.bounds[name],TOWER0369_PRESET);
+        this.tower0369Studies.push(study);
+        this.bindings.push({mesh,day:study.day,night:study.night});
+        if(this.enabled)mesh.material=study.night;
         continue;
       }
       if (PAVILION_STUDY_NODES.has(name)) {
@@ -466,7 +482,7 @@ export class ImportNightLighting {
       const count = segments.length / 6;
       const instanced = new THREE.InstancedMesh(this.geometry, this.fixtureMaterials.get(kind), count);
       instanced.name = `Source-aligned ${kind} lights / tile-${id}`;
-      instanced.userData.nightFixture = true;
+      instanced.userData.nightFixture = true;instanced.userData.nightFixtureKind=kind;
       instanced.castShadow = false; instanced.receiveShadow = false;
       for (let i = 0; i < count; i++) {
         start.fromArray(segments, i * 6); end.fromArray(segments, i * 6 + 3);
@@ -479,6 +495,9 @@ export class ImportNightLighting {
       instanced.instanceMatrix.needsUpdate = true;
       instanced.computeBoundingSphere(); group.add(instanced);
       this.stats.segments += count; this.stats.batches++;
+    }
+    if(byName.has('FuziTemple0369')&&byName.has('FuziTemple0388')){
+      const fixtures=createTower0369Fixtures(tile.fixtures);group.add(fixtures.root);this.tower0369Fixtures.push(fixtures);
     }
     this.addWashLights(group, id);
     this.root.add(group); this.attached.add(id);
@@ -559,10 +578,11 @@ export class ImportNightLighting {
   }
   applyMapLightSettings() {
     const p = this.mapLightSettings;
+    for(const fixtures of this.tower0369Fixtures)fixtures.apply(TOWER0369_PRESET,p);
     this.updateEnvironmentSources();
     this.waterReflections.apply(p,{matou:this.matouSelection.settings,pavilion:this.pavilionSelection.settings,styles:NIGHT_STYLE,buildingAdjustments:this.buildingAdjustments.saved});
     // Always restore the study source first: repeated slider input must not compound.
-    for (const [studies, selection] of [[this.templeStudies,this.templeSelection],[this.pavilionStudies,this.pavilionSelection]]) {
+    for (const [studies, selection] of [[this.templeStudies,this.templeSelection],[this.pavilionStudies,this.pavilionSelection],[this.tower0369Studies,{settings:TOWER0369_PRESET}]]) {
       for (const study of studies) {
         study.lighting.apply(selection.settings);
         // The roof shader uses width as a falloff exponent (inverse visible width).
@@ -584,6 +604,7 @@ export class ImportNightLighting {
       light.penumbra = p.washPenumbra;
       this.buildingAdjustments.applyWashLight(light);
     });
+    this.boatLanterns.setState();
   }
   updateEnvironmentSources() {
     this.environmentSpill.setSources({temple:this.templeSelection.settings,pavilion:this.pavilionSelection.settings,matou:this.matouSelection.settings,gate:GATE_LIGHT_PRESETS[this.gatePreset],styles:NIGHT_STYLE});
@@ -616,6 +637,10 @@ export class ImportNightLighting {
     this.templeStudies.length = 0;
     for (const study of this.pavilionStudies) study.dispose();
     this.pavilionStudies.length = 0;
+    for(const study of this.tower0369Studies)study.dispose();
+    this.tower0369Studies.length = 0;
+    for(const fixtures of this.tower0369Fixtures)fixtures.dispose();
+    this.tower0369Fixtures.length = 0;
     for (const study of this.matouStudies) study.dispose();
     this.matouStudies.length = 0;
     for (const field of this.matouFields.values()) field.texture.dispose();

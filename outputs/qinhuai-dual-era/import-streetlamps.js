@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {lampSetting,lampGain} from './import-lantern-settings.mjs';
 import { spatialInstanceGroups } from './import-render-visibility.js';
 import {groundControls,applyGroundControls} from './import-light-effects.mjs';
 import {normalizeMapLights} from './import-light-controls.mjs';
@@ -20,19 +21,19 @@ export const STREETLAMP_PLACEMENTS = Object.freeze([
   { tile: 10, route: 'riverside', x: 44, z: .9, y: GROUND, rotation: -Math.PI / 2 },
 ].map(Object.freeze));
 
-function clothMaterial(source, night) {
+function clothMaterial(source, night, tint) {
   const material = source.clone();
   material.emissive?.setHex(0);
   material.onBeforeCompile = shader => {
-    shader.uniforms.qhStreetlampNight = night;
-    shader.fragmentShader = 'uniform float qhStreetlampNight;\n' + shader.fragmentShader;
+    shader.uniforms.qhStreetlampNight = night; shader.uniforms.qhStreetlampTint=tint;
+    shader.fragmentShader = 'uniform float qhStreetlampNight; uniform vec3 qhStreetlampTint;\n' + shader.fragmentShader;
     shader.fragmentShader = shader.fragmentShader.replace('#include <emissivemap_fragment>', `
       #include <emissivemap_fragment>
       // Sample the original painted fabric; neutral metal stays unlit.
       float cloth = smoothstep(.045, .16, diffuseColor.r - diffuseColor.b)
         * smoothstep(.065, .22, diffuseColor.r)
         * smoothstep(.035, .12, diffuseColor.g);
-      totalEmissiveRadiance += diffuseColor.rgb * vec3(1.0, .94, .82)
+      totalEmissiveRadiance += diffuseColor.rgb * qhStreetlampTint
         * cloth * qhStreetlampNight * 1.8;
     `);
   };
@@ -69,7 +70,7 @@ export class ImportStreetlamps {
     this.root.name = 'Roadside lanterns - repaired Blender model';
     parent.add(this.root);
     this.load = load;
-    this.night = { value: 0 };
+    this.night = { value: 0 }; this.isNight=false; this.tint={value:new THREE.Color(1,.94,.82)};
     this.groundLight = groundControls();
     this.tiles = new Map();
     this.pending = new Map();
@@ -110,8 +111,8 @@ export class ImportStreetlamps {
         this.parts.push({
           geometry: mesh.geometry.clone().applyMatrix4(normalize.clone().multiply(mesh.matrixWorld)),
           material: Array.isArray(mesh.material)
-            ? mesh.material.map(material => clothMaterial(material, this.night))
-            : clothMaterial(mesh.material, this.night),
+            ? mesh.material.map(material => clothMaterial(material, this.night, this.tint))
+            : clothMaterial(mesh.material, this.night, this.tint),
         });
       });
       sourceGeometry.forEach(geometry => geometry.dispose());
@@ -165,9 +166,11 @@ export class ImportStreetlamps {
     return pending;
   }
 
-  setState({ night = this.night.value > 0, wireframe = this.wireframe } = {}) {
+  setState({ night = this.isNight, wireframe = this.wireframe } = {}) {
     this.wireframe = wireframe;
-    this.night.value = night && !wireframe ? 1 : 0;
+    this.isNight=night; const p=lampSetting(this,'street');this.root.visible=p.modelVisible;
+    this.night.value = night && !wireframe ? lampGain(p) : 0;
+    if(p.inheritColor)this.tint.value.setRGB(1,.94,.82);else this.tint.value.set(p.color);
     for (const part of this.parts) {
       for (const material of [part.material].flat()) material.wireframe = wireframe;
     }

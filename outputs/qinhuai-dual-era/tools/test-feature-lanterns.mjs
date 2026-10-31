@@ -1,19 +1,17 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import * as THREE from 'three';
-import {fishTransforms,WOMAN_PLACEMENT,FeatureLanternLayer} from '../import-feature-lanterns.js';
-import {waterClearance,MAP_UNITS_PER_METER} from '../import-festival-lanterns.js';
+import {WOMAN_PLACEMENT,FeatureLanternLayer} from '../import-feature-lanterns.js';
+import {waterClearance} from '../import-festival-lanterns.js';
+import {bridgeLanternPlacements} from '../import-bridge-lanterns.js';
 import {RedLanternLayer} from '../red-lantern-layer.js';
 import {BUILDING_LIGHT_KEY,normalizeBuilding,readBuildingLights,writeBuildingLight} from '../import-building-controls.mjs';
 
-test('courtyard fish are center-symmetric on the front of the hall behind Tianxia Wenshu, diagonal and equally scaled',()=>{
- const [a,b]=fishTransforms(),pa=new THREE.Vector3(),pb=new THREE.Vector3(),qa=new THREE.Quaternion(),qb=new THREE.Quaternion(),sa=new THREE.Vector3(),sb=new THREE.Vector3();
- a.decompose(pa,qa,sa);b.decompose(pb,qb,sb);
- assert.ok(pa.clone().add(pb).multiplyScalar(.5).distanceTo(new THREE.Vector3(-5.5,14.55,-23.9))<1e-10);
- assert.ok(pa.x<-8.9&&pa.x>-9.1&&pb.x>-2.1&&pb.x<-1.9);assert.ok(pa.y<pb.y);assert.ok(Math.abs(pa.y-14)<1e-10);assert.ok(Math.abs(pb.y-15.1)<1e-10);assert.ok(Math.abs(pa.z+23.9)<1e-10);assert.ok(pa.z>-24.21);assert.equal(pa.z,pb.z);
- assert.ok(sa.distanceTo(sb)<1e-10);assert.ok(Math.abs(sa.x-2.8*MAP_UNITS_PER_METER)<1e-10);
- const forward=new THREE.Vector3(0,0,1).applyQuaternion(qa),opposite=new THREE.Vector3(0,0,1).applyQuaternion(qb);
- assert.ok(forward.x>0&&forward.y<0);assert.ok(forward.clone().add(opposite).length()<1e-10);
+test('the sky fish are removed and Wende Bridge lanterns alternate on both rails',()=>{
+ const layer=new FeatureLanternLayer(new THREE.Group());assert.equal(layer.stats.fish,0);layer.dispose();
+ const placements=bridgeLanternPlacements();assert.equal(placements.length,16);
+ for(const side of [-1,1]){const row=placements.filter(p=>p.side===side);assert.equal(row.length,8);for(let i=1;i<row.length;i++)assert.notEqual(row[i].kind,row[i-1].kind);}
+ assert.ok(placements.every(p=>p.x>=-22.92&&p.x<=-18.67&&p.z>=-9.53&&p.z<=4.97));
 });
 
 test('woman stays in water, faces bridge and respects water visibility',()=>{
@@ -23,7 +21,7 @@ test('woman stays in water, faces bridge and respects water visibility',()=>{
  assert.ok(front.x<0&&front.z<0);
  const layer=new FeatureLanternLayer(new THREE.Group()),group=new THREE.Group();
  const reflection=new THREE.Object3D();reflection.name='feature-woman-reflection';group.add(reflection);
- layer.entries.set('woman',{group,uniforms:{uClothPower:{value:0}},tuning:{power:.65},materials:[],meshes:[reflection],reflections:[]});
+ layer.entries.set('woman',{group,uniforms:{uClothPower:{value:0},uClothTint:{value:new THREE.Color()}},tuning:{power:.65,color:'#fff0dc'},materials:[],meshes:[reflection],reflections:[]});
  layer.setState({night:true});assert.equal(reflection.visible,true);
  layer.setState({waterVisible:false});assert.equal(group.visible,false);assert.equal(reflection.visible,false);
  layer.entries.clear();layer.dispose();assert.equal(layer.root.parent,null);

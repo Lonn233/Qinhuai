@@ -3,7 +3,7 @@ export const RED_LANTERN_DEFAULTS=Object.freeze({enabled:true,brightness:.85,tem
 export function normalizeRedLantern(value={}){
  const out={...RED_LANTERN_DEFAULTS};
  for(const key of ['enabled','lightEaves','lightWalls'])if(typeof value[key]==='boolean')out[key]=value[key];
- for(const [key,min,max] of [['brightness',0,3],['temperature',1800,6500],['spillRange',.3,3],['halo',0,1.5]]){const n=Number(value[key]);if(value[key]!=null&&Number.isFinite(n))out[key]=Math.max(min,Math.min(max,n));}
+ for(const [key,min,max] of [['brightness',0,6],['temperature',1800,6500],['spillRange',.3,3],['halo',0,1.5]]){const n=Number(value[key]);if(value[key]!=null&&Number.isFinite(n))out[key]=Math.max(min,Math.min(max,n));}
  return out;
 }
 export function readRedLantern(){try{return normalizeRedLantern(JSON.parse(localStorage.getItem(RED_LANTERN_KEY)||'{}'));}catch{return {...RED_LANTERN_DEFAULTS};}}
@@ -16,7 +16,7 @@ export function mountRedLanternControls(host,onChange){
  const status=host.querySelector('#red-state');
  const update=patch=>{current=normalizeRedLantern({...current,...patch});const ok=saveRedLantern(current);sync(current,available);onChange(current);if(!ok)status.textContent='浏览器存储不可用；本次调整仍生效，但刷新后无法保留。';};
  for(const [key,id] of [['enabled','red-enabled'],['lightEaves','red-eaves'],['lightWalls','red-walls']]){const input=host.querySelector('#'+id);inputs.set(key,input);input.addEventListener('change',()=>update({[key]:input.checked}));}
- for(const [key,label,min,max,step,unit] of [['brightness','灯体亮度',0,3,.05,'×'],['temperature','色温',1800,6500,100,' K'],['spillRange','外溢范围',.3,3,.05,' m'],['halo','光晕强度',0,1.5,.05,'×']]){
+ for(const [key,label,min,max,step,unit] of [['brightness','灯体亮度',0,6,.05,'×'],['temperature','色温',1800,6500,100,' K'],['spillRange','外溢范围',.3,3,.05,' m'],['halo','光晕强度',0,1.5,.05,'×']]){
   const row=document.createElement('div');row.className='red-slider';row.innerHTML=`<label for="red-${key}">${label}<output></output></label><div class="red-inputs"><input id="red-${key}" type="range" min="${min}" max="${max}" step="${step}"><input type="number" aria-label="${label}数值" min="${min}" max="${max}" step="${step}"></div>`;
   const [range,number]=row.querySelectorAll('input');inputs.set(key,{range,number,output:row.querySelector('output'),unit});range.oninput=()=>update({[key]:range.valueAsNumber});number.onchange=()=>{if(Number.isFinite(number.valueAsNumber))update({[key]:number.valueAsNumber});else sync(current,available);};host.querySelector('.red-sliders').append(row);
  }

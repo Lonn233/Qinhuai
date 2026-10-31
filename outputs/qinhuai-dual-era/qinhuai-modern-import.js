@@ -1,3 +1,18 @@
+import {TempleRenderVisibility} from './import-temple-visibility.js';
+import {navigationSnapshot} from './story/navigation-surface.mjs';
+import {mountStory} from './story/controller.js';
+let story=null;
+import {NearLanternQuality,collectNearLanternBatches,NEAR_LANTERN_MODES,NEAR_LANTERN_STORAGE_KEY} from './import-near-lantern-quality.js';
+import {createTempleVisit,TEMPLE_PORTAL} from './import-temple-visit.mjs';
+import {mountMainMusic} from './import-main-music.js';
+import {createFootsteps} from './import-footsteps.mjs';
+import {CourtyardRackLanterns} from './courtyard-rack-lanterns.js';
+import {LanternLighting} from './import-lantern-lighting.js';
+import {mountLanternControls} from './import-lantern-controls.mjs';
+import {LANTERN_LIGHT_KEY} from './import-lantern-settings.mjs';
+import {PlaceableLanternLayer} from './import-placeable-lanterns.js';
+import {mountPlaceableLanternControls} from './import-placeable-lantern-controls.mjs';
+import {PLACED_LANTERN_KEY} from './import-placeable-lantern-settings.mjs';
 import {BUILDING_LIGHT_KEY,mountBuildingControls} from './import-building-controls.mjs';
 import {DragonWallLighting} from './import-dragon-lighting.js';
 import {DRAGON_STORAGE_KEY,mountDragonControls} from './import-dragon-controls.mjs';
@@ -25,11 +40,14 @@ import { CourtyardLanternLayer } from './courtyard-lantern-layer.js';
 import { ImportStreetlamps } from './import-streetlamps.js';
 import { ImportFestivalLanterns } from './import-festival-lanterns.js';
 import {FeatureLanternLayer} from './import-feature-lanterns.js';
+import {BridgeLanternLayer} from './import-bridge-lanterns.js';
 import { ImportPlayer } from './import-player.js';
 import { installImportPerformanceAudit } from './import-performance-audit.js';
 import { XZSpatialIndex } from './import-spatial-index.mjs';
 import { PERFORMANCE_PROFILES, performanceProfile, personFar } from './import-performance-profiles.mjs';
 import { ImportRenderVisibility } from './import-render-visibility.js';
+import { ImportBuildingLabels } from './import-building-labels.js';
+import { removeOriginalGateStreetlamps } from './import-remove-gate-streetlamps.js';
 
 const root = document.querySelector('#app');
 const statusEl = document.querySelector('#status');
@@ -42,7 +60,9 @@ const errorsEl = document.querySelector('#errors');
 const perfEl = document.querySelector('#perf');
 const wireframeInput = document.querySelector('#wireframe');
 const query = new URLSearchParams(location.search);
-let activePerformanceProfile = performanceProfile(query.get('quality'));
+const TEMPLE_TILE_ID = 9;
+// Start each visit in smooth mode; the runtime selector can still change quality.
+let activePerformanceProfile = 'smooth';
 const perfEnabled = query.get('perf') === '1';
 const requestedMode = query.get('tile') === 'all' ? 'all' : 'near';
 document.documentElement.classList.toggle('perf-on', perfEnabled);
@@ -94,19 +114,83 @@ const modelRoot = new THREE.Group();
 modelRoot.name = 'qinhuai-modern-import';
 scene.add(modelRoot);
 const renderVisibility = new ImportRenderVisibility();
+const templeVisibility = new TempleRenderVisibility();
+// The two low utility sheds beside the mountain-lantern placement are not part
+// of the intended riverside composition. Keep the source GLB intact and omit
+// only their map nodes when tile 09 is attached to the main scene.
+const MOUNTAIN_SIDE_SHED_NODES = new Set([
+  'FuziTemple0328', // East shed: walls, roof, front sign.
+  'FuziTemple0329',
+  'FuziTemple0330',
+  'FuziTemple0331', // West shed: roof, front sign, walls.
+  'FuziTemple0332',
+  'FuziTemple0333',
+]);
+
+function removeMountainSideSheds(tileId, object) {
+  if (tileId !== 9) return;
+  const sheds = [];
+  object.traverse(node => {
+    if (MOUNTAIN_SIDE_SHED_NODES.has(node.name)) sheds.push(node);
+  });
+  // Detach before collision and lighting registration, so neither invisible
+  // obstacles nor lighting generated for these sheds remain in the scene.
+  for (const node of sheds) node.removeFromParent();
+}
+
 function refreshRenderVisibility(tileRoot) {
+  templeVisibility.registerProxies(restoredProxies.root);
+  templeVisibility.registerCourtyard(courtyardLanterns.root);
   if (tileRoot) renderVisibility.register(tileRoot);
   renderVisibility.register(streetlamps.root);
+  renderVisibility.register(courtyardRacks.root);
   renderVisibility.register(restoredProxies.root);
+  const gongming=featureLanterns.entries.get('gongming');
+  if(gongming)renderVisibility.register(gongming.group);
+   const tengma=featureLanterns.entries.get('tengma');
+   if(tengma)renderVisibility.register(tengma.group);
   renderer.shadowMap.needsUpdate = true;
 }
 const restoredProxies = new ImportRestoredProxies(modelRoot);
 const goldenTreeLanterns = new GoldenTreeLanternLayer(modelRoot);
 const courtyardLanterns = new CourtyardLanternLayer(modelRoot, {trees:restoredProxies, lanterns:goldenTreeLanterns});
+const courtyardRacks = new CourtyardRackLanterns(modelRoot);
 const streetlamps = new ImportStreetlamps(modelRoot);
 const festivalLanterns = new ImportFestivalLanterns(modelRoot);
 const featureLanterns = new FeatureLanternLayer(modelRoot);
+const bridgeLanterns = new BridgeLanternLayer(modelRoot);
+const placedLanterns = new PlaceableLanternLayer(modelRoot);
 const redLanterns = new RedLanternLayer(modelRoot);
+for(const layer of [streetlamps,festivalLanterns,featureLanterns,bridgeLanterns,redLanterns,goldenTreeLanterns])
+  templeVisibility.register(layer.root,'exterior');
+templeVisibility.register(courtyardRacks.root,'interior');
+const nearLanternInput=document.querySelector('#nearLanternQuality');
+const nearLanternStatus=document.querySelector('#nearLanternStatus');
+const nearLanternQuality=new NearLanternQuality({
+  getBatches:()=>collectNearLanternBatches({festival:festivalLanterns,feature:featureLanterns,street:streetlamps,racks:courtyardRacks,tree:goldenTreeLanterns,courtyard:courtyardLanterns}),
+  onChange:stats=>{
+    nearLanternInput.value=stats.mode;
+    const names={lion:'瑞狮灯',mountain:'鳖山灯',streetlamp:'路灯','lotus-main':'荷花主灯','lotus-one':'荷花灯',chrysanthemum:'菊灯',fish:'金鱼灯',woman:'女灯',gongming:'贡院题名灯',tengma:'腾马灯',green:'绿灯',blue:'蓝灯',gold:'金灯笼',red:'红灯笼'};
+    const description=stats.mode==='five'?'所有已接入灯具近景保留原模约5%三角面，原贴图与灯光不变':
+      stats.mode==='original'?'近景使用100%原始面数，显存和渲染开销较高':
+      '保留之前半面数版本，其中女灯为已选25万面版';
+    nearLanternStatus.textContent=stats.mode==='current'?'旧轻量模型 · 不加载额外近景资产':
+      `${NEAR_LANTERN_MODES[stats.mode]} · 当前 ${stats.active}/12 盏 · 8米内启用，远处与倒影继续使用轻量模型。${description}。`+
+      (stats.loading?` 正在加载${names[stats.loading]||stats.loading}…`:'')+
+      (Object.keys(stats.errors).length?' 部分模型加载失败，已保留轻量模型；重新选择可重试。':'');
+  }
+});
+function setNearLanternQuality(mode){
+  const value=nearLanternQuality.setMode(mode);
+  try{localStorage.setItem(NEAR_LANTERN_STORAGE_KEY,value);}catch{}
+  const url=new URL(window.location.href);url.searchParams.set('nearModels',value);history.replaceState(history.state,'',url);
+  return value;
+}
+let initialNearQuality=query.get('nearModels');
+try{initialNearQuality??=localStorage.getItem(NEAR_LANTERN_STORAGE_KEY);}catch{}
+nearLanternQuality.setMode(initialNearQuality);
+nearLanternInput.onchange=event=>setNearLanternQuality(event.target.value);
+
 window.addEventListener('storage',event=>{if(event.key===RED_LANTERN_KEY)redLanterns.configure(readRedLantern());});
 window.addEventListener('focus',()=>redLanterns.configure(readRedLantern()));
 const orbit = new OrbitControls(camera, renderer.domElement);
@@ -115,12 +199,8 @@ orbit.dampingFactor = 0.075;
 orbit.screenSpacePanning = true;
 orbit.maxDistance = 2200;
 const firstPerson = new PointerLockControls(camera, renderer.domElement);
-// Codex's embedded browser and some hosted previews reject requestPointerLock.
-// Keep first-person movement usable there with a normal drag-to-look fallback.
-const isEmbeddedDocument = (() => {
-  try { return window.self !== window.top; } catch (_) { return true; }
-})();
-let pointerLockUnavailable = isEmbeddedDocument || typeof renderer.domElement.requestPointerLock !== 'function';
+// Try native lock even in embedded previews; fall back only if the API rejects it.
+let pointerLockUnavailable = typeof renderer.domElement.requestPointerLock !== 'function';
 let fallbackDragging = false;
 let fallbackLastX = 0;
 let fallbackLastY = 0;
@@ -138,16 +218,21 @@ const originalMaterials = new Map();
 const clock = new THREE.Clock();
 const keys = new Set();
 // Source model is normalized; these are scene units, not meters.
-const WALK = Object.freeze({ eyeHeight: .53, stepUp: .32, stepDown: .40 });
+const WALK = Object.freeze({ eyeHeight: .53, stepUp: .32, stepDown: .40, dockStep: .62 });
+const WALKABLE_DOCK_NODES = new Set(['FuziTemple0005', 'FuziTemple0006', 'FuziTemple0007']);
 const WALKABLE_NODES = new Set([
   'FuziTemple1082', 'FuziTemple1083', 'FuziTemple0014', 'FuziTemple0009',
   'FuziTemple0113', 'FuziTemple0325', 'FuziTemple0326', 'FuziTemple0327',
   // Narrow bridge, bank paving and the actual stair treads are too small for
   // the generic imported-floor size filter, but are valid walking surfaces.
-  'FuziTemple0005', 'FuziTemple0006', 'FuziTemple0007', 'FuziTemple0012',
+  'FuziTemple0005', 'FuziTemple0006', 'FuziTemple0007', 'FuziTemple0012', 'FuziTemple0320',
+  // Existing narrow connector between the lower bank and the boat dock.
+  'FuziTemple0099',
   'FuziTemple0015', 'FuziTemple0019', 'FuziTemple0020', 'FuziTemple0309',
 ]);
 const WALK_BARRIER_NODES = new Set([
+  // The closed temple door is crossed through the E / fade transition.
+  'FuziTemple1073',
   // Keep the low retaining edges and bridge railings as blockers even though
   // their imported bounds are below the normal obstacle-height threshold.
   'FuziTemple0023', 'FuziTemple0024', 'FuziTemple0307',
@@ -205,19 +290,21 @@ function registerWalkable(rootObject) {
     if (!mesh.isMesh) return;
     const bounds = new THREE.Box3().setFromObject(mesh);
     let node = mesh;
-    let explicitlyWalkable = false;
+    let explicitlyWalkable = mesh.userData.walkSurface === true;
     let explicitlyBlocked = false;
+    let dockPlatform = false;
     while (node && node !== rootObject) {
       if (WALKABLE_NODES.has(node.name)) {
         explicitlyWalkable = true;
       }
+      if (WALKABLE_DOCK_NODES.has(node.name)) dockPlatform = true;
       if (WALK_BARRIER_NODES.has(node.name)) explicitlyBlocked = true;
       node = node.parent;
     }
     const surface = !explicitlyBlocked && (explicitlyWalkable || isWalkSurface(mesh, bounds));
     if (surface && !walkableMeshSet.has(mesh)) {
       walkableMeshSet.add(mesh);
-      const record = { mesh, bounds }; walkableMeshes.push(record); groundIndex.insert(record);
+      const record = { mesh, bounds, dockPlatform }; walkableMeshes.push(record); groundIndex.insert(record);
     }
     if (!surface && (explicitlyBlocked || isWalkObstacle(mesh, bounds)) && !walkObstacleSet.has(mesh)) {
       walkObstacleSet.add(mesh);
@@ -229,11 +316,11 @@ function groundAt(x, z, footY) {
   const tolerance = .015;
   groundRay.set(groundOrigin.set(x, footY + WALK.stepUp + tolerance, z), groundDown);
   groundRay.near = 0;
-  groundRay.far = WALK.stepUp + WALK.stepDown + 2 * tolerance;
+  groundRay.far = Math.max(WALK.stepUp, WALK.dockStep) + Math.max(WALK.stepDown, WALK.dockStep) + 2 * tolerance;
   let highest = null;
   groundIndex.query(x, z, x, z, groundCandidates);
   collisionMetrics.candidates += groundCandidates.length;
-  for (const { mesh, bounds } of groundCandidates) {
+  for (const { mesh, bounds, dockPlatform } of groundCandidates) {
     if (x < bounds.min.x || x > bounds.max.x || z < bounds.min.z || z > bounds.max.z) continue;
     rayHits.length = 0;
     for (const hit of groundRay.intersectObject(mesh, false, rayHits)) {
@@ -242,7 +329,9 @@ function groundAt(x, z, footY) {
       groundNormal.copy(hit.face.normal).applyMatrix3(groundNormalMatrix).normalize();
       if (groundNormal.y < .65) continue;
       const y = hit.point.y;
-      if (y > footY + WALK.stepUp + tolerance || y < footY - WALK.stepDown - tolerance) continue;
+      const stepUp = dockPlatform ? WALK.dockStep : WALK.stepUp;
+      const stepDown = dockPlatform ? WALK.dockStep : WALK.stepDown;
+      if (y > footY + stepUp + tolerance || y < footY - stepDown - tolerance) continue;
       if (highest === null || y > highest) highest = y;
     }
   }
@@ -315,6 +404,7 @@ function findWalkSpawn(x, z, footY) {
   return null;
 }
 const player = new ImportPlayer(modelRoot, camera, {
+  footsteps:createFootsteps(),
   surface:walkSurfaceAt, obstacles:()=>walkObstacles,
   queryObstacles:(start,end,result)=>{
     obstacleIndex.query(Math.min(start.x,end.x)-.08,Math.min(start.z,end.z)-.08,
@@ -336,8 +426,10 @@ let fps = 0;
 let currentMode = requestedMode;
 
 const nightLighting = new ImportNightLighting(scene);
+const buildingLabels = new ImportBuildingLabels(document.querySelector('#buildingLabels'),document.querySelector('#buildingNamesVisible'));
 const river = new RiverSystem({scene,parent:modelRoot,renderer,
   onActiveChange:active=>nightLighting.waterReflections.setSceneReflectionEnabled(active)});
+river.setQuality('low');
 const dragonLighting = new DragonWallLighting(scene);
 let mapLightStorage;
 try { mapLightStorage = window.localStorage; } catch { /* Private browser: controls still work. */ }
@@ -418,6 +510,28 @@ mapLightControls = mountMapLightControls(document.querySelector('#mapLightContro
 const buildingLightHost=document.createElement('div');buildingLightHost.id='buildingLightControls';
 const buildingControls=mountBuildingControls(buildingLightHost,{rig:nightLighting.buildingAdjustments,storage:mapLightStorage,redLanterns});buildingControls.host=buildingLightHost;
 const environmentControls = mountEnvironmentControls(document.querySelector('#environmentLightControls'), {rig:nightLighting.environmentSpill,storage:mapLightStorage,isNight:()=>TIME_PRESETS[timeOfDay].lit,onFocus:focusEnvironmentBuilding,buildingControls});
+const lanternLighting=new LanternLighting({festival:festivalLanterns,feature:featureLanterns,tree:goldenTreeLanterns,courtyard:courtyardLanterns,racks:courtyardRacks,red:redLanterns,street:streetlamps,boats:nightLighting.boatLanterns,placed:placedLanterns,environment:nightLighting.environmentSpill});
+const lanternControls=mountLanternControls(document.querySelector('#lanternLightControls'),{rig:lanternLighting,storage:mapLightStorage,onFocus:focusNightView,placementLayer:featureLanterns,onPlacementFocus:focusLanternPlacement,onPlacedFocus:focusPlacedLantern});
+const placementNormalMatrix=new THREE.Matrix3(),placementNormal=new THREE.Vector3();
+function pickPlacementGround(raycaster){
+  let closest=null;
+  for(const {mesh,bounds} of walkableMeshes){
+    if(!raycaster.ray.intersectsBox(bounds))continue;
+    for(const hit of raycaster.intersectObject(mesh,false)){
+      if(!hit.face||closest&&hit.distance>=closest.distance)continue;
+      placementNormalMatrix.getNormalMatrix(mesh.matrixWorld);
+      placementNormal.copy(hit.face.normal).applyMatrix3(placementNormalMatrix).normalize();
+      if(placementNormal.y>=.65)closest=hit;
+    }
+  }
+  return closest?.point.clone()||null;
+}
+const placedLanternControls=mountPlaceableLanternControls(document.querySelector('#lanternLightControls'),{
+  layer:placedLanterns,storage:mapLightStorage,camera,canvas:renderer.domElement,
+  canEdit:()=>story?.mode==='preview'&&controlMode==='orbit',pickGround:pickPlacementGround,
+  viewTarget:()=>{camera.updateMatrixWorld();const ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2(),camera);return pickPlacementGround(ray);},
+  onFocus:focusPlacedLantern
+});
 const dragonControls=mountDragonControls(document.querySelector('#dragonLightControls'),{rig:dragonLighting,storage:mapLightStorage,onFocus:()=>focusNightView('dragonWall')});
 
 function ensureNightComposer() {
@@ -453,7 +567,9 @@ function updateTimeUI() {
   festivalLanterns.setState({ night: TIME_PRESETS[timeOfDay].lit, wireframe: document.querySelector('#wireframe').checked });
   redLanterns.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:document.querySelector('#wireframe').checked});
   featureLanterns.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:document.querySelector('#wireframe').checked});
+  bridgeLanterns.setNight(TIME_PRESETS[timeOfDay].lit);
   goldenTreeLanterns.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:document.querySelector('#wireframe').checked});
+  courtyardRacks.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:document.querySelector('#wireframe').checked});
   courtyardLanterns.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:document.querySelector('#wireframe').checked});
 }
 async function setTimeOfDay(value) {
@@ -463,7 +579,8 @@ async function setTimeOfDay(value) {
     setStatus('正在准备灯会夜景：屋檐灯带、窗格暖光、游船与牌坊灯光…');
     try { await nightLighting.prepare(); }
     catch (error) {
-      if (request === timeRequest) setStatus(`夜景资源未就绪：${error.message}。可再次点击夜晚重试，白天不受影响。`);
+      console.warn('夜景资源未就绪', error);
+      if (request === timeRequest) setStatus('夜景资源未就绪，可再次点击夜晚重试，白天不受影响。');
       return false;
     }
     if (request !== timeRequest) return false;
@@ -489,7 +606,12 @@ async function loadNightLandmarks() {
   if (!manifest) return;
   if (nightLoad) return nightLoad;
   nightLoad = (async () => {
-    const focal = [9, 10, 5, 6].map(id => allTiles().find(tile => tile.id === id)).filter(Boolean);
+    // Tile 09 is shared: it owns the visible temple facade, entrance paving,
+    // lions, mountain lantern and bridge lanterns, not just the courtyard.
+    // Always load the exterior; interior props stay gated and racks remain
+    // lazy-loaded by templeVisit.load when the player enters the temple.
+    const focalIds = [TEMPLE_TILE_ID, 10, 5, 6];
+    const focal = focalIds.map(id => allTiles().find(tile => tile.id === id)).filter(Boolean);
     const missing = focal.filter(tile => !tileObjects.has(tile.id));
     if (!missing.length) return;
     showProgress('正在加载灯会重点区域…', '保留当前位置；加载魁星阁、游船、天下文枢及对岸区域');
@@ -535,9 +657,35 @@ async function focusNightView(key = 'riverfront') {
       if(!menu.classList.contains('is-collapsed')&&innerWidth>680){const shift=rect.right/innerWidth*camera.position.distanceTo(orbit.target)*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.aspect;const right=new THREE.Vector3(1,0,0).applyQuaternion(camera.quaternion);camera.position.addScaledVector(right,-shift);orbit.target.addScaledVector(right,-shift);orbit.update();}
       document.querySelector('#dragonLightPanel').open=true;
     }
-    await loadNightLandmarks();
+     await loadNightLandmarks();
     setStatus(`已切换重点夜景视角 · ${nightLighting.stats.boats} 艘游船 · ${streetlamps.stats.lamps} 盏沿街灯笼 · ${festivalLanterns.stats.lamps} 盏花灯`);
-  } catch (error) { setStatus(`重点夜景区域尚未完整加载：${error.message}。请点击重试失败。`); }
+  } catch (error) { console.warn('重点夜景区域尚未完整加载', error); setStatus('重点夜景区域尚未完整加载，请点击重试失败。'); }
+}
+
+async function focusLanternPlacement(id) {
+  if (!manifest) return setStatus('请等待模型清单加载完成。');
+  if (!TIME_PRESETS[timeOfDay].lit && !(await setTimeOfDay('night'))) return;
+  await featureLanterns.ensure('tengma');
+  refreshRenderVisibility();
+  const index = id === 'tengma-right' ? 1 : 0;
+  const placement = featureLanterns.getTengmaPlacements()[index];
+  const center = new THREE.Vector3(placement.x, placement.y + .8, placement.z);
+  const forward = new THREE.Vector3(0, 0, 1).applyAxisAngle(new THREE.Vector3(0, 1, 0), placement.yaw);
+  switchControl('orbit');
+  cameraRevision++;
+  camera.position.copy(center).addScaledVector(forward, -4).add(new THREE.Vector3(0, 2.3, 0));
+  orbit.target.copy(center);
+  orbit.update();
+  setStatus(`已定位${index ? '右侧' : '左侧'}腾马灯，可调整位置与旋转。`);
+}
+function focusPlacedLantern(id){
+  const bounds=placedLanterns.bounds(id);if(!bounds)return;
+  const center=bounds.getCenter(new THREE.Vector3()),size=bounds.getSize(new THREE.Vector3());
+  const distance=Math.max(size.length(),1)/Math.tan(THREE.MathUtils.degToRad(camera.fov/2))/Math.min(camera.aspect,1);
+  switchControl('orbit');cameraRevision++;
+  const damping=orbit.enableDamping;orbit.enableDamping=false;orbit.update();orbit.enableDamping=damping;
+  camera.position.copy(center).add(new THREE.Vector3(.8,.6,1).normalize().multiplyScalar(distance));
+  orbit.target.copy(center);orbit.update();
 }
 // Loading one selection must never snap back after a newer selection or orbit gesture.
 async function focusEnvironmentBuilding(id,{isCurrent=()=>true}={}) {
@@ -564,8 +712,9 @@ async function focusEnvironmentBuilding(id,{isCurrent=()=>true}={}) {
   return {id:building.id,label:building.label,...pose};
 }
 window.__QINHUAI_IMPORT__ = {
-  setPerformanceProfile,
-  get performanceSettings() { return {profile:activePerformanceProfile, ...PERFORMANCE_PROFILES[activePerformanceProfile]}; },
+  setPerformanceProfile, setNearLanternQuality, nearLanternQuality,
+  get nearLanternStats(){return nearLanternQuality.stats;},
+  get performanceSettings() { return {profile:activePerformanceProfile, ...PERFORMANCE_PROFILES[activePerformanceProfile],nearLanternQuality:nearLanternQuality.mode}; },
   get collisionStats() { return {...collisionMetrics}; },
   get visibilityStats() { return renderVisibility.stats; },
   environment, river, setWaterMode, setWaterQuality, setWaterVisible, setWireframe,
@@ -589,11 +738,100 @@ window.__QINHUAI_IMPORT__ = {
   // Exposed read-only references for the standalone viewer's diagnostics.
   get restoredStats() { return restoredProxies.stats; },
   get goldenLanternStats() { return goldenTreeLanterns.stats; },
+  get courtyardRackStats() { return courtyardRacks.stats; },
   get courtyardLanternStats() { return courtyardLanterns.stats; },
-  courtyardLanterns, goldenTreeLanterns, restoredProxies, scene, camera, renderer, modelRoot, nightLighting, dragonLighting, streetlamps, festivalLanterns, redLanterns, featureLanterns,
+  placedLanterns, placedLanternControls, lanternLighting, lanternControls, courtyardRacks, courtyardLanterns, goldenTreeLanterns, restoredProxies, scene, camera, orbit, renderer, modelRoot, nightLighting, dragonLighting, streetlamps, festivalLanterns, redLanterns, featureLanterns, bridgeLanterns,
 };
 
 const performanceAudit = perfEnabled ? installImportPerformanceAudit(window.__QINHUAI_IMPORT__) : null;
+
+const mainMusic=mountMainMusic(document.querySelector('#mainMusicToggle'));
+const templePrompt=document.querySelector('#templePrompt'),templeCurtain=document.querySelector('#templeCurtain');
+const templeLoadingBar=document.querySelector('#templeLoadingBar'),templeLoadingPercent=document.querySelector('#templeLoadingPercent'),templeLoadingDetail=document.querySelector('#templeLoadingDetail');
+function updateTempleLoadingProgress({ratio=0,detail='正在准备场景'}={}){
+  const percent=Math.max(0,Math.min(100,Math.round(ratio*100)));
+  templeLoadingBar.style.width=percent+'%';
+  templeLoadingPercent.textContent=percent+'%';
+  templeLoadingDetail.textContent=detail;
+}
+const templeVisit=createTempleVisit({
+ stop(){clearMovement();fallbackDragging=false;if(firstPerson.isLocked)firstPerson.unlock();},
+ async fade(black){
+  templeCurtain.hidden=false;
+   if(black){document.querySelector('#templeTransitionText').textContent='正在加载夫子庙…';updateTempleLoadingProgress({ratio:0,detail:'正在准备场景'});}
+  if(black)await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  templeCurtain.classList.toggle('is-black',black);
+  templeCurtain.setAttribute('aria-busy',String(black));
+  await new Promise(resolve=>setTimeout(resolve,matchMedia('(prefers-reduced-motion: reduce)').matches?20:460));
+  if(!black)templeCurtain.hidden=true;
+ },
+  async load({onProgress=()=>{}}={}){
+   const tile=allTiles().find(t=>t.id===TEMPLE_TILE_ID);
+  if(!tile)throw new Error('未找到夫子庙区域');
+   await loadTile(tile,false,{onProgress:progress=>onProgress({ratio:Math.min(.82,progress.ratio*.82),detail:'正在加载夫子庙场景'} )});
+   onProgress({ratio:.86,detail:'正在准备夫子庙灯组'});
+   await courtyardRacks.registerTile(TEMPLE_TILE_ID);
+  registerWalkable(courtyardRacks.root);
+  nightLighting.environmentSpill.attachReceivers(courtyardRacks.root,{external:true});
+  courtyardRacks.setState({night:TIME_PRESETS[timeOfDay].lit});
+   onProgress({ratio:.94,detail:'正在整理可行走区域'});
+  refreshRenderVisibility();
+   onProgress({ratio:1,detail:'夫子庙已准备完成'});
+ },
+ teleport(entering){
+  const p=entering?TEMPLE_PORTAL.inside:TEMPLE_PORTAL.outside;
+  // Use the real paving at the chosen landing, never a distant spawn fallback.
+  const ground=walkSurfaceAt(p.x,p.z,TEMPLE_PORTAL.ground);
+  if(ground===null)throw new Error('门口落脚点尚未就绪，请重试');
+  player.spawn({x:p.x,z:p.z,ground});
+  camera.rotation.set(0,entering?0:Math.PI,0,'YXZ');
+  player.yaw=entering?0:Math.PI;player.updateCamera(0,true);
+ },
+ setVisible(visible){
+  templeVisibility.setInside(visible);
+  lanternLighting.setTempleInside(visible);
+  nightLighting.boatLanterns.setTempleHidden(visible);
+  nearLanternQuality.lastScan=-Infinity;
+  renderer.shadowMap.needsUpdate=true;
+  river.invalidate();
+ },
+ onChange(state){
+   story?.onTempleChange(state);
+  templePrompt.hidden=!state.near;
+  templePrompt.textContent=state.inside?'按 E 键 · 离开夫子庙':'按 E 键 · 进入夫子庙';
+  document.querySelector('#templeTransitionText').textContent='上元秦淮 · 夫子庙';
+  if(state.error){console.warn('进入夫子庙失败',state.error);setStatus('进入夫子庙失败，靠近门口按 E 重试。');}
+  },
+  onProgress:progress=>updateTempleLoadingProgress(progress)
+});
+templeVisibility.setInside(false);
+lanternLighting.setTempleInside(false);
+Object.assign(window.__QINHUAI_IMPORT__,{templeVisit,templeVisibility,mainMusic});
+const storyRay=new THREE.Raycaster(),storyRayDirection=new THREE.Vector3(),storyObstacles=[],storyGround=[];
+window.addEventListener('qinhuai-story-mode',event=>setWaterMode(event.detail?.mode==='preview'?'flow':'original'));
+story=mountStory({scene,player,camera,orbit,pointer:firstPerson,temple:templeVisit,
+ festival:festivalLanterns,features:featureLanterns,
+ setTimeOfDay,
+ setPlayBoatsHidden:value=>nightLighting.boatLanterns.setPlayHidden(value),
+ waterVisible:()=>document.querySelector('#waterVisible').checked,
+ modelVisible:()=>modelRoot.visible,controlMode:()=>controlMode,switchControl,requestLookLock,
+ stop(){clearMovement();fallbackDragging=false;},ensureScene:loadNightLandmarks,
+ surface:walkSurfaceAt,findSpawn:findWalkSpawn,
+ navigationSnapshot:()=>navigationSnapshot(walkableMeshes,walkObstacles),
+ attachReceivers:object=>nightLighting.environmentSpill.attachReceivers(object,{external:true}),
+ lineClear(start,end){
+  storyRayDirection.subVectors(end,start);const length=storyRayDirection.length();
+  if(length<.1)return true;
+  obstacleIndex.query(Math.min(start.x,end.x),Math.min(start.z,end.z),Math.max(start.x,end.x),Math.max(start.z,end.z),storyObstacles);
+  groundIndex.query(Math.min(start.x,end.x),Math.min(start.z,end.z),Math.max(start.x,end.x),Math.max(start.z,end.z),storyGround);
+  storyRay.set(start,storyRayDirection.normalize());storyRay.near=.03;storyRay.far=length-.08;
+  const meshes=[...storyObstacles,...storyGround].filter(o=>o.mesh.visible&&o.bounds.max.y>=Math.min(start.y,end.y)&&o.bounds.min.y<=Math.max(start.y,end.y)).map(o=>o.mesh);
+  return !storyRay.intersectObjects(meshes,false).length;
+ }
+});
+window.__QINHUAI_IMPORT__.story=story;
+
+
 
 function setStatus(text) { statusEl.textContent = text; }
 function fmtBytes(bytes) { if (!bytes) return '0 B'; const units = ['B','KB','MB','GB']; const i = Math.min(units.length - 1, Math.floor(Math.log(bytes) / Math.log(1024))); return `${(bytes / 1024 ** i).toFixed(i ? 1 : 0)} ${units[i]}`; }
@@ -606,11 +844,13 @@ function sortedNearTiles() {
 }
 function tileListForMode(mode) {
   const tiles = sortedNearTiles();
-  if (mode !== 'all' && ['sunset','blueHour','night'].includes(query.get('time')) && ['gate', 'gateDetail', 'streetlamps', 'festivalMountain', 'festivalLions', 'festivalWater', 'redLanterns'].includes(query.get('view'))) {
-    const gateTile = allTiles().find(tile => tile.id === 9);
+  if (mode !== 'all' && query.get('mode') === 'orbit' && ['sunset','blueHour','night'].includes(query.get('time')) && ['gate', 'gateDetail', 'temple', 'courtyard', 'windowspill', 'streetlamps', 'festivalMountain', 'festivalLions', 'festivalWater', 'redLanterns'].includes(query.get('view'))) {
+    const gateTile = allTiles().find(tile => tile.id === TEMPLE_TILE_ID);
     if (gateTile) return [gateTile];
   }
-  return mode === 'all' ? tiles : tiles.slice(0, Math.min(1, tiles.length));
+  if (mode === 'all') return tiles;
+  const gameplayTiles = tiles.filter(tile => tile.id !== TEMPLE_TILE_ID);
+  return gameplayTiles.slice(0, Math.min(1, gameplayTiles.length));
 }
 function updateSummary() {
   if (!manifest) return;
@@ -626,7 +866,8 @@ function addError(tile, error) {
   failedTiles.set(tile.id, tile);
   errorsEl.style.display = 'block';
   const row = document.createElement('div'); row.className = 'error-item'; row.dataset.tile = tile.id;
-  row.innerHTML = `tile-${String(tile.id).padStart(2, '0')}.glb 加载失败：<span class="warn">${String(error?.message || error).slice(0, 180)}</span>`;
+  console.warn('场景区域加载失败', tile.file, error);
+  row.textContent = '部分场景资源加载失败，请重试。';
   const btn = document.createElement('button'); btn.textContent = '重试'; btn.onclick = () => loadTile(tile, true);
   row.appendChild(btn); errorsEl.appendChild(row);
 }
@@ -669,7 +910,9 @@ function setWireframe(enabled) {
   festivalLanterns.setState({ night: TIME_PRESETS[timeOfDay].lit, wireframe: enabled });
   redLanterns.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:enabled});
   featureLanterns.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:enabled});
+  bridgeLanterns.setNight(TIME_PRESETS[timeOfDay].lit);
   goldenTreeLanterns.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:enabled});
+  courtyardRacks.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:document.querySelector('#wireframe').checked});
   courtyardLanterns.setState({night:TIME_PRESETS[timeOfDay].lit,wireframe:enabled});
   river.setWireframe(enabled);
 }
@@ -712,6 +955,7 @@ function firstPersonControlHint() {
     : '第一人称：点击画面锁定鼠标，W/A/S/D 行走，Shift 加速，Esc 释放鼠标。';
 }
 function switchControl(mode) {
+  if(templeVisit.snapshot().busy)return;
   mode = ['firstPerson', 'thirdPerson'].includes(mode) ? mode : 'orbit';
   const request = ++controlRequest;
   if (mode === controlMode) return;
@@ -720,10 +964,10 @@ function switchControl(mode) {
     if (!player.avatar) {
       setStatus('正在准备学生主角…');
       return player.ready().then(() => { if (request === controlRequest) switchControl(mode); })
-        .catch(error => setStatus('学生模型加载失败，可再次点击人物视角重试：' + error.message));
+        .catch(error => { console.warn('人物加载失败', error); setStatus('人物加载失败，可再次点击人物视角重试。'); });
     }
     if (!player.spawned) {
-      const spawn = findWalkSpawn(-5, -29, 11.864055);
+      const spawn = findWalkSpawn(-5.24, -11.8, 11.864055);
       if (!spawn) return setStatus('步行区域尚未加载，请先加载近景或夜景重点区域。');
       player.spawn(spawn);
     }
@@ -783,6 +1027,7 @@ async function loadGoldenTreeLanterns(tileId) {
 async function loadCourtyardLanterns(tileId) {
   const load = async () => {
     await courtyardLanterns.registerTile(tileId);
+    templeVisibility.registerCourtyard(courtyardLanterns.root);
     nightLighting.environmentSpill.attachReceivers(courtyardLanterns.root, {external:true});
   };
   try { await load(); }
@@ -800,23 +1045,32 @@ async function loadCourtyardLanterns(tileId) {
     notice.appendChild(retry); errorsEl.appendChild(notice); errorsEl.style.display = 'block';
   }
 }
-function loadTile(tile, retry = false) {
-  if (loadedTiles.has(tile.id)) return loadedTiles.get(tile.id);
+function loadTile(tile, retry = false, {onProgress=()=>{}} = {}) {
+  if (loadedTiles.has(tile.id)) {
+    onProgress({loaded:1,total:1,ratio:1});
+    return loadedTiles.get(tile.id);
+  }
   const url = `./assets/qinhuai-modern-import/${tile.file}${tile.revision ? `?v=${encodeURIComponent(tile.revision)}` : ''}`;
   const loader = new GLTFLoader();
-  window.__QINHUAI_STARTUP__?.stage('正在下载模型 ' + tile.file);
+  window.__QINHUAI_STARTUP__?.stage('正在加载场景资源…');
   const promise = new Promise((resolve, reject) => loader.load(url, gltf => resolve(gltf), event => {
     const total = event.total || tile.bytes || 0;
-    const label = '正在下载 ' + tile.file + ' · ' + fmtBytes(event.loaded) + (total ? ' / ' + fmtBytes(total) : '');
-    progressText.textContent = total && event.loaded >= total ? tile.file + ' 下载完成，正在解析模型和贴图…' : label;
+    const ratio = total ? Math.min(1, event.loaded / total) : 0;
+    onProgress({loaded:event.loaded,total,ratio});
+    const label = '正在加载场景资源 · ' + fmtBytes(event.loaded) + (total ? ' / ' + fmtBytes(total) : '');
+    progressText.textContent = total && event.loaded >= total ? '正在准备场景与贴图…' : label;
     if (total) progressBar.style.width = Math.min(100, event.loaded / total * 100).toFixed(0) + '%';
     statusEl.textContent = progressText.textContent;
   }, reject));
   const ready = promise.then(async gltf => {
+    onProgress({loaded:1,total:1,ratio:1});
     const object = gltf.scene || gltf.scenes[0];
     object.name = `tile-${String(tile.id).padStart(2, '0')}`;
+    removeMountainSideSheds(tile.id, object);
+    removeOriginalGateStreetlamps(object);
     if (query.get('gateRepair') !== 'off') await repairGateRoof(object);
-    modelRoot.add(object); tileObjects.set(tile.id, object); rememberMaterials(object); registerWalkable(object);
+    modelRoot.add(object); templeVisibility.registerTile(tile.id,object); tileObjects.set(tile.id, object); rememberMaterials(object); registerWalkable(object);
+    nightLighting.boatLanterns.registerObject(object);
     nightLighting.registerTile(tile.id, object);
     river.registerTile(tile.id, object);
     dragonLighting.registerTile(tile.id,object);
@@ -830,17 +1084,20 @@ function loadTile(tile, retry = false) {
     try { await redLanterns.registerTile(tile.id,object); }
     catch(error){console.warn('红灯笼挂件载入失败',tile.id,error);}
     try { await featureLanterns.registerTile(tile.id); }
-    catch(error){console.warn('金鱼灯或女灯载入失败',tile.id,error);const notice=document.createElement('div');notice.textContent='金鱼灯或女灯暂未载入，可点击重试花灯。';document.querySelector('#errors').append(notice);document.querySelector('#errors').style.display='block';}
-    try { await restoredProxies.registerTile(tile.id); nightLighting.environmentSpill.attachReceivers(restoredProxies.root,{external:true}); await loadGoldenTreeLanterns(tile.id); }
+    catch(error){console.warn('附加花灯载入失败',tile.id,error);const notice=document.createElement('div');notice.textContent='附加花灯暂未载入，可重试分区模型。';document.querySelector('#errors').append(notice);document.querySelector('#errors').style.display='block';}
+    try { await bridgeLanterns.registerTile(tile.id);bridgeLanterns.setNight(TIME_PRESETS[timeOfDay].lit); }
+    catch(error){console.warn('文德桥灯笼载入失败',tile.id,error);const notice=document.createElement('div');notice.textContent='文德桥灯笼暂未载入，可重试分区模型。';document.querySelector('#errors').append(notice);document.querySelector('#errors').style.display='block';}
+    try { await restoredProxies.registerTile(tile.id); templeVisibility.registerProxies(restoredProxies.root); nightLighting.environmentSpill.attachReceivers(restoredProxies.root,{external:true}); await loadGoldenTreeLanterns(tile.id); }
     catch(error){
       console.warn('原场景树木与街边物件载入失败',tile.id,error);
       const notice=document.createElement('div');notice.textContent='分区 '+tile.id+' 的树木与街边物件暂未载入。';
       const retry=document.createElement('button');retry.textContent='重试补充模型';
-      retry.onclick=async()=>{retry.disabled=true;try{await restoredProxies.registerTile(tile.id); nightLighting.environmentSpill.attachReceivers(restoredProxies.root,{external:true});await loadGoldenTreeLanterns(tile.id);refreshRenderVisibility();notice.remove();}catch(e){console.warn(e);}finally{retry.disabled=false;}};
+      retry.onclick=async()=>{retry.disabled=true;try{await restoredProxies.registerTile(tile.id); templeVisibility.registerProxies(restoredProxies.root); nightLighting.environmentSpill.attachReceivers(restoredProxies.root,{external:true});await loadGoldenTreeLanterns(tile.id);refreshRenderVisibility();notice.remove();}catch(e){console.warn(e);}finally{retry.disabled=false;}};
       notice.appendChild(retry);document.querySelector('#errors').appendChild(notice);document.querySelector('#errors').style.display='block';
     }
     await loadCourtyardLanterns(tile.id);
-    for(const layer of [streetlamps,festivalLanterns,redLanterns,featureLanterns])if(layer.root)nightLighting.environmentSpill.attachReceivers(layer.root,{external:true});
+    // New central rack is loaded only by the temple doorway interaction.
+    for(const layer of [streetlamps,festivalLanterns,redLanterns,featureLanterns,bridgeLanterns])if(layer.root)nightLighting.environmentSpill.attachReceivers(layer.root,{external:true});
     updateFestivalReadout();
     setWireframe(document.querySelector('#wireframe').checked); updateTimeUI();
     totalBytes += tile.bytes || 0; totalObjects += tile.objects || 0; totalVertices += tile.vertices || 0; totalTriangles += tile.triangles || 0;
@@ -863,7 +1120,7 @@ async function loadTiles(mode) {
     if (!loadedTiles.has(tile.id)) {
       try { await loadTile(tile); } catch (_) {}
     }
-    done++; updateProgress(done, tiles.length, `tile-${String(tile.id).padStart(2, '0')} · ${done}/${tiles.length}`);
+    done++; updateProgress(done, tiles.length, `场景区域 ${done}/${tiles.length}`);
   }
   hideProgress();
   if (firstLoad && startRevision === cameraRevision && controlMode === 'orbit') fitCamera();
@@ -873,7 +1130,8 @@ async function loadTiles(mode) {
 async function retryFailed() { const tiles = [...failedTiles.values()]; if (!tiles.length) return setStatus('当前没有失败的 tile。'); for (const tile of tiles) { try { await loadTile(tile, true); } catch (_) {} } }
 function updateFirstPerson(delta) {
   if (!modelRoot.visible) clearMovement();
-  player.update(delta, keys);
+  player.update(delta, keys, {movementLocked:templeVisit.snapshot().busy||!!story?.movementLocked});
+  templeVisit.update(player.position,!story?.blocked&&modelRoot.visible&&controlMode!=='orbit');
 }
 function updatePerf(now) {
   if (now - lastWaterUIUpdate >= 500) { updateWaterUI(); lastWaterUIUpdate = now; }
@@ -884,6 +1142,7 @@ function updatePerf(now) {
   const info = renderer.info;
   const nightStats = nightLighting.stats;
   perfEl.textContent = `FPS      ${fps}\nDRAW     ${info.render.calls}\nTRI      ${fmtNum(info.render.triangles)}\nGEOMETRY ${info.memory.geometries}\nTEXTURE  ${info.memory.textures}\nTILES    ${loadedTiles.size}/${allTiles().length}\nMODE     ${currentMode}\nTIME     ${TIME_PRESETS[timeOfDay].clock} ${timeOfDay}\nNIGHT    ${nightStats.batches} batches / ${nightStats.washLights} lights`;
+  perfEl.textContent += `\nNEAR LAMP ${nearLanternQuality.mode} · ${nearLanternQuality.active}/12`;
   const visibility = renderVisibility.stats;
   perfEl.textContent += `\nQUALITY  ${PERFORMANCE_PROFILES[activePerformanceProfile].label}\nCELLS    ${visibility.visibleCells}/${visibility.cells}\nCULL MS  ${visibility.updateMs.toFixed(2)}`;
 }
@@ -893,7 +1152,7 @@ function animate(now = performance.now()) {
   performanceAudit?.tickStart();
   const rawDelta = clock.getDelta();
   const delta = Math.min(rawDelta, .05);
-  updateFirstPerson(delta); festivalLanterns.update(now / 1000); featureLanterns.update(now / 1000); nightLighting.update(now / 1000);
+  updateFirstPerson(delta); story?.update(now); placedLanternControls.update(story?.mode==='preview'); if(!templeVisibility.inside){festivalLanterns.update(now / 1000,camera); featureLanterns.update(now / 1000,camera);} lanternLighting.update(now); nightLighting.update(now / 1000);
   if (controlMode === 'orbit') orbit.update();
   environment.update(camera);
   // Bake static shadows with all distance cells present, then cull on the next
@@ -901,12 +1160,16 @@ function animate(now = performance.now()) {
   const bakeShadows = sun.castShadow && renderer.shadowMap.needsUpdate;
   renderVisibility.update(camera.position, controlMode !== 'orbit' &&
     activePerformanceProfile !== 'original' && !bakeShadows ? camera.far : null);
+  nearLanternQuality.beforeRender(camera,now);
   renderer.info.reset();
   performanceAudit?.renderStart();
-  river.update(now / 1000, rawDelta);
-  if (TIME_PRESETS[timeOfDay].lit && !wireframeInput.checked) composer.render(delta);
-  else renderer.render(scene, camera);
+  try {
+    river.update(now / 1000, rawDelta, camera.position);
+    if (TIME_PRESETS[timeOfDay].lit && !wireframeInput.checked) composer.render(delta);
+    else renderer.render(scene, camera);
+  } finally { nearLanternQuality.afterRender(); }
   performanceAudit?.renderEnd();
+  buildingLabels.update(camera,tileObjects,modelRoot.visible,now,innerWidth,innerHeight);
   updatePerf(now);
   performanceAudit?.tickEnd();
 }
@@ -915,34 +1178,68 @@ window.addEventListener('resize', () => { camera.aspect = innerWidth / innerHeig
 window.addEventListener('keydown', event => {
   if (controlMode === 'orbit' || event.ctrlKey || event.metaKey || event.altKey) return;
   if (event.target?.closest?.('input, textarea, select, [contenteditable="true"]')) return;
+  if(event.code==='KeyE'){if(event.target instanceof HTMLElement&&event.target.closest('input,textarea,[contenteditable=true]'))return;event.preventDefault();if(!event.repeat){if(story?.mode==='play')void story.activate();else void templeVisit.activate();}return;}
+  if(story?.movementLocked)return;
+  if(templeVisit.snapshot().busy)return;
   if (!['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight'].includes(event.code)) return;
   keys.add(event.code); event.preventDefault();
 });
 window.addEventListener('blur', clearMovement);
 document.addEventListener('visibilitychange', () => { if (document.hidden) clearMovement(); });
 document.addEventListener('pointerlockerror', () => {
-  pointerLockUnavailable = true;
-  clearMovement();
-  setStatus('当前浏览器不支持鼠标锁定。已启用拖拽转向，W/A/S/D 可继续行走。');
+  handlePointerLockFailure();
 });
 window.addEventListener('keyup', event => keys.delete(event.code));
 function handlePointerLockFailure(error) {
   pointerLockUnavailable = true;
   clearMovement();
-  setStatus('当前浏览器不支持鼠标锁定。已启用拖拽转向，W/A/S/D 可继续行走。');
+  setStatus(story?.observing ? '当前浏览器不允许锁定鼠标，已启用画面内移动鼠标环视；可在独立浏览器中使用完整鼠标锁定。' : '当前浏览器不支持鼠标锁定。已启用拖拽转向，W/A/S/D 可继续行走。');
   return error;
 }
-renderer.domElement.addEventListener('click', () => {
-  if (controlMode !== 'firstPerson' || firstPerson.isLocked || pointerLockUnavailable) return;
+function requestLookLock() {
+  if (story?.testing) return;
+  if (firstPerson.isLocked || typeof renderer.domElement.requestPointerLock !== 'function') return;
   try {
-    const lockRequest = firstPerson.lock();
+    const lockRequest = renderer.domElement.requestPointerLock();
     if (lockRequest && typeof lockRequest.catch === 'function') lockRequest.catch(handlePointerLockFailure);
   } catch (error) {
     handlePointerLockFailure(error);
   }
+}
+renderer.domElement.addEventListener('click', () => {
+  if (!story?.observing && (story?.blocked || controlMode !== 'firstPerson')) return;
+  requestLookLock();
+});
+const lanternPickRaycaster = new THREE.Raycaster();
+const lanternPickPointer = new THREE.Vector2();
+let lanternPickStart = null;
+function pickTengmaLantern(event) {
+  if (controlMode !== 'orbit') return;
+  const entry = featureLanterns.entries.get('tengma');
+  if (!entry) return;
+  const rect = renderer.domElement.getBoundingClientRect();
+  lanternPickPointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  lanternPickPointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  lanternPickRaycaster.setFromCamera(lanternPickPointer, camera);
+  const hit = lanternPickRaycaster.intersectObjects(entry.meshes.filter(mesh => mesh.userData.featureLantern === 'tengma'), false)
+    .find(result => Number.isInteger(result.instanceId));
+  if (!hit) return;
+  const id = hit.instanceId === 1 ? 'tengma-right' : 'tengma-left';
+  lanternControls.selectPlacement(id);
+  setStatus(`已选中${hit.instanceId === 1 ? '右侧' : '左侧'}腾马灯，可在“灯具摆位”中调整。`);
+}
+renderer.domElement.addEventListener('pointerdown', event => {
+  if (story?.mode==='preview' && controlMode === 'orbit' && event.button === 0) lanternPickStart = {x:event.clientX,y:event.clientY};
+});
+renderer.domElement.addEventListener('pointerup', event => {
+  const start = lanternPickStart;
+  lanternPickStart = null;
+  if (!start || Math.hypot(event.clientX - start.x, event.clientY - start.y) > 5) return;
+  if(placedLanternControls.handleClick(event))return;
+  pickTengmaLantern(event);
 });
 renderer.domElement.addEventListener('pointerdown', event => {
-  if (controlMode === 'orbit' || (controlMode === 'firstPerson' && !pointerLockUnavailable) || event.button !== 0) return;
+  if (story?.lookLocked || story?.observing || firstPerson.isLocked || controlMode === 'orbit' || (controlMode === 'firstPerson' && !pointerLockUnavailable && !story?.blocked) || event.button !== 0) return;
   fallbackDragging = true;
   fallbackLastX = event.clientX;
   fallbackLastY = event.clientY;
@@ -950,15 +1247,16 @@ renderer.domElement.addEventListener('pointerdown', event => {
   event.preventDefault();
 });
 renderer.domElement.addEventListener('pointermove', event => {
-  if (!fallbackDragging || controlMode === 'orbit' || firstPerson.isLocked) return;
-  const dx = event.clientX - fallbackLastX;
-  const dy = event.clientY - fallbackLastY;
+  if (story?.lookLocked || (!fallbackDragging && !story?.observing) || controlMode === 'orbit' || firstPerson.isLocked) return;
+  const dx = story?.observing ? event.movementX : event.clientX - fallbackLastX;
+  const dy = story?.observing ? event.movementY : event.clientY - fallbackLastY;
   fallbackLastX = event.clientX;
   fallbackLastY = event.clientY;
-  if (controlMode === 'thirdPerson') player.look(dx, dy);
+  if (controlMode === 'thirdPerson' && !story?.observing) player.look(dx, dy);
   else {
-    camera.rotation.y -= dx * fallbackLookSpeed;
-    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x - dy * fallbackLookSpeed, -Math.PI / 2, Math.PI / 2);
+    camera.rotation.order = 'YXZ';
+    camera.rotation.y -= dx * fallbackLookSpeed * (story?.lookSensitivity??1);
+    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x - dy * fallbackLookSpeed * (story?.lookSensitivity??1), -Math.PI / 2, Math.PI / 2);
   }
 });
 const stopFallbackDrag = event => {
@@ -968,11 +1266,11 @@ const stopFallbackDrag = event => {
 renderer.domElement.addEventListener('pointerup', stopFallbackDrag);
 renderer.domElement.addEventListener('pointercancel', stopFallbackDrag);
 renderer.domElement.addEventListener('wheel', event => {
-  if (controlMode !== 'thirdPerson') return;
+  if (story?.lookLocked || story?.observing || controlMode !== 'thirdPerson') return;
   event.preventDefault(); player.zoom(event.deltaY);
 }, {passive:false});
-firstPerson.addEventListener('lock', () => setStatus('第一人称已锁定：W/A/S/D 移动，Shift 加速，Esc 退出。'));
-firstPerson.addEventListener('unlock', () => { clearMovement(); if (controlMode === 'firstPerson') setStatus(pointerLockUnavailable ? '鼠标已释放：按住鼠标拖动转向，W/A/S/D 继续行走。' : '鼠标已释放，点击画面可重新进入第一人称。'); });
+firstPerson.addEventListener('lock', () => {pointerLockUnavailable=false;setStatus(story?.observing ? '正在原地赏灯，移动鼠标环视，按 E 结束赏灯。' : '第一人称已锁定：W/A/S/D 移动，Shift 加速，Esc 退出。');});
+firstPerson.addEventListener('unlock', () => { if (!story?.blocked || story.movementLocked) clearMovement(); if(story?.observing)setStatus('鼠标已释放，点击画面可重新锁定并继续环视；按 E 结束赏灯。');else if (controlMode === 'firstPerson') setStatus(pointerLockUnavailable ? '鼠标已释放：按住鼠标拖动转向，W/A/S/D 继续行走。' : '鼠标已释放，点击画面可重新进入第一人称。'); });
 document.querySelector('#orbitMode').onclick = () => switchControl('orbit');
 document.querySelector('#firstPersonMode').onclick = () => switchControl('firstPerson');
 document.querySelector('#thirdPersonMode').onclick = () => switchControl('thirdPerson');
@@ -991,7 +1289,7 @@ document.querySelectorAll('[data-time-of-day]').forEach(button => {
   button.onclick = async () => {
     const changed = await setTimeOfDay(button.dataset.timeOfDay);
     if (changed && TIME_PRESETS[timeOfDay].lit) {
-      try { await loadNightLandmarks(); } catch (error) { setStatus(`夜景已开启，部分重点区域加载失败：${error.message}。可重试失败资源。`); }
+      try { await loadNightLandmarks(); } catch (error) { console.warn('部分夜景区域加载失败', error); setStatus('夜景已开启，部分重点区域加载失败，可重试失败资源。'); }
     }
   };
 });
@@ -1002,7 +1300,7 @@ document.querySelectorAll('[data-gate-light]').forEach(button => {
     try {
       await loadNightLandmarks();
       setStatus('天下文枢 · ' + GATE_LIGHT_PRESETS[nightLighting.gatePreset].label + '；保持当前位置，可切换比较。');
-    } catch (error) { setStatus('灯效已选择，牌坊资源加载失败：' + error.message + '。请重试失败资源。'); }
+    } catch (error) { console.warn('牌坊资源加载失败', error); setStatus('灯效已选择，牌坊资源加载失败，请重试失败资源。'); }
   };
 });
 document.querySelector('#gateDetailView').onclick = () => focusNightView('gateDetail');
@@ -1025,12 +1323,13 @@ document.querySelector('#mountainDiameter').oninput=updateMountainPreview;
 document.querySelector('#mountainRotation').oninput=updateMountainPreview;
 document.querySelector('#resetMountainPreview').onclick=()=>{
   document.querySelector('#mountainDiameter').value=13;
-  document.querySelector('#mountainRotation').value=180;updateMountainPreview();
+  document.querySelector('#mountainRotation').value=90;updateMountainPreview();
 };
 document.querySelector('#retryFestival').onclick=async()=>{
   for(const id of tileObjects.keys()){
     try { await festivalLanterns.registerTile(id); } catch(error) {console.warn(error);}
     try { await featureLanterns.registerTile(id);nightLighting.environmentSpill.attachReceivers(featureLanterns.root,{external:true}); } catch(error) {console.warn(error);}
+    try { await bridgeLanterns.registerTile(id);bridgeLanterns.setNight(TIME_PRESETS[timeOfDay].lit);nightLighting.environmentSpill.attachReceivers(bridgeLanterns.root,{external:true}); } catch(error) {console.warn(error);}
   }
   updateFestivalReadout();
 };
@@ -1039,17 +1338,22 @@ updateMountainPreview();
 document.querySelector('#nightViewButton').onclick = () => focusNightView(document.querySelector('#nightView').value);
 updateTimeUI();
 window.addEventListener('beforeunload', () => {
+  placedLanternControls.dispose();placedLanterns.dispose();
+  story?.dispose();
+  mainMusic.dispose();
   performanceAudit?.dispose();
   renderVisibility.dispose();
+  buildingLabels.dispose();
   environment.dispose(); river.dispose();
   player.dispose(); firstPerson.dispose(); orbit.dispose();
-  courtyardLanterns.dispose(); goldenTreeLanterns.dispose(); restoredProxies.dispose(); redLanterns.dispose(); featureLanterns.dispose(); festivalLanterns.dispose(); streetlamps.dispose(); nightLighting.dispose(); dragonLighting.dispose(); disposeGateRoofRepair(); bloomPass?.dispose(); outputPass?.dispose(); composer?.dispose();
+  nearLanternQuality.dispose(); bridgeLanterns.dispose(); lanternLighting.dispose(); courtyardRacks.dispose(); courtyardLanterns.dispose(); goldenTreeLanterns.dispose(); restoredProxies.dispose(); redLanterns.dispose(); featureLanterns.dispose(); festivalLanterns.dispose(); streetlamps.dispose(); nightLighting.dispose(); dragonLighting.dispose(); disposeGateRoofRepair(); bloomPass?.dispose(); outputPass?.dispose(); composer?.dispose();
 });
 
 (async function boot() {
   try {
     window.__QINHUAI_STARTUP__?.stage('正在读取模型清单…');
     await loadManifest();
+    buildingLabels.load().catch(error=>{console.warn('建筑名称未加载',error);const toggle=document.querySelector('#buildingNamesVisible');toggle.title='建筑名称未加载，关闭后重新开启可重试';toggle.addEventListener('change',()=>{if(toggle.checked&&!buildingLabels.entries.length)buildingLabels.load().catch(console.warn);});});
     updateSummary();
     window.__QINHUAI_STARTUP__?.stage('正在准备场景光照…');
     if (!(await setTimeOfDay(query.get('time') || 'day'))) throw new Error('场景光照加载失败，请重试。');
@@ -1058,22 +1362,37 @@ window.addEventListener('beforeunload', () => {
       console.warn('学生模型加载失败，可从人物视角按钮重试', error); return null;
     });
     await loadTiles(requestedMode);
+    // Keep the small set of gate-tree lanterns available without pulling the
+    // 128 MB temple tile into the initial gameplay scene.
+    await loadGoldenTreeLanterns(TEMPLE_TILE_ID);
+    await loadCourtyardLanterns(TEMPLE_TILE_ID);
+    nightLighting.environmentSpill.attachReceivers(goldenTreeLanterns.root,{external:true});
     if (TIME_PRESETS[timeOfDay].lit) {
-      if (query.get('view')) await focusNightView(query.get('view'));
+      if (query.get('mode')==='orbit'&&query.get('view')) await focusNightView(query.get('view'));
       else await loadNightLandmarks();
     }
     await playerReady;
+    if(query.get('mode')!=='orbit'){
+      await loadNightLandmarks();
+      await switchControl('firstPerson');
+      camera.rotation.set(0,0,0,'YXZ');player.updateCamera(0,true);
+      setStatus('天下文枢 · W/A/S/D 行走，Shift 加速。走到夫子庙门前，按 E 进入。');
+    }
     performanceAudit?.markReady(failedTiles.size === 0 && player.stats.ready);
+    story.ready();
     window.__QINHUAI_STARTUP__?.ready();
   } catch (error) {
     window.__QINHUAI_STARTUP__?.fail(error);
-    showProgress('独立测试页启动失败'); progressText.textContent = `${error.message}。请通过本地 HTTP 服务打开，不要直接使用 file://。`;
-    setStatus(`启动失败：${error.message}`);
+    console.error('地图场景启动失败', error);
+    showProgress('地图场景启动失败'); progressText.textContent = location.protocol==='file:'?'请通过本地 HTTP 服务打开场景。':'场景加载失败，请重新加载。';
+    setStatus('场景加载失败，请重新加载。');
   }
 })();
 
 // Same-origin saved building settings: update already-loaded tiles without rebuilding geometry.
 window.addEventListener('storage',event=>{
+ if(event.key===LANTERN_LIGHT_KEY||event.key===null)lanternControls.reload();
+ if(event.key===PLACED_LANTERN_KEY||event.key===null)placedLanternControls.reload();
  if(event.key===BUILDING_LIGHT_KEY||event.key===null)buildingControls.reload();
  if(event.key===DRAGON_STORAGE_KEY||event.key===null)dragonControls.reload();
  if(event.key===MAP_LIGHT_STORAGE_KEY||event.key===null)mapLightControls.reload();

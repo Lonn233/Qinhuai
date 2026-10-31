@@ -5,6 +5,7 @@ import os from 'node:os';
 import http from 'node:http';
 import path from 'node:path';
 import {createRequire} from 'node:module';
+import {readSaved} from '../lion-study/tuning.js';
 const require=createRequire(import.meta.url);
 const {createPresetStore}=require('../preset-store.cjs');
 const {createServer}=require('../serve.cjs');
@@ -27,7 +28,7 @@ test('legacy migration is additive, idempotent and cannot resurrect deleted reco
 });
 test('invalid input and duplicate IDs do not overwrite a saved file',async t=>{
  const store=createPresetStore(await folder(t));await store.add(sample('valid'));const before=await readFile(store.file,'utf8');
- for(const input of [sample('bad',{power:3}),sample('bad',{color:'red'}),sample('bad',{lanternId:'unknown'}),sample('bad',{name:''}),sample('../escape'),sample('bad',{base:'unknown'}),sample('bad',{power:'1'})])await assert.rejects(store.add(input));
+ for(const input of [sample('bad',{power:5.01}),sample('bad',{color:'red'}),sample('bad',{lanternId:'unknown'}),sample('bad',{name:''}),sample('../escape'),sample('bad',{base:'unknown'}),sample('bad',{power:'1'})])await assert.rejects(store.add(input));
  await assert.rejects(store.add(sample('valid',{power:2})),{status:409});
  assert.equal(await readFile(store.file,'utf8'),before);
 });
@@ -50,7 +51,7 @@ test('HTTP API validates origin/body and protects private files while serving ex
  const base='http://127.0.0.1:'+server.address().port, endpoint=base+'/api/lantern-presets';
  let response=await fetch(endpoint);assert.equal(response.status,200);assert.equal((await response.json()).storage,'file');
  const post=(body,headers={})=>fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(body)});
- response=await post(sample('http'));assert.equal(response.status,201);
+ response=await post(sample('http',{power:5}));assert.equal(response.status,201);
  assert.equal((await fetch(endpoint).then(r=>r.json())).items.length,1);
  assert.equal((await post(sample('attack'),{Origin:'https://evil.invalid'})).status,403);
  assert.equal(await new Promise((resolve,reject)=>{http.get(endpoint,{headers:{Host:'evil.invalid'}},res=>{res.resume();resolve(res.statusCode);}).on('error',reject);}),403);
@@ -62,6 +63,16 @@ test('HTTP API validates origin/body and protects private files while serving ex
  assert.equal((await fetch(base+'/building-light-study.html')).status,200);
  assert.equal((await fetch(endpoint+'/http',{method:'DELETE'})).status,200);
  assert.equal((await fetch(endpoint).then(r=>r.json())).items.length,0);
+});
+test('doubled brightness maximum survives file and client preset reload',async t=>{
+ const dir=await folder(t),store=createPresetStore(dir);
+ await store.add(sample('maximum',{power:5}));
+ const data=await createPresetStore(dir).list();
+ assert.equal(data.items[0].power,5);
+ const parsed=readSaved(JSON.stringify({version:1,items:data.items}),['mountain'],['柔彩透亮']);
+ assert.equal(parsed[0].power,5);
+ assert.deepEqual(readSaved(JSON.stringify({version:1,items:[sample('invalid',{power:5.01})]}),['mountain'],['柔彩透亮']),[]);
+ await assert.rejects(store.add(sample('invalid',{power:5.01})));
 });
 test('physical dimensions persist while legacy presets stay unchanged',async t=>{
  const dir=await folder(t),store=createPresetStore(dir),old=sample('legacy-size');

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {lampSetting,lampGain} from './import-lantern-settings.mjs';
 import layout from './assets/golden-tree-lanterns/courtyard-layout.json' with { type: 'json' };
 import lantern from './assets/golden-tree-lanterns/layout.json' with { type: 'json' };
 
@@ -10,7 +11,7 @@ export class CourtyardLanternLayer {
   constructor(parent, { trees, lanterns }) {
     this.trees = trees; this.lanterns = lanterns;
     this.root = new THREE.Group(); this.root.name = 'DachengHall-TreeLanternNets'; parent.add(this.root);
-    this.geometries = new Set(); this.materials = new Set();
+    this.geometries = new Set(); this.materials = new Set(); this.fabric=[];
     this.night = true; this.wireframe = false; this.disposed = false; this.ready = false; this.error = null;
   }
   registerTile(id) {
@@ -80,7 +81,8 @@ export class CourtyardLanternLayer {
       for (const part of lampParts) {
         const matrices = mounts.map(mount => new THREE.Matrix4().compose(mount.top,
           new THREE.Quaternion().setFromAxisAngle(UP, mount.rotation), new THREE.Vector3(scale, scale, scale)).multiply(origin).multiply(part.matrix));
-        this.batch(part.geometry, part.material, matrices, 'CourtyardGoldenLanterns');
+        const clone=source=>{const m=source.clone();this.materials.add(m);this.fabric.push(m);return m;};
+        this.batch(part.geometry, Array.isArray(part.material)?part.material.map(clone):clone(part.material), matrices, 'CourtyardGoldenLanterns');
       }
       for (const mount of mounts) addLine([mount.branch, mount.top]);
       const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position', new THREE.Float32BufferAttribute(lines, 3));
@@ -110,7 +112,10 @@ export class CourtyardLanternLayer {
   }
   setState({night=this.night,wireframe=this.wireframe}={}) {
     this.night=night; this.wireframe=wireframe;
-    if (this.halo) { this.halo.visible = night && !wireframe; this.halo.material.uniforms.power.value = night && !wireframe ? .15 : 0; }
+    const p=lampSetting(this,'courtyard'),gain=lampGain(p),active=night&&!wireframe;
+    this.root.traverse(o=>{if(o.name==='CourtyardGoldenLanterns')o.visible=p.modelVisible;});
+    for(const m of this.fabric){m.emissive.set(p.inheritColor?'#ffe0a1':p.color);m.emissiveIntensity=active?.85*gain:0;m.wireframe=wireframe;}
+    if (this.halo) { this.halo.visible = p.modelVisible && night && !wireframe; this.halo.material.uniforms.power.value = night && !wireframe ? .15*gain*p.halo : 0; this.halo.material.uniforms.tint.value.set(p.inheritColor?'#ffc65c':p.color); }
     for (const material of this.materials) if (material.isLineBasicMaterial) material.opacity = wireframe ? .35 : .68;
   }
   get stats() {

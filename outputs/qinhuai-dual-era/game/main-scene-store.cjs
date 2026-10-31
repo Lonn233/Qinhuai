@@ -8,7 +8,7 @@ const KEYS = new Set([
  'qinhuai.building-manual-spill.v1','qinhuai-building-soft-spill-v2',
  'qinhuai.red-lantern-light.v1','qinhuai.lantern-light-studies.v1',
  'qinhuai.lantern-light-studies.file-cache.v1',
- 'qinhuai:main-map:toolbar-collapsed:v1','qinhuai.dragon-wall-light.v1','qinhuai.main-building-lights.v1'
+ 'qinhuai:main-map:toolbar-collapsed:v1','qinhuai.dragon-wall-light.v1','qinhuai.main-building-lights.v1','qinhuai.main-lantern-lights.v1','qinhuai.scene-lantern-placements.v1'
 ]);
 const MAX_BYTES=4*1024*1024;
 const fail=(message,status=400)=>Object.assign(new Error(message),{status});

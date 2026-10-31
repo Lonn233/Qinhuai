@@ -2,7 +2,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('nod
 const dir=fs.mkdtempSync(path.join(os.tmpdir(),'qinhuai-proxy-test-')),entry=path.join(dir,'layer.cjs');
 require('esbuild').buildSync({entryPoints:['import-restored-proxies.js'],bundle:true,platform:'node',format:'cjs',outfile:entry,external:['three','three/*'],logLevel:'silent',define:{'import.meta.url':JSON.stringify('file:///restored-layer.js')}});
 // Resolve THREE from the project's node_modules when loading the temporary bundle.
-module.paths.push(path.resolve('node_modules'));const Module=require('node:module'),mod=new Module(entry,module);mod.filename=entry;mod.paths=module.paths;mod._compile(fs.readFileSync(entry,'utf8'),entry);const {ImportRestoredProxies,retainStreetAsset}=mod.exports;
+module.paths.push(path.resolve('node_modules'));const Module=require('node:module'),mod=new Module(entry,module);mod.filename=entry;mod.paths=module.paths;mod._compile(fs.readFileSync(entry,'utf8'),entry);const {ImportRestoredProxies,retainStreetAsset,retainStreetInstance}=mod.exports;
 (async()=>{
  const identity=new THREE.Matrix4(),mirror=new THREE.Matrix4().makeScale(-2,3,2).setPosition(10,5,-4);
  const manifest={version:1,prototypes:{one:{file:'one.glb',source:'fixture',kind:'tree',triangles:1}},instances:[{tile:9,prototype:'one',matrix:identity.toArray()},{tile:9,prototype:'one',matrix:mirror.toArray()}]};
@@ -22,7 +22,13 @@ module.paths.push(path.resolve('node_modules'));const Module=require('node:modul
  for(const id of removed)assert.equal(retainStreetAsset(id,production.prototypes[id]),false,id);
  assert.equal(retainStreetAsset('new-person',{kind:'person'}),false);
  for(const id of ['2aef056dfd30','2653adabd207','1e927883527a','b5edc0957e35','f9c56fd5588e','725cc47fa7ec','c18b080bb16c','aea2429a8149','82b828ba1638','f36907c329f8','82584b68b828','ff70b10c3fc3','3cf718c9af4e']){assert.ok(production.prototypes[id]);assert.ok(retainStreetAsset(id,production.prototypes[id]),id);}
- const retained=production.instances.filter(item=>retainStreetAsset(item.prototype,production.prototypes[item.prototype]));
+ const retained=production.instances.filter(item=>retainStreetInstance(item,production.prototypes));
+ const shrubPlacements=production.instances.filter(item=>retainStreetAsset(item.prototype,production.prototypes[item.prototype])&&!retainStreetInstance(item,production.prototypes));
+ assert.equal(shrubPlacements.length,104);
+ assert.equal(shrubPlacements.filter(item=>item.tile===9&&item.matrix[14]>-19.6&&item.matrix[14]<-19.1).length,52);
+ assert.ok(!retained.some(item=>item.name==='Obj3d66-646323-52-868'),'remaining screenshot tree removed');
+ const selectedGroup=production.instances.filter(item=>['b5edc0957e35','f9c56fd5588e','725cc47fa7ec','c18b080bb16c'].includes(item.prototype)&&item.tile===9&&Math.abs(item.matrix[12]+2.66453338)<.3&&Math.abs(item.matrix[14]+14.80933224)<.3);
+ assert.equal(selectedGroup.length,26);assert.ok(selectedGroup.every(item=>!retainStreetInstance(item,production.prototypes)),'selected tree and entire flower bed excluded');
  const requested=[];const filtered=new ImportRestoredProxies(new THREE.Group(),{fetchManifest:async()=>production,load:async url=>{requested.push(url);return {scene:new THREE.Group()};}});
  for(const tile of [5,6,9,10,15])await filtered.registerTile(tile);
  assert.equal(filtered.stats.instances,retained.length);assert.equal(filtered.stats.expected,retained.length);assert.equal(filtered.stats.excluded,1546-retained.length);assert.ok(filtered.stats.excluded>0);

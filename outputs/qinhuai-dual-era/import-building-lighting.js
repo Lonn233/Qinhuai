@@ -1,5 +1,6 @@
 import {hasWindowFloors,WINDOW_FLOORS,normalizeWindowFloors,windowFloorSplit} from './import-window-floors.mjs';
 import {BRIDGE_PARTS} from './import-bridge-config.mjs';
+import {TOWER0369_NODES} from './import-tower0369-config.mjs';
 import * as THREE from 'three';
 import {normalizeBuilding,BUILDING_PARTS} from './import-building-controls.mjs';
 export const rolePart=role=>role?.startsWith('bridge')?role:role==='roof'?'roof':role==='window'?'window':role==='sign'?'sign':/trim/i.test(role||'')?'trim':'facade';
@@ -9,7 +10,7 @@ export class BuildingLightAdjustments {
  constructor(environment){this.environment=environment;this.saved={};this.uniforms=new Map();this.patched=new Map();this.fixtureMaterials=[];this.environment.windowLightMaterials=new Map();}
  get buildings(){return this.environment.buildings;}
  getWindowAvailability(id){const b=this.buildings.find(b=>b.id===id),es=(this.environment.emitters.get(id)||[]).filter(e=>e.floor);return {loaded:!!b&&b.tiles.every(t=>this.environment.loaded.has(t)),total:es.length,first:es.filter(e=>e.floor==='first').length,second:es.filter(e=>e.floor==='second').length};}
- getParts(id){const b=this.buildings.find(b=>b.id===id);if(!b)return [];if(b.style==='bridge')return BRIDGE_PARTS.map(p=>p[0]);const roles=new Set();for(const tile of Object.values(this.environment.layout?.tiles||{}))for(const r of tile.materials)if(b.nodes.includes(r.node))roles.add(rolePart(r.role));if(roles.has('roof'))roles.add('eave');if(b.style==='matou')return ['window','trim'];return BUILDING_PARTS.map(p=>p[0]).filter(p=>roles.has(p));}
+ getParts(id){const b=this.buildings.find(b=>b.id===id);if(!b)return [];if(b.style==='bridge')return BRIDGE_PARTS.map(p=>p[0]);const roles=new Set();for(const tile of Object.values(this.environment.layout?.tiles||{}))for(const r of tile.materials)if(b.nodes.includes(r.node))roles.add(rolePart(r.role));if(b.nodes.some(n=>TOWER0369_NODES.has(n)))roles.add('facade');if(roles.has('roof'))roles.add('eave');if(b.style==='matou')return ['window','trim'];return BUILDING_PARTS.map(p=>p[0]).filter(p=>roles.has(p));}
  loadSettings(saved){this.saved={...saved};this.apply();this.onChange?.();}
  setSettings(id,value){this.saved[id]=normalizeBuilding(value);this.apply();this.onChange?.();}
  getUniform(id,part){const key=id+':'+part;if(!this.uniforms.has(key))this.uniforms.set(key,{value:new THREE.Vector4(1,1,1,0)});return this.uniforms.get(key);}

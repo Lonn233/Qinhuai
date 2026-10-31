@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1b110b">
+<title>秦淮灯作 · 荷花灯工坊</title>
+<link rel="icon" href="./assets/ui/05_菱形图标.png" type="image/png">
+<link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<canvas id="scene" aria-label="秦淮灯作三维工坊"></canvas>
+<div class="atmosphere" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<div id="loading" class="loading">
+  <div class="loading-seal">灯</div>
+  <p>灯坊起火 · 竹香初闻</p>
+</div>
+
+<main id="hud" class="hud" hidden>
+  <aside class="task-panel" aria-label="工序指引">
+    <div class="brand">
+      <div class="brand-copy">
+        <span class="brand-kicker">秦 淮 · 灯 作</span>
+        <h1>花灯制作</h1>
+      </div>
+    </div>
+    <div class="current-phase">
+      <img class="phase-diamond" src="./assets/ui/05_菱形图标.png" alt="">
+      <span id="phase-label">第一步 · 扎框子</span>
+      <em id="phase-count">壹 / 肆</em>
+    </div>
+    <div class="phase-tips" id="phase-tips">
+      <p><i></i>长篾短篾，收入栏中</p>
+      <p><i></i>竹篾备齐，再往合成台</p>
+    </div>
+    <ol class="substeps" id="substeps">
+      <li data-step="0" class="active"><b></b><span>收竹篾</span><em>待作</em></li>
+      <li data-step="1"><b></b><span>制作大小竹圈</span><em>待作</em></li>
+      <li data-step="2"><b></b><span>搭建荷花骨架</span><em>待作</em></li>
+      <li data-step="3"><b></b><span>安装三点吊挂</span><em>待作</em></li>
+    </ol>
+    <div class="task-card">
+      <div class="task-card-head"><span id="task-ordinal">壹</span><h2 id="task-name">收竹篾</h2></div>
+      <p id="task-hint">鼠标移到台面左侧的 62 厘米长篾上，待它泛起金光，按 E 收入物品栏。</p>
+      <div id="dye-timer" class="dye-timer" hidden data-quality="light" aria-label="花瓣纸浸染计时">
+        <span class="dye-timer-heading">浸染 · 二十倍计时</span>
+        <strong id="dye-time">00:00</strong>
+        <span id="dye-quality">颜色偏浅</span><small id="dye-timer-state">按住 E 浸染</small>
+      </div>
+      <div class="mini-progress" aria-hidden="true"><i id="task-progress-bar"></i></div>
+    </div>
+    <div class="step-controls" aria-label="工序导航">
+      <button id="step-back" type="button" disabled>上一步</button>
+      <button id="step-skip" type="button" disabled>跳过本步</button>
+    </div>
+    <div class="panel-foot">
+      <span id="station-foot">竹篾操作台 · 左后方</span>
+      <button id="tips-toggle" class="text-link" type="button">收起</button>
+    </div>
+  </aside>
+
+  <div class="corner-tools">
+    <button id="guide-button" class="guide-button" type="button" aria-label="打开指导书">
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M7 11c6-3 12-2 17 2 5-4 11-5 17-2v26c-6-3-12-2-17 2-5-4-11-5-17-2V11Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M24 13v26M11 17c4-1 8-.5 11 1.5M11 23c4-1 8-.5 11 1.5M11 29c4-1 8-.5 11 1.5M37 17c-4-1-8-.5-11 1.5M37 23c-4-1-8-.5-11 1.5M37 29c-4-1-8-.5-11 1.5" fill="none" stroke="currentColor" stroke-width="1"/>
+      </svg>
+      <span>指 导 书</span>
+      <small>J</small>
+    </button>
+    <div class="corner-minor">
+      <button id="music-button" class="round-tool is-on" type="button" aria-label="背景音乐">
+        <svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="6.5" cy="18" r="2.6" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="16.5" cy="16" r="2.6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+        <i class="music-bars"><b></b><b></b><b></b></i>
+      </button>
+      <button id="settings-button" class="round-tool" type="button" aria-label="设置">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12 3.2v2.4M12 18.4v2.4M20.8 12h-2.4M5.6 12H3.2M18.2 5.8l-1.7 1.7M7.5 16.5l-1.7 1.7M18.2 18.2l-1.7-1.7M7.5 7.5 5.8 5.8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="station-prompt" class="station-prompt" hidden>
+    <img src="./assets/ui/05_菱形图标.png" alt="">
+    <span><kbd>F</kbd> <b id="prompt-text">进入 · 竹篾操作台</b></span>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <section id="bend-panel" class="bend-panel" hidden aria-label="弯竹弧度">
+    <div class="bend-head"><span>弯 竹 塑 形</span><em id="bend-tip">均匀用力 · 慢弯</em></div>
+    <div class="bend-track">
+      <div class="bend-band" id="bend-band"></div>
+      <div class="bend-fill" id="bend-fill"></div>
+      <div class="bend-marker" id="bend-marker"></div>
+      <div class="bend-ticks"></div>
+    </div>
+    <div class="bend-foot"><span>直篾</span><b id="bend-readout">0%</b><span>成形</span></div>
+  </section>
+
+  <section id="hint-stack" class="hint-stack" aria-label="操作提示">
+    <div class="hint-row" id="hint-0">
+      <span class="mouse-icon"><svg viewBox="0 0 24 34"><rect x="3" y="2" width="18" height="30" rx="9"/><path class="key active" d="M3 12h8V2H12A9 9 0 0 0 3 11v1Z"/><path class="wheel" d="M12 8v7"/></svg></span>
+      <span class="hint-key">左键</span><span class="hint-text">弯曲竹篾</span>
+    </div>
+    <div class="hint-row" id="hint-1">
+      <span class="mouse-icon"><svg viewBox="0 0 24 34"><rect x="3" y="2" width="18" height="30" rx="9"/><path class="key active" d="M21 12h-8V2h-1a9 9 0 0 1 9 9v1Z"/><path class="wheel" d="M12 8v7"/></svg></span>
+      <span class="hint-key">右键</span><span class="hint-text">松开竹篾</span>
+    </div>
+    <div class="hint-row" id="hint-2">
+      <span class="mouse-icon drag"><svg viewBox="0 0 24 34"><rect x="3" y="2" width="18" height="30" rx="9"/><path class="wheel" d="M12 8v9"/><path d="m12 20 2 2-2 2-2-2 2-2Z"/></svg></span>
+      <span class="hint-key">拖动</span><span class="hint-text">旋转查看</span>
+    </div>
+  </section>
+
+  <nav id="inventory" class="inventory" aria-label="物品栏">
+    <button class="inv-arrow left" id="inv-left" type="button" aria-label="上一件">
+      <img src="./assets/ui/04_左箭头.png" alt="">
+    </button>
+    <div class="inv-window">
+      <div class="inv-track" id="inv-track"></div>
+    </div>
+    <button class="inv-arrow right" id="inv-right" type="button" aria-label="下一件">
+      <img src="./assets/ui/06_右箭头.png" alt="">
+    </button>
+    <div class="inv-caption"><span id="inv-caption">滚轮切换 · 当前材料</span></div>
+  </nav>
+
+  <div class="crosshair" id="crosshair" aria-hidden="true"></div>
+</main>
+
+<section id="start-screen" class="start-screen">
+  <div class="start-vignette"></div>
+  <div class="start-inner">
+    <img class="start-emblem" src="./assets/ui/01_上方图标_红色竖形.png" alt="">
+    <p class="start-kicker">秦 淮 灯 作 · 荷 花 灯</p>
+    <h1>扎 框</h1>
+    <div class="start-rule"><i></i><b></b><i></i></div>
+    <p class="start-sub">一篾一纸 · 一灯一心</p>
+    <p class="start-desc">暮色落在秦淮河上，灯坊里竹香正暖。<br>收篾入栏，到合成台弯骨搭框。</p>
+    <button id="start-button" class="primary-button" type="button">
+      <span>推 门 入 坊</span><em>F</em>
+    </button>
+    <p class="start-note">建议佩戴耳机 · 笛声与古筝相伴</p>
+  </div>
+  <div class="start-foot"><span>南京 · 秦淮</span><span>第一幕</span></div>
+</section>
+
+<dialog id="guide-dialog" class="paper-dialog guide-dialog">
+  <div class="paper-inner">
+    <button class="dialog-close" data-close="guide-dialog" type="button" aria-label="关闭">×</button>
+    <div class="paper-heading">
+      <img src="./assets/ui/03_上方图标_红色椭圆.png" alt="">
+      <div><span>秦淮灯作 · 匠人手记</span><h2>扎框子 · 工序指导</h2></div>
+    </div>
+    <div class="paper-columns">
+      <section>
+        <h3>工序次序</h3>
+        <ol class="paper-list">
+          <li><b>一</b><div><strong>收竹篾</strong><p>竹篾台上取 62 厘米长篾一根、40 厘米竹篾三根与小圈用篾一根。鼠标对准、泛起金光后按 E，竹篾收入物品栏。</p></div></li>
+          <li><b>二</b><div><strong>制作大小竹圈</strong><p>到合成台，把 62 厘米长篾拖到台面亮点，按住左键弯成大圈，用棉花纸捻扎紧搭接处，再按 E 或点击大圈收进物品栏。接着取圈篾弯成小圈，同样扎口并收进物品栏。两个竹圈都收好后再开始搭架。</p></div></li>
+          <li><b>三</b><div><strong>搭建荷花骨架</strong><p>从物品栏拖出大竹圈，放到悬空亮点。每根 40 厘米竹篾先弯成开口向上的 U 形，再拖入大圈，依次用棉花纸捻扎紧两端，完成后再弯下一根。大圈位于弧骨靠上处。三根弧骨固定后，从物品栏拖出小竹圈放到弧骨顶端，逐一捆扎三处连接点。</p></div></li>
+          <li><b>四</b><div><strong>合框与三点吊挂</strong><p>弧骨六处接点和小圈三处接点都交叉捆扎牢固后，将金丝下端固定在主大圈上相隔 120° 的三个点。金丝上接红线，三根红线向上汇聚，形成三棱锥吊挂。</p></div></li>
+        </ol>
+      </section>
+      <section>
+        <h3>手上功夫</h3>
+        <table class="key-table">
+          <tr><th>W A S D</th><td>工坊内自由走动（进入工作台后锁定）</td></tr>
+          <tr><th>F</th><td>靠近工作台时进入 / 再次按 F 退出；竹篾收齐后走到合成台</td></tr>
+          <tr><th>E</th><td>收取竹篾台高亮材料；合成台上收取已扎口的大圈或小圈</td></tr>
+          <tr><th>左键</th><td>合成台台面上按住弯竹，点击已扎口的竹圈可收取；从物品栏拖出竹圈与材料，弯好的弧骨从台面拖入骨架</td></tr>
+          <tr><th>右键</th><td>弯竹时松劲回弹</td></tr>
+          <tr><th>滚轮</th><td>切换物品栏材料</td></tr>
+          <tr><th>视角</th><td>入座工作台后固定，不随拖动旋转</td></tr>
+          <tr><th>ESC</th><td>设置与音效</td></tr>
+        </table>
+        <h3>料性分明</h3>
+        <p class="paper-note">竹篾台上只收竹篾，不弯制。备齐竹篾后携至合成台：先弯大圈、扎口并收入物品栏，再弯小圈、扎口并收入物品栏。两个圈都收好后，从物品栏拖出大圈放到悬空亮点，开始搭架。三根弧骨分别弯成两端朝上、底部圆弯的 U 形，穿过大圈，每根两端扎紧后再制作下一根。最后从物品栏取出小圈，放到弧骨顶端并扎紧三处连接点。交叉接点的纸捻须同时束住圆圈与弧骨。再安装金丝红线三点吊挂，三处落点在主大圈上构成等边三角形，不使用中央立柱。</p>
+        <div class="paper-stamp">扎<br>框</div>
+      </section>
+    </div>
+    <footer class="paper-foot"><span>第一步 · 扎框子</span><span>后续：裱糊 · 制瓣 · 粘贴 · 装花头</span></footer>
+  </div>
+</dialog>
+
+<dialog id="settings-dialog" class="paper-dialog settings-dialog">
+  <div class="paper-inner">
+    <button class="dialog-close" data-close="settings-dialog" type="button" aria-label="关闭">×</button>
+    <div class="paper-heading compact"><div><span>灯坊 · 设置</span><h2>静听竹声</h2></div></div>
+    <div class="settings-body">
+      <label class="switch-row"><span><b>背景音乐</b><small>ChineseZenMusic · 竹笛与古筝</small></span><input id="music-toggle" type="checkbox" checked><i></i></label>
+      <label class="range-row"><span><b>音乐音量</b><output id="music-volume-value">42%</output></span><input id="music-volume" type="range" min="0" max="100" value="42"></label>
+      <label class="range-row"><span><b>音效音量</b><output id="sfx-volume-value">58%</output></span><input id="sfx-volume" type="range" min="0" max="100" value="58"></label>
+      <label class="range-row"><span><b>视角灵敏度</b><output id="sens-value">1.0</output></span><input id="sensitivity" type="range" min="40" max="180" value="100"></label>
+      <div class="settings-buttons">
+        <button id="reset-step" class="ghost-button" type="button">重做本步</button>
+        <button id="back-to-start" class="ghost-button" type="button">回到门厅</button>
+      </div>
+      <p class="settings-note">音量与视角设置会保存在本机浏览器。扎框子仅解锁第一道工序，其余工序将在后续版本开启。</p>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="complete-dialog" class="complete-dialog">
+  <div class="complete-card">
+    <div class="complete-corner tl"></div><div class="complete-corner tr"></div><div class="complete-corner bl"></div><div class="complete-corner br"></div>
+    <p class="complete-kicker">第 一 步 · 扎 框 子</p>
+    <h2>扎 框 已 成</h2>
+    <div class="complete-rule"><i></i><img src="./assets/ui/05_菱形图标.png" alt=""><i></i></div>
+    <p class="complete-text">大圈端正如月，纸捻交叉扎牢，<br>三根弧骨与小圈俱已收势，金丝红线三点汇聚。</p>
+    <div class="complete-stats">
+      <div><b>1</b><span>大竹圈</span></div>
+      <div><b>3</b><span>弧形骨架</span></div>
+      <div><b>1</b><span>小竹圈</span></div>
+      <div><b>1</b><span>三点吊挂</span></div>
+    </div>
+    <p class="complete-next">裱糊与花瓣工序，静候下一幕。</p>
+    <div class="complete-actions">
+      <button id="keep-looking" class="ghost-button" type="button">留步赏灯</button>
+      <button id="craft-again" class="primary-button small" type="button">再扎一只</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="locked-dialog" class="locked-dialog">
+  <div>
+    <span class="locked-mark">未 启</span>
+    <h2 id="locked-title">合成台 · 待料</h2>
+    <p id="locked-text">先到竹篾操作台收齐 62 厘米长篾、三根 40 厘米竹篾与小圈用篾。竹篾备齐后，合成台自会点亮。</p>
+    <button class="ghost-button" data-close="locked-dialog" type="button">退 回 灯 坊</button>
+  </div>
+</dialog>
+
+<audio id="bgm" src="./assets/audio/bamboo-flute-guzheng.mp3" loop preload="auto"></audio>
+
+<script type="importmap">
+{"imports":{"three":"./vendor/three.module.js"}}
+</script>
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>

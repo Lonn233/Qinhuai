@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import {CONFIG} from './config.mjs';
+import {CONFIG,STAGES} from './config.mjs';
 import {liningOrientation,attachmentOrientation,DECORATION_STAGES,LINING_ROTATION_SPEED} from './lining-orientation.mjs';
 import {clonePart,disposeGroup,makeHand,alignHandGrip} from './workbench-visuals.js';
 const $=id=>document.getElementById(id),V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const TAU=Math.PI*2;
-export function createLiningWork({scene,camera,canvas,lantern,audio,getState,onGlue,onComplete,canInteract}){
+export function createLiningWork({scene,camera,canvas,lantern,audio,getState,onGlue,onSoak,onTrim,onComplete,canInteract}){
  const overlay=new THREE.Group(),held=new THREE.Group(),glueMarks=new THREE.Group();scene.add(overlay,held);lantern.root.add(glueMarks);glueMarks.name='workbench-glue-marks';
  const surface=$('handwork-surface'),ray=new THREE.Raycaster();
  const dropPrompt=document.createElement('span');dropPrompt.id='decoration-drop-prompt';dropPrompt.hidden=true;dropPrompt.setAttribute('role','status');document.body.append(dropPrompt);
@@ -20,6 +20,8 @@ export function createLiningWork({scene,camera,canvas,lantern,audio,getState,onG
  const data=()=>decoration()?{glued:decorationGlue,installed:Array.from({length:getState().counts[stage.id]},(_,i)=>i)}:getState().lining[stage.id];
  function eachMaterial(object,fn){object.traverse(o=>{if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(fn);});}
  function paint(object,color,opacity){eachMaterial(object,m=>{m.color.set(color);Object.assign(m,{transparent:true,opacity,side:THREE.DoubleSide,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});});}
+ function CONFIG_STAGE_INDEX(id){return STAGES.findIndex(item=>item.id===id);}
+ function applySoak(panel){return decoration()?true:onSoak(stage.id,panel);}
  function applyGlue(panel){if(!decoration())return onGlue(stage.id,panel);if(!decorationGlue.includes(panel))decorationGlue.push(panel);return true;}
  const busy=()=>!!animation||!canInteract();
  function orientation(){
@@ -54,13 +56,14 @@ export function createLiningWork({scene,camera,canvas,lantern,audio,getState,onG
  function status(text){notice=text;$('handwork-status').textContent=text;$('handwork-status').dataset.ready=String(pending);}
  function inventory(){
   $('lining-brush').classList.toggle('selected',tool==='brush');$('lining-paper').classList.toggle('selected',tool==='paper');
+  $('lining-soak').hidden=decoration();$('lining-trim').hidden=decoration()||stage.id!=='lining_lower';$('lining-soak').disabled=!!animation||data().soaked.includes(panel);$('lining-trim').disabled=!!animation||!data().installed.includes(panel)||data().trimmed.includes(panel);
   $('lining-brush').setAttribute('aria-pressed',String(tool==='brush'));$('lining-paper').setAttribute('aria-pressed',String(tool==='paper'));
   document.querySelector('.lining-inventory-caption').textContent='1 胶刷 · 2 '+itemName()+(decoration()?' · 对准松手粘贴':' · 拖入后确认');
   $('lining-paper-name').textContent=itemName();$('lining-paper-count').textContent=stage.total-data().installed.length;
   $('lining-paper').classList.toggle('white-paper',stage.id==='lining_lower');
   $('lining-paper').classList.toggle('decoration-paper',decoration());
   $('lining-paper').classList.toggle('leaf-paper',['calyx_assembly','lotus_leaf_assembly'].includes(stage.id));
-  if(!decoration())for(let i=0;i<6;i++){const b=$('lining-panel-'+i),done=data().installed.includes(i),glued=data().glued.includes(i);b.classList.toggle('current',panel===i);b.classList.toggle('glued',glued);b.disabled=done||!!animation;b.textContent=(i+1)+' · '+(done?'已贴':glued?'已涂':'待涂');b.setAttribute('aria-pressed',String(panel===i));}
+  if(!decoration())for(let i=0;i<6;i++){const b=$('lining-panel-'+i),done=data().installed.includes(i),needsTrim=stage.id==='lining_lower'&&done&&!data().trimmed.includes(i),glued=data().glued.includes(i);b.classList.toggle('current',panel===i);b.classList.toggle('glued',glued);b.disabled=done&&!needsTrim||!!animation;b.textContent=(i+1)+' · '+(needsTrim?'待裁边':done?'已完成':glued?'已涂':'待涂');b.setAttribute('aria-pressed',String(panel===i));}
   $('handwork-confirm').disabled=!pending||busy()||!orientation().aligned;$('handwork-retry').disabled=!!animation;
  }
  function showHeld(){
@@ -103,9 +106,10 @@ export function createLiningWork({scene,camera,canvas,lantern,audio,getState,onG
   target=targetPoint();dot=new THREE.Mesh(new THREE.SphereGeometry(.031,12,8),new THREE.MeshBasicMaterial({color:data().glued.includes(panel)?'#e6f2cc':'#e7d6a0',depthTest:false}));dot.position.copy(target);dot.renderOrder=20;overlay.add(dot);
  }
  function choosePanel(i,initial=false){
-  if(!active||animation||!initial&&!canInteract()||data().installed.includes(i))return;
+  const unfinishedTrim=stage?.id==='lining_lower'&&data().installed.includes(i)&&!data().trimmed.includes(i);
+  if(!active||animation||!initial&&!canInteract()||data().installed.includes(i)&&!unfinishedTrim)return;
   releasePointers();pending=false;panel=i;angle=lantern.root.rotation.y;
-  buildTarget();showHeld();inventory();updateFacing();status(decoration()||data().glued.includes(i)?dropHint():'选胶刷，点击灯体上高亮的一幅，先涂浆糊。');
+  buildTarget();showHeld();inventory();updateFacing();status(unfinishedTrim?'白布已贴合，请点击“裁边”修去这面的多余边缘。':decoration()||data().glued.includes(i)?dropHint():'选胶刷，点击灯体上高亮的一幅，先涂浆糊。');
  }
  function dropHint(){return decoration()?'拖动手中或下方物品栏的材料，对准高亮位置后松开左键，自动上浆并粘贴。':'将纸料拖到已上胶的亮点，松手定位后点击「确认粘贴」。';}
  function selectTool(next){if(!active||animation||!canInteract())return;releasePointers();pending=false;tool=next;buildTarget();showHeld();inventory();audio.play('tool');status(next==='brush'?'胶刷在手：点击高亮灯面涂浆糊。':dropHint());}
@@ -114,6 +118,7 @@ export function createLiningWork({scene,camera,canvas,lantern,audio,getState,onG
  function near(e){if(!target)return false;screenRay(e);if(ghost&&ray.intersectObject(ghost).length)return true;const p=project(target);return Math.hypot(e.clientX-p.x,e.clientY-p.y)<(e.pointerType==='touch'?48:34);}
  function beginGlue(){
   if(!requireFacing())return;
+  if(!decoration()&&!data().soaked.includes(panel)){status('先点击“蘸浆”，再用胶刷。');return;}
   if(data().glued.includes(panel)){status('这个位置已涂好浆糊，可以切换纸料。');return;}
   animation={type:'glue',time:0,panel};audio.play('lining_lower');inventory();status('胶刷轻扫骨架，铺开一层浆糊…');
  }
@@ -191,6 +196,8 @@ export function createLiningWork({scene,camera,canvas,lantern,audio,getState,onG
   }else finishDrag(e);
  });
  window.addEventListener('craft-book-open',cancel);window.addEventListener('pointercancel',cancel);window.addEventListener('blur',cancel);document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel();});
+ $('lining-soak').onclick=()=>{if(!active||decoration()||busy())return;if(!applySoak(panel)){status('这个位置已经蘸过浆，继续刷胶即可。');return;}audio.play('lining_lower');inventory();status('蘸浆完成。取胶刷，在同一面均匀刷胶。');selectTool('brush');};
+ $('lining-trim').onclick=()=>{if(!active||decoration()||busy()||stage.id!=='lining_lower')return;const result=onTrim(stage.id,panel);if(!result){status('请先贴好白布，再裁边。');return;}audio.play('tool');if(result==='next'||result==='done')return;const next=Array.from({length:stage.total},(_,j)=>j).find(j=>!data().trimmed.includes(j));if(next!==undefined)choosePanel(next,true);inventory();status(next===undefined?'白布六面已全部裁边。':'裁边完成。继续处理下一面：先蘸浆，再刷胶。');};
  $('lining-brush').onclick=()=>selectTool('brush');
  $('lining-paper').addEventListener('pointerdown',e=>{if(e.button!==0)return;selectTool('paper');startDrag(e);});$('lining-paper').onclick=e=>{if(e.detail===0)selectTool('paper');};
  for(let i=0;i<6;i++)$('lining-panel-'+i).onclick=()=>choosePanel(i);
@@ -198,11 +205,11 @@ export function createLiningWork({scene,camera,canvas,lantern,audio,getState,onG
   active=true;stage=s;index=i;decorationGlue=[];tool=decoration()?'paper':'brush';pending=false;animation=null;drag=null;rotationDrag=null;angle=lantern.root.rotation.y;overlay.visible=true;lantern.groups.DebugMarkers.visible=false;
   document.body.classList.add('lining-work');$('lining-panels').hidden=decoration();$('lining-facing').hidden=false;
   $('handwork-title').textContent=decoration()?s.name+' · '+(i+1)+' / '+s.total:s.id==='lining_upper'?'先上浆，再裱一幅红纸':'薄施浆糊，白纸打底';
-  $('handwork-subtitle').textContent=decoration()?'合灯台 · 入座平视 · 拖动灯体转正 / 拖入材料后松手粘贴':'合灯台 · 入座平视 · 左键拖动灯体旋转 / 松手后点击加工';$('handwork-tool').textContent=decoration()?'转正目标位置 → 拖入'+itemName()+' → 松开左键，自动上浆贴合':'转正目标位置 → 1 胶刷点涂 → 2 从物品栏拖入'+itemName()+' → 确认粘贴';
+  $('handwork-subtitle').textContent=decoration()?'合灯台 · 入座平视 · 拖动灯体转正 / 拖入材料后松手粘贴':'合灯台 · 入座平视 · 左键拖动灯体旋转 / 松手后点击加工';$('handwork-tool').textContent=decoration()?'转正目标位置 → 拖入'+itemName()+' → 松开左键，自动上浆贴合':'裱糊顺序：蘸浆 → 刷胶 → 贴'+(s.id==='lining_lower'?'白布':'红色内衬')+(s.id==='lining_lower'?' → 裁边':'');
   $('handwork-confirm').textContent=decoration()?'确认粘贴 · 贴合'+itemName():'确认粘贴 · 贴合纸面';$('handwork-confirm').hidden=decoration();$('handwork-retry').textContent='收回纸料';$('handwork-retry').hidden=false;
   $('handwork-rotate-left').hidden=$('handwork-rotate-right').hidden=true;
   $('handwork-confirm').onclick=confirm;$('handwork-retry').onclick=cancel;
-  choosePanel(decoration()?index:Array.from({length:6},(_,j)=>j).find(j=>!data().installed.includes(j))??0,true);
+  const first=Array.from({length:6},(_,j)=>j).find(j=>!data().installed.includes(j)||stage.id==='lining_lower'&&!data().trimmed.includes(j))??0;inventory();choosePanel(decoration()?index:first,true);if(!decoration()&&data().installed.includes(panel))status('白布已贴合，请点击“裁边”修去多余边缘。');
  }
  function close(){if(!active)return;releasePointers();active=false;dropPrompt.hidden=true;drag=null;pending=false;animation=null;disposeGroup(overlay);disposeGroup(held);disposeGroup(glueMarks);ghost=dot=preview=brush=hand=null;target=null;overlay.visible=held.visible=false;document.body.classList.remove('lining-work');$('lining-panels').hidden=true;$('lining-facing').hidden=true;lantern.groups.DebugMarkers.visible=true;}
  return {open,close,selectTool,get active(){return active;},update(dt){
@@ -213,6 +220,6 @@ export function createLiningWork({scene,camera,canvas,lantern,audio,getState,onG
   if(job.type==='glue'){
    held.position.copy(target).add(V(Math.sin(t*Math.PI*4)*.13,-.12+Math.sin(t*Math.PI)*.06,.10));if(ghost)paint(ghost,'#dce8bd',.14+t*.24);brush.rotation.z=-.6+Math.sin(t*Math.PI*4)*.3;
    if(t===1){animation=null;if(applyGlue(job.panel)){audio.play('tool');buildTarget();showHeld();inventory();status(decoration()?'浆糊已涂好。从下方物品栏拖入'+itemName()+'，或拖动手中材料；对准亮点，松开左键直接粘贴。':'浆糊已涂好。可选下一幅继续涂胶，或按 2 取纸粘贴。');}}
-  }else {fitPreview(t);if(t===1){animation=null;const ok=onComplete(stage.id,index,{mode:decoration()?'place':'paper',panel:job.panel,quality:1,curve:0,oval:0,dose:1,angle:0,distance:1});if(!ok){pending=true;inventory();status('纸料尚未提交，请检查该位置是否已上胶。');}}}
+  }else {fitPreview(t);if(t===1){animation=null;const ok=onComplete(stage.id,index,{mode:decoration()?'place':'paper',panel:job.panel,quality:1,curve:0,oval:0,dose:1,angle:0,distance:1});if(!ok){pending=true;inventory();status('纸料尚未提交，请检查该位置是否已上胶。');}else if(!decoration()){inventory();status(stage.id==='lining_lower'?'白布贴合完成。点击“裁边”修去边缘多余部分。':'红色内衬贴合完成。');if(stage.id==='lining_upper'&&getState().stage!==CONFIG_STAGE_INDEX(stage.id))close();}}}
  },snapshot(){return {mode:decoration()?'decoration':'lining',stage:stage?.id,panel,tool,heldTarget:heldPoint(),target:target?project(target):null,ready:pending,dragging:!!drag,pending,animation:animation?.type??null,turning:!!rotationDrag?.moved,rotation:lantern.root.rotation.y,orientation:orientation(),rotationSpeed:LINING_ROTATION_SPEED,rotationTarget:project(lantern.root.localToWorld(V(0,.68,0))),glueMarks:glueMarks.children.map(m=>m.userData.gluePanel),glued:active?[...data().glued]:[],installed:active?[...data().installed]:[]};}};
 }

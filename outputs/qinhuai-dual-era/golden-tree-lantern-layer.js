@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {lampSetting,lampGain} from './import-lantern-settings.mjs';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import layout from './assets/golden-tree-lanterns/layout.json' with { type: 'json' };
 
@@ -101,8 +102,9 @@ export class GoldenTreeLanternLayer {
   setState({ night = this.night, wireframe = this.wireframe } = {}) {
     this.night = night; this.wireframe = wireframe; const active = night && !wireframe;
     for (const material of this.materials) if (material.isMeshStandardMaterial) material.wireframe = wireframe;
-    for (const material of this.fabric) material.emissiveIntensity = active ? .85 : 0;
-    for (const halo of this.halos) { halo.visible = active; halo.material.uniforms.power.value = active ? .17 : 0; }
+    const p=lampSetting(this,'tree'),gain=lampGain(p);this.root.visible=p.modelVisible;
+    for (const material of this.fabric) {material.emissiveIntensity=active?.85*gain:0;material.emissive.set(p.inheritColor?'#ffe0a1':p.color);}
+    for (const halo of this.halos) { halo.visible = active; halo.material.uniforms.power.value = active ? .17*gain*p.halo : 0; halo.material.uniforms.tint.value.set(p.inheritColor?'#ffc65c':p.color); }
   }
   get stats() {
     const tiles = [...this.tiles.values()];

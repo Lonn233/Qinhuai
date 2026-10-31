@@ -1,15 +1,28 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as THREE from 'three';
-import {ImportFestivalLanterns,FESTIVAL_LAYOUT,FESTIVAL_PLACEMENTS,MAP_UNITS_PER_METER,WATER_KINDS,waterClearance,pointInWater,lightingFor,mountainSettings} from '../import-festival-lanterns.js';
+import {ImportFestivalLanterns,FESTIVAL_LAYOUT,FESTIVAL_PLACEMENTS,DOCK_OBSERVATIONS,MAP_UNITS_PER_METER,WATER_KINDS,waterClearance,pointInWater,lightingFor,mountainSettings} from '../import-festival-lanterns.js';
 import {DEFAULT_LIGHTS} from '../game/lion-study/defaults.cjs';
 const water=FESTIVAL_PLACEMENTS.filter(p=>WATER_KINDS.has(p.kind));
-assert.equal(water.length,32);assert.equal(water.filter(p=>p.kind==='chrysanthemum').length,4);
+assert.equal(water.length,35);assert.equal(water.filter(p=>p.kind==='chrysanthemum').length,5);
 assert.equal(FESTIVAL_PLACEMENTS.filter(p=>p.kind==='lion').length,6);
-assert.equal(FESTIVAL_PLACEMENTS.length,39);
+assert.equal(FESTIVAL_PLACEMENTS.length,42);
 assert.equal(pointInWater(500,500),false);assert.equal(pointInWater(-5,-20),false);
 for(const p of water){assert.ok(waterClearance(p,.6),p.id+' river margin');assert.equal(p.tile,6);assert.ok(Math.abs(p.y-FESTIVAL_LAYOUT.water.height)<.02);}
-for(let i=0;i<water.length;i++)for(let j=i+1;j<water.length;j++)assert.ok(Math.hypot(water[i].x-water[j].x,water[i].z-water[j].z)>1.64);
+for(let i=0;i<water.length;i++)for(let j=i+1;j<water.length;j++)assert.ok(Math.hypot(water[i].x-water[j].x,water[i].z-water[j].z)>1.2);
+for(const dock of DOCK_OBSERVATIONS){
+ const lamp=water.find(p=>p.id===dock.placementId);
+ assert.equal(lamp.kind,dock.kind);
+ const meters=Math.hypot(lamp.x-dock.x,lamp.z-dock.z)/MAP_UNITS_PER_METER;
+ assert.equal(dock.z,-11.5,'stand on upper promenade, not lower dock');
+ assert.ok(meters>=23&&meters<=35,'featured lamp viewed from upper promenade');
+ assert.ok(lamp.z>=-4,'story lamps must be farther into the river than the former boats');
+ const former=({'dock-water-1':[-15.55,-6.4],'dock-water-2':[-13.2,-6.38],'dock-water-3':[-11.5,-6.5]})[lamp.id];
+ assert.ok(Math.hypot(lamp.x-former[0],lamp.z-former[1])>2.3,'move featured lamps away from former berths');
+ for(const p of water.filter(p=>!DOCK_OBSERVATIONS.some(o=>o.placementId===p.id)))assert.ok(Math.hypot(p.x-lamp.x,p.z-lamp.z)>=1.85,'clear space around featured lamp');
+}
+assert.equal(new Set(water.map(p=>p.x.toFixed(5))).size,water.length,'no aligned columns');
+assert.equal(new Set(water.map(p=>p.z.toFixed(5))).size,water.length,'no aligned rows');
 for(const p of FESTIVAL_PLACEMENTS.filter(p=>p.kind==='lion')){
  assert.ok(p.z<-16&&p.z>-24,'behind gate and in front of temple');
  const dx=p.target[0]-p.x,dz=p.target[1]-p.z;
@@ -20,7 +33,7 @@ for(const kind of ['lion','mountain','lotus-main','lotus-one','chrysanthemum']){
  const light=lightingFor(kind),base=DEFAULT_LIGHTS[WATER_KINDS.has(kind)?'lotus':kind];
  assert.equal(light.color,base.color);assert.equal(light.power,base.power);assert.equal(light.sourceId,base.sourceId);
 }
-assert.deepEqual(mountainSettings(),{sizeMeters:13,rotation:180});
+assert.deepEqual(mountainSettings(),{sizeMeters:13,rotation:90});
 assert.deepEqual(mountainSettings({sizeMeters:100,rotation:-90}),{sizeMeters:15,rotation:270});
 const origin=FESTIVAL_PLACEMENTS.find(p=>p.kind==='mountain'),plot=FESTIVAL_LAYOUT.mountainPlot;
 const maxRadius=15*MAP_UNITS_PER_METER*Math.SQRT2/2; // conservative square bounding circle
@@ -30,7 +43,7 @@ let calls=0;
 const load=async()=>{calls++;const scene=new THREE.Group();const map=new THREE.Texture();scene.add(new THREE.Mesh(new THREE.BoxGeometry(2,1,2),new THREE.MeshStandardMaterial({map})));return {scene};};
 const parent=new THREE.Group(),lamps=new ImportFestivalLanterns(parent,{load,loadMask:async()=>new THREE.Texture()});
 lamps.setState({night:true});await Promise.all([lamps.registerTile(9),lamps.registerTile(9)]);await lamps.registerTile(6);await lamps.registerTile(10);
-assert.equal(calls,5);assert.equal(lamps.stats.lamps,39);assert.equal(lamps.stats.batches,10);assert.deepEqual(lamps.stats.errors,{});
+assert.equal(calls,5);assert.equal(lamps.stats.lamps,42);assert.equal(lamps.stats.batches,10);assert.deepEqual(lamps.stats.errors,{});
 for(const e of lamps.entries.values()){
  assert.equal(e.uniforms.uClothPower.value,e.tuning.power);
  assert.ok(e.batches.every(b=>b.mesh.isInstancedMesh&&!b.mesh.castShadow));

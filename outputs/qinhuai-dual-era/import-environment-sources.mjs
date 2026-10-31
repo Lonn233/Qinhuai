@@ -1,4 +1,5 @@
 import {BRIDGE_BUILDING} from './import-bridge-config.mjs';
+import {TOWER0369_NODES} from './import-tower0369-config.mjs';
 // Stable source IDs, independent of asynchronous tile arrival order.
 // The imported FBX merges some terrace roofs. They remain explicit architectural
 // blocks rather than pretending material names identify individual houses.
@@ -33,6 +34,7 @@ export function collectEnvironmentBuildings(layout,{matouGroups=[],templeNodes=n
   add('pavilion','魁星阁',[...pavilionNodes],'pavilion',false,[10]);
   const gate=['FuziTemple0336','FuziTemple0338','FuziTemple0339','FuziTemple0340','FuziTemple0341','FuziTemple0360','FuziTemple0361','FuziTemple0362'];
   add('gate','夫子庙 · 天下文枢牌坊',gate,'gate',true,[9]);
+  add('building-FuziTemple0369','沿河建筑 · 0369号',[...TOWER0369_NODES],'eave',false,[9]);
   for(const [tileName,tile] of Object.entries(layout.tiles)){
     const tileId=Number(tileName.split('-').at(-1)),candidates=tile.materials.filter(r=>!r.role.startsWith('boat')&&!claimed.has(r.node)&&bounds.has(r.node));
     const roofs=[...new Set(candidates.filter(r=>r.role==='roof').map(r=>r.node))].sort();

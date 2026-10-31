@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {lampSetting,lampGain} from './import-lantern-settings.mjs';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import layout from './assets/red-lantern/layout.json' with {type:'json'};
 import {normalizeRedLantern,readRedLantern,temperatureRGB} from './red-lantern-settings.mjs';
@@ -73,10 +74,10 @@ export class RedLanternLayer{
   const material=new THREE.ShaderMaterial({uniforms:{power:{value:0},tint:{value:new THREE.Color('#ff5030')}},vertexShader:`varying vec2 vUv;void main(){vUv=uv;vec4 center=modelViewMatrix*instanceMatrix*vec4(0.,0.,0.,1.);center.xy+=position.xy*length(instanceMatrix[0].xyz);gl_Position=projectionMatrix*center;}`,fragmentShader:`varying vec2 vUv;uniform vec3 tint;uniform float power;void main(){float r=length(vUv-.5)*2.;float glow=exp(-r*r*5.)*pow(max(0.,1.-r),2.);gl_FragColor=vec4(tint,glow*power);}`,transparent:true,depthWrite:false,depthTest:true,blending:THREE.AdditiveBlending,toneMapped:false});
   const halo=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1),material,positions.length);halo.name='RedLanternSoftHalos';const matrix=new THREE.Matrix4();positions.forEach((p,i)=>{matrix.makeScale(.65,.65,.65);matrix.setPosition(p);halo.setMatrixAt(i,matrix);});halo.computeBoundingSphere();halo.renderOrder=4;this.materials.push(material);return halo;
  }
- configure(value){this.settings=normalizeRedLantern(value);const s=this.settings,active=this.night&&!this.wireframe&&s.enabled;const white=colorAt(s.temperature),warm=white.clone().multiply(new THREE.Color('#ff7950'));
-  for(const material of this.materials)if(material.userData.redFabric){material.emissive.copy(white);material.emissiveIntensity=active?s.brightness*.85:0;}
-  for(const {uniforms,halo} of this.groups){uniforms.power.value=active?s.brightness*.28:0;uniforms.tint.value.copy(warm);uniforms.reach.value=s.spillRange*SCALE;uniforms.eaves.value=s.lightEaves?1:0;uniforms.walls.value=s.lightWalls?1:0;halo.material.uniforms.power.value=active?s.halo*s.brightness*.28:0;halo.material.uniforms.tint.value.copy(warm);halo.visible=active&&s.halo>0;}
-  for(const {group,buildingId,receivers} of this.groups){const enabled=this.buildingSettings?.[buildingId]!==false;group.visible=enabled;for(const receiver of receivers)receiver.visible=enabled&&active&&(s.lightEaves||s.lightWalls)&&s.brightness>0;}
+ configure(value){this.settings=normalizeRedLantern(value);const s=this.settings,active=this.night&&!this.wireframe&&s.enabled;const p=lampSetting(this,'red'),gain=lampGain(p);const white=p.inheritColor?colorAt(s.temperature):new THREE.Color(p.color),warm=p.inheritColor?white.clone().multiply(new THREE.Color('#ff7950')):white.clone();
+  for(const material of this.materials)if(material.userData.redFabric){material.emissive.copy(white);material.emissiveIntensity=active?s.brightness*.85*gain:0;}
+  for(const {uniforms,halo} of this.groups){uniforms.power.value=active?s.brightness*.28*gain:0;uniforms.tint.value.copy(warm);uniforms.reach.value=s.spillRange*SCALE;uniforms.eaves.value=s.lightEaves?1:0;uniforms.walls.value=s.lightWalls?1:0;halo.material.uniforms.power.value=active?s.halo*s.brightness*.28*gain*p.halo:0;halo.material.uniforms.tint.value.copy(warm);halo.visible=active&&s.halo>0;}
+  for(const {group,buildingId,receivers} of this.groups){const enabled=this.buildingSettings?.[buildingId]!==false;group.visible=enabled&&p.modelVisible;for(const receiver of receivers)receiver.visible=p.modelVisible&&enabled&&active&&(s.lightEaves||s.lightWalls)&&s.brightness>0;}
   for(const batch of this.batches)for(const material of Array.isArray(batch.material)?batch.material:[batch.material])material.wireframe=this.wireframe;
  }
  setState({night=this.night,wireframe=this.wireframe}={}){this.night=night;this.wireframe=wireframe;this.configure(this.settings);}

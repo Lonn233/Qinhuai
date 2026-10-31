@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 export const PLAYER_SCALE = 0.3212121212121212;
 export class ImportPlayer {
-  constructor(parent, camera, {load = url => new GLTFLoader().loadAsync(url), surface, obstacles = () => [], queryObstacles, onReady = () => {}} = {}) {
+  constructor(parent, camera, {load = url => new GLTFLoader().loadAsync(url), surface, obstacles = () => [], queryObstacles, onReady = () => {}, footsteps = null} = {}) {
     this.root = new THREE.Group(); this.root.name = '学生主角'; parent.add(this.root);
     this.camera = camera; this.load = load; this.surface = surface; this.obstacles = obstacles; this.onReady = onReady;
     this.position = this.root.position; this.velocity = new THREE.Vector3();
@@ -12,7 +12,7 @@ export class ImportPlayer {
     this.queryObstacles = queryObstacles; this.cameraMeshes = []; this.cameraHits = []; this.armEnd = new THREE.Vector3();
     this.mode = 'orbit'; this.spawned = false; this.yaw = 0; this.pitch = Math.PI / 4;
     this.distance = 3.8 * PLAYER_SCALE; this.actions = new Map(); this.state = 'Idle'; this.disposed = false;
-    this.root.visible = false;
+    this.root.visible = false; this.footsteps = footsteps;
   }
   ready() {
     if (!this.loading) this.loading = this.load(new URL('./assets/player/student.glb', import.meta.url).href).then(gltf => {
@@ -34,10 +34,22 @@ export class ImportPlayer {
         }
         this.actions.set(clip.name, this.mixer.clipAction(clip));
       }
+      // The source has walk/run only. Relax the bind-pose arms for a standing idle.
+      this.avatar.updateWorldMatrix(true, true);
+      const restingArms = new Map();
+      for (const [side, sign] of [['L', 1], ['R', -1]]) {
+        const arm = this.avatar.getObjectByName('upper_arm.' + side);
+        const elbow = this.avatar.getObjectByName('forearm.' + side);
+        if (!arm || !elbow) continue;
+        const direction = elbow.getWorldPosition(new THREE.Vector3()).sub(arm.getWorldPosition(new THREE.Vector3())).normalize();
+        const desired = new THREE.Vector3(sign * .12, -1, .04).normalize();
+        const worldRotation = new THREE.Quaternion().setFromUnitVectors(direction, desired).multiply(arm.getWorldQuaternion(new THREE.Quaternion()));
+        restingArms.set(arm.name, arm.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(worldRotation).toArray());
+      }
       const tracks = [];
       this.avatar.traverse(bone => {
         if (!bone.isBone) return;
-        const p = bone.position.toArray(), q = bone.quaternion.toArray();
+        const p = bone.position.toArray(), q = restingArms.get(bone.name) || bone.quaternion.toArray();
         const breathed = [...p]; if (roots.has(bone.name)) breathed[1] += .004;
         tracks.push(new THREE.VectorKeyframeTrack(bone.name + '.position', [0, 1.5, 3], [...p, ...breathed, ...p]));
         tracks.push(new THREE.QuaternionKeyframeTrack(bone.name + '.quaternion', [0, 3], [...q, ...q]));
@@ -50,7 +62,7 @@ export class ImportPlayer {
     return this.loading;
   }
   spawn({x, z, ground}) { this.position.set(x, ground, z); this.spawned = true; }
-  stop() { this.velocity.set(0, 0, 0); this.setAnimation('Idle'); }
+  stop() { this.velocity.set(0, 0, 0); this.setAnimation('Idle'); this.footsteps?.setMoving(false); }
   setMode(mode) {
     const previous = this.mode; this.stop(); this.mode = mode;
     this.root.visible = this.spawned && mode === 'thirdPerson';
@@ -73,7 +85,14 @@ export class ImportPlayer {
     this.actions.get(this.state)?.fadeOut(.18);
     this.actions.get(name).reset().fadeIn(.18).play(); this.state = name;
   }
-  update(delta, keys) {
+  update(delta, keys, {movementLocked = false} = {}) {
+    if (movementLocked) {
+      this.stop();
+      // Observation and modals stop locomotion while the idle animation keeps running.
+      // Leave camera rotation available for observation mouse look.
+      if (this.spawned && this.mode === 'thirdPerson') this.mixer?.update(delta);
+      return;
+    }
     if (this.spawned && this.mode !== 'orbit') {
       const x = Number(keys.has('KeyD')) - Number(keys.has('KeyA'));
       const z = Number(keys.has('KeyW')) - Number(keys.has('KeyS'));
@@ -98,6 +117,7 @@ export class ImportPlayer {
       }
       const dx = this.position.x - oldX, dz = this.position.z - oldZ;
       const moving = Math.hypot(dx, dz) > delta * .01;
+      this.footsteps?.setMoving(moving, {running:run});
       this.setAnimation(moving ? (run ? 'Running' : 'Walking') : 'Idle');
       if (moving && this.avatar) {
         const yaw = Math.atan2(dx, dz);
@@ -105,6 +125,7 @@ export class ImportPlayer {
       }
       this.updateCamera(delta);
     }
+    if (!this.spawned || this.mode === 'orbit') this.footsteps?.setMoving(false);
     if (this.spawned && this.mode === 'thirdPerson') this.mixer?.update(delta);
   }
   updateCamera(delta, snap = false) {
@@ -132,5 +153,5 @@ export class ImportPlayer {
     geometries.forEach(g => g.dispose()); materials.forEach(m => m.dispose()); textures.forEach(t => { t.dispose(); t.source?.data?.close?.(); });
   }
   dispose() { if (this.disposed) return; this.disposed = true; this.stop(); this.mixer?.stopAllAction(); if (this.avatar) this.mixer.uncacheRoot(this.avatar);
-    this.release(this.avatar); this.root.removeFromParent(); }
+    this.footsteps?.dispose(); this.release(this.avatar); this.root.removeFromParent(); }
 }

@@ -1,3 +1,4 @@
+import {isTempleInteriorPosition} from './import-temple-visibility.js';
 import * as THREE from 'three';
 import { spatialInstanceGroups } from './import-render-visibility.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -10,6 +11,124 @@ const REMOVED_STREET_ASSETS = new Set([
 ]);
 export function retainStreetAsset(id, prototype) {
   return prototype?.kind !== 'person' && !REMOVED_STREET_ASSETS.has(id);
+}
+
+// Two shrub/conifer clumps immediately beside the Tianxia Wenshu lion lanterns.
+// Remove these placements only; retain the same plants elsewhere in the map.
+const REMOVED_LION_SHRUB_INSTANCES = new Set([
+  "Obj3d66-646323-52-867",
+  "Obj3d66-646323-53-935",
+  "Obj3d66-646323-55-222",
+  "Obj3d66-646323-56-948",
+  "Obj3d66-646323-57-502",
+  "Obj3d66-646323-58-863",
+  "Obj3d66-646323-59-947",
+  "Obj3d66-646323-60-829",
+  "Obj3d66-646323-61-993",
+  "Obj3d66-646323-62-128",
+  "Obj3d66-646323-63-565",
+  "Obj3d66-646323-64-470",
+  "Obj3d66-646323-65-336",
+  "Obj3d66-646323-66-566",
+  "Obj3d66-646323-67-167",
+  "Obj3d66-646323-68-790",
+  "Obj3d66-646323-69-030",
+  "Obj3d66-646323-70-288",
+  "Obj3d66-646323-71-871",
+  "Obj3d66-646323-72-186",
+  "Obj3d66-646323-73-380",
+  "Obj3d66-646323-74-501",
+  "Obj3d66-646323-75-856",
+  "Obj3d66-646323-76-833",
+  "Obj3d66-646323-77-734",
+  "Obj3d66-646323-78-876",
+  "Obj3d66-646323-52-869",
+  "Obj3d66-646323-53-937",
+  "Obj3d66-646323-55-224",
+  "Obj3d66-646323-56-950",
+  "Obj3d66-646323-57-504",
+  "Obj3d66-646323-58-865",
+  "Obj3d66-646323-59-949",
+  "Obj3d66-646323-60-831",
+  "Obj3d66-646323-61-995",
+  "Obj3d66-646323-62-130",
+  "Obj3d66-646323-63-567",
+  "Obj3d66-646323-64-472",
+  "Obj3d66-646323-65-338",
+  "Obj3d66-646323-66-568",
+  "Obj3d66-646323-67-169",
+  "Obj3d66-646323-68-792",
+  "Obj3d66-646323-69-031",
+  "Obj3d66-646323-70-290",
+  "Obj3d66-646323-71-873",
+  "Obj3d66-646323-72-188",
+  "Obj3d66-646323-73-382",
+  "Obj3d66-646323-74-503",
+  "Obj3d66-646323-75-858",
+  "Obj3d66-646323-76-835",
+  "Obj3d66-646323-77-736",
+  "Obj3d66-646323-78-878",
+]);
+// Left lion-side tree and its flower/grass mound, removed by placement.
+const REMOVED_LION_FLOWER_INSTANCES = new Set([
+  "Obj3d66-646323-52-868",
+  "Obj3d66-646323-53-936",
+  "Obj3d66-646323-55-223",
+  "Obj3d66-646323-56-949",
+  "Obj3d66-646323-57-503",
+  "Obj3d66-646323-58-864",
+  "Obj3d66-646323-59-948",
+  "Obj3d66-646323-60-830",
+  "Obj3d66-646323-61-994",
+  "Obj3d66-646323-62-129",
+  "Obj3d66-646323-63-566",
+  "Obj3d66-646323-64-471",
+  "Obj3d66-646323-65-337",
+  "Obj3d66-646323-66-567",
+  "Obj3d66-646323-67-168",
+  "Obj3d66-646323-68-791",
+  "Obj3d66-646323-69-032",
+  "Obj3d66-646323-70-289",
+  "Obj3d66-646323-71-872",
+  "Obj3d66-646323-72-187",
+  "Obj3d66-646323-73-381",
+  "Obj3d66-646323-74-502",
+  "Obj3d66-646323-75-857",
+  "Obj3d66-646323-76-834",
+  "Obj3d66-646323-77-735",
+  "Obj3d66-646323-78-877",
+]);
+// Screenshot-selected tree beside the right lion, including its complete flower bed.
+const REMOVED_LION_RIGHT_TREE_INSTANCES = new Set([
+  "Obj3d66-646323-52-866",
+  "Obj3d66-646323-53-934",
+  "Obj3d66-646323-55-221",
+  "Obj3d66-646323-56-947",
+  "Obj3d66-646323-57-501",
+  "Obj3d66-646323-58-862",
+  "Obj3d66-646323-59-946",
+  "Obj3d66-646323-60-828",
+  "Obj3d66-646323-61-992",
+  "Obj3d66-646323-62-127",
+  "Obj3d66-646323-63-564",
+  "Obj3d66-646323-64-469",
+  "Obj3d66-646323-65-335",
+  "Obj3d66-646323-66-565",
+  "Obj3d66-646323-67-166",
+  "Obj3d66-646323-68-789",
+  "Obj3d66-646323-69-29",
+  "Obj3d66-646323-70-287",
+  "Obj3d66-646323-71-870",
+  "Obj3d66-646323-72-185",
+  "Obj3d66-646323-73-379",
+  "Obj3d66-646323-74-500",
+  "Obj3d66-646323-75-855",
+  "Obj3d66-646323-76-832",
+  "Obj3d66-646323-77-733",
+  "Obj3d66-646323-78-875"
+]);
+export function retainStreetInstance(item, prototypes) {
+  return retainStreetAsset(item.prototype, prototypes[item.prototype]) && !REMOVED_LION_SHRUB_INSTANCES.has(item.name) && !REMOVED_LION_FLOWER_INSTANCES.has(item.name) && !REMOVED_LION_RIGHT_TREE_INSTANCES.has(item.name);
 }
 
 // Original MAX proxy instances, independent of building materials and saved lighting.
@@ -29,7 +148,7 @@ export class ImportRestoredProxies {
     if (!this.manifestPromise) this.manifestPromise = this.fetchManifest().then(data => {
       if (data.version !== 1 || !data.instances?.length) throw new Error('原场景补充模型清单无效');
       this.manifest = data;
-      this.retained = data.instances.filter(item => retainStreetAsset(item.prototype, data.prototypes[item.prototype]));
+      this.retained = data.instances.filter(item => retainStreetInstance(item, data.prototypes));
       return data;
     }).catch(error => { this.manifestPromise = null; throw error; });
     return this.manifestPromise;
@@ -98,19 +217,22 @@ export class ImportRestoredProxies {
         const records = byPrototype.get(key);
         triangles += records.length * manifest.prototypes[key].triangles;
         for (const part of parts) {
-          const buckets = [[], []];
+          const buckets = [[], [], [], []];
           for (const record of records) {
             const matrix = new THREE.Matrix4().fromArray(record.matrix).multiply(part.matrix);
             const mirrored = matrix.determinant() < 0;
             if (mirrored) matrix.multiply(REFLECT_X);
-            buckets[Number(mirrored)].push(matrix);
+            const interior=id===9&&isTempleInteriorPosition(record.matrix[12],record.matrix[14]);
+            buckets[Number(mirrored)+2*Number(interior)].push(matrix);
           }
-          buckets.forEach((matrices, mirrored) => {
+          buckets.forEach((matrices, bucketIndex) => {
+            const mirrored=!!(bucketIndex%2),interior=bucketIndex>=2;
             if (!matrices.length) return;
             const geometry = mirrored ? this.mirrored(part) : part.geometry;
             for (const bucket of spatialInstanceGroups(matrices, geometry, this.root.matrixWorld)) {
               const mesh = new THREE.InstancedMesh(geometry, part.material, bucket.length);
               mesh.name = manifest.prototypes[key].source; mesh.userData.restoredProxy = true;
+              mesh.userData.templeInterior=interior;
               mesh.userData.prototype = key; mesh.userData.kind = manifest.prototypes[key].kind;
               bucket.forEach((matrix, i) => mesh.setMatrixAt(i, matrix));
               mesh.instanceMatrix.needsUpdate = true; mesh.computeBoundingBox(); mesh.computeBoundingSphere();

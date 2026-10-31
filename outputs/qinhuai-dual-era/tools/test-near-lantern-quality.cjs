@@ -1,0 +1,57 @@
+const assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs');
+const root=path.resolve(__dirname,'..');
+const bundle=require('esbuild').buildSync({stdin:{contents:`export * from './import-near-lantern-quality.js';export * as THREE from 'three';`,resolveDir:root},bundle:true,format:'cjs',platform:'node',write:false,logLevel:'silent'}).outputFiles[0].text;
+const mod={exports:{}};new Function('module','exports','require',bundle)(mod,mod.exports,require);
+const {NearLanternQuality,collectNearLanternBatches,THREE,DEFAULT_NEAR_LANTERN_MODE,normalizeNearLanternMode,NEAR_LANTERN_MODES,NEAR_LANTERN_STORAGE_KEY}=mod.exports;
+assert.equal(DEFAULT_NEAR_LANTERN_MODE,'five');
+assert.equal(normalizeNearLanternMode(undefined),'five');assert.equal(normalizeNearLanternMode('garbage'),'five');
+assert.equal(NEAR_LANTERN_STORAGE_KEY,'qinhuai-near-lantern-quality-v2');
+assert.deepEqual(Object.keys(NEAR_LANTERN_MODES),['five','half','original','current']);
+// Keep the prior user-approved version available as a separate option.
+const old=JSON.parse(fs.readFileSync(path.join(root,'assets/lantern-near-half/manifest.json'),'utf8'));
+assert.equal(old.woman.triangles,250000);assert.equal(old.lion.triangles,810603);
+const camera=new THREE.PerspectiveCamera();camera.position.set(0,.5,0);
+const scene=new THREE.Scene(),material=new THREE.MeshStandardMaterial({color:'pink'}),geometry=new THREE.BoxGeometry(1,1,1);
+geometry.computeBoundingBox();
+const source=new THREE.InstancedMesh(geometry,material,20);source.name='Original four-lantern streetlamp';scene.add(source);
+for(let i=0;i<20;i++)source.setMatrixAt(i,new THREE.Matrix4().makeTranslation(i*.06,0,0));source.computeBoundingBox();source.computeBoundingSphere();
+const before=Array.from(source.instanceMatrix.array),count=source.count,loads=[];
+const make=(mode='five')=>({scene:new THREE.Group().add(new THREE.Mesh(new THREE.SphereGeometry(1,mode==='original'?24:mode==='half'?16:8,8),new THREE.MeshStandardMaterial()))});
+const settle=()=>new Promise(r=>setTimeout(r,0));
+const quality=new NearLanternQuality({getBatches:()=>collectNearLanternBatches({street:{root:scene}}),load:async(kind,mode)=>{loads.push({kind,mode});return make(mode);}});
+const run=now=>{scene.updateMatrixWorld(true);quality.beforeRender(camera,now);};
+(async()=>{
+ run(0);assert.equal(source.count,20,'no holes during loading');await settle();run(1);
+ assert.equal(loads[0].mode,'five');assert.equal(quality.stats.active,12);assert.equal(source.count,8);
+ assert.equal(quality.records.get(source).mode,'five');assert.equal(quality.records.get(source).mesh.material,material);
+ quality.afterRender();assert.equal(source.count,count);assert.deepEqual(Array.from(source.instanceMatrix.array),before);
+ const fiveGeometry=quality.records.get(source).mesh.geometry, fiveTriangles=fiveGeometry.index.count/3;
+ camera.position.z=20;run(1000);assert.equal(quality.stats.active,0);assert.equal(source.count,20);
+ camera.position.z=0;quality.setMode('five');run(1100);assert.equal(loads.length,1,'same-mode reselect reuses geometry');
+ let disposed=0;fiveGeometry.addEventListener('dispose',()=>disposed++);
+ quality.setMode('original');assert.equal(disposed,1);assert.equal(quality.cache.size,0);assert.equal(source.count,20);
+ run(1200);await settle();run(1201);assert.equal(quality.stats.active,12);
+ const high=quality.records.get(source).mesh.geometry;assert.ok(high.index.count/3>fiveTriangles);
+ let highDisposed=0;high.addEventListener('dispose',()=>highDisposed++);
+ quality.setMode('five');assert.equal(highDisposed,1,'original GPU resources freed when lowering quality');
+ run(1300);await settle();run(1301);assert.equal(quality.records.get(source).mesh.geometry.index.count/3,fiveTriangles);
+ for(let n=0;n<12;n++){
+   quality.setMode(n%2?'half':'five');run(2000+n*10);await settle();run(2001+n*10);
+   quality.setMode('current');assert.equal(source.count,count);assert.deepEqual(Array.from(source.instanceMatrix.array),before);
+   assert.equal(quality.cache.size,0);assert.equal(quality.records.size,0);assert.equal(source.children.length,0);
+ }
+ quality.setMode('half');source.visible=false;run(4000);assert.equal(quality.stats.active,0);source.visible=true;
+ source.count=2;source.setMatrixAt(0,new THREE.Matrix4().makeTranslation(0,0,.1));const lodState=Array.from(source.instanceMatrix.array);
+ run(4500);await settle();run(4501);assert.equal(quality.stats.active,2);quality.afterRender();assert.equal(source.count,2);assert.deepEqual(Array.from(source.instanceMatrix.array),lodState);
+ quality.dispose();assert.equal(source.children.length,0);assert.equal(quality.cache.size,0);
+ const batches=()=>[{mesh:source,kind:'lion',bounds:geometry.boundingBox}];
+ let resolve;const pending=new NearLanternQuality({getBatches:batches,load:()=>new Promise(r=>resolve=r)});
+ pending.setMode('original');pending.beforeRender(camera,5000);pending.setMode('five');resolve(make('original'));await settle();
+ assert.equal(pending.cache.size,0,'stale original result cannot populate five-percent cache');assert.equal(pending.stats.active,0);pending.dispose();
+ let reject;const staleFailure=new NearLanternQuality({getBatches:batches,load:()=>new Promise((_,r)=>reject=r)});
+ staleFailure.setMode('original');staleFailure.beforeRender(camera,5200);staleFailure.setMode('five');reject(Error('stale original failure'));await settle();assert.deepEqual(staleFailure.stats.errors,{});staleFailure.dispose();
+ let failures=0;const broken=new NearLanternQuality({getBatches:batches,load:async()=>{failures++;throw Error('fixture failure');}});
+ broken.beforeRender(camera,6000);await settle();broken.beforeRender(camera,6100);assert.equal(failures,1);assert.equal(source.count,2);assert.equal(broken.stats.active,0);assert.match(broken.stats.errors.lion,/fixture failure/);
+ broken.setMode('five');broken.beforeRender(camera,6200);await settle();assert.equal(failures,2,'explicit reselection retries');broken.dispose();
+ console.log('PASS: five default; four modes; <=12; near/far; material identity; LOD matrix restoration; same-mode cache; 12 reversible switches; original GPU disposal; async races; failures/retry.');
+})().catch(e=>{console.error(e);process.exitCode=1;});

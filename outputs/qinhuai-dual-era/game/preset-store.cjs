@@ -8,7 +8,7 @@ const MAX_ITEMS = 500;
 function failure(message,status=400){return Object.assign(new Error(message),{status});}
 function validId(id){return typeof id==='string' && /^[a-zA-Z0-9_-]{1,80}$/.test(id);}
 function validate(item){
- if(!item || !validId(item.id) || !LANTERNS.has(item.lanternId) || !BASES.has(item.base) || typeof item.name!=='string' || !item.name.trim() || item.name.length>40 || !Number.isFinite(item.power) || item.power<0 || item.power>2.5 || typeof item.color!=='string' || !/^#[0-9a-f]{6}$/i.test(item.color))throw failure('方案格式无效，请检查名称、亮度和颜色。');
+ if(!item || !validId(item.id) || !LANTERNS.has(item.lanternId) || !BASES.has(item.base) || typeof item.name!=='string' || !item.name.trim() || item.name.length>40 || !Number.isFinite(item.power) || item.power<0 || item.power>5 || typeof item.color!=='string' || !/^#[0-9a-f]{6}$/i.test(item.color))throw failure('方案格式无效，请检查名称、亮度和颜色。');
  if(item.sizeMeters!==undefined&&!validSize(item.lanternId,item.sizeMeters))throw failure('模型尺寸超出可调范围，请检查米制尺寸。');
  const {id,lanternId,base,name,power,color}=item;
  return {id,lanternId,base,name:name.trim(),power,color:color.toLowerCase(),...(item.sizeMeters===undefined?{}:{sizeMeters:item.sizeMeters})};

@@ -1,0 +1,563 @@
+{
+  "results": [
+    {
+      "slug": "lantern-lion",
+      "label": "瑞狮灯",
+      "source": "assets/lantern-quality/five/lion.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-lion.png",
+      "bounds": {
+        "min": [
+          -0.6776395440101624,
+          -0.9492261409759521,
+          -0.7747001051902771
+        ],
+        "max": [
+          0.6770063638687134,
+          0.9509944319725037,
+          0.7687596678733826
+        ]
+      }
+    },
+    {
+      "slug": "lantern-mountain",
+      "label": "鳖山灯",
+      "source": "assets/lantern-quality/five/mountain.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-mountain.png",
+      "bounds": {
+        "min": [
+          -0.9519211053848267,
+          -0.876752495765686,
+          -0.7316224575042725
+        ],
+        "max": [
+          0.9506480693817139,
+          0.876752495765686,
+          0.7123774886131287
+        ]
+      }
+    },
+    {
+      "slug": "lantern-lotus-main",
+      "label": "荷花灯-主灯",
+      "source": "assets/lantern-quality/five/lotus-main.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-lotus-main.png",
+      "bounds": {
+        "min": [
+          -0.9503656029701233,
+          -0.910949170589447,
+          -0.40371981263160706
+        ],
+        "max": [
+          0.9496569633483887,
+          0.9056601524353027,
+          0.3853422999382019
+        ]
+      }
+    },
+    {
+      "slug": "lantern-lotus-one",
+      "label": "荷花灯-单朵",
+      "source": "assets/lantern-quality/five/lotus-one.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-lotus-one.png",
+      "bounds": {
+        "min": [
+          -0.9500362873077393,
+          -0.8923664689064026,
+          -0.41207993030548096
+        ],
+        "max": [
+          0.951156497001648,
+          0.8928162455558777,
+          0.41351452469825745
+        ]
+      }
+    },
+    {
+      "slug": "lantern-chrysanthemum",
+      "label": "菊水灯",
+      "source": "assets/lantern-quality/five/chrysanthemum.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-chrysanthemum.png",
+      "bounds": {
+        "min": [
+          -0.9507352113723755,
+          -0.949302077293396,
+          -0.8126354217529297
+        ],
+        "max": [
+          0.9501872658729553,
+          0.9506626725196838,
+          0.8117998242378235
+        ]
+      }
+    },
+    {
+      "slug": "lantern-streetlamp",
+      "label": "路灯",
+      "source": "assets/lantern-quality/five/streetlamp.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-streetlamp.png",
+      "bounds": {
+        "min": [
+          -0.17453482747077942,
+          -0.11207558959722519,
+          -0.9517203569412231
+        ],
+        "max": [
+          0.15454204380512238,
+          0.10741779953241348,
+          0.9510837197303772
+        ]
+      }
+    },
+    {
+      "slug": "lantern-hanging",
+      "label": "吊灯",
+      "source": "assets/lantern-quality/five/hanging.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-hanging.png",
+      "bounds": {
+        "min": [
+          -0.41887199878692627,
+          -0.37552109360694885,
+          -0.9534398913383484
+        ],
+        "max": [
+          0.4199354350566864,
+          0.3754042685031891,
+          0.9520705938339233
+        ]
+      }
+    },
+    {
+      "slug": "lantern-crane",
+      "label": "仙鹤灯",
+      "source": "assets/lantern-quality/five/crane.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-crane.png",
+      "bounds": {
+        "min": [
+          -0.5165148973464966,
+          -0.5145280957221985,
+          -0.9525467157363892
+        ],
+        "max": [
+          0.5161198973655701,
+          0.5161864757537842,
+          0.9498220086097717
+        ]
+      }
+    },
+    {
+      "slug": "lantern-fish",
+      "label": "金鱼灯",
+      "source": "assets/lantern-quality/five/fish.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-fish.png",
+      "bounds": {
+        "min": [
+          -0.7446994185447693,
+          -0.9505818486213684,
+          -0.40719178318977356
+        ],
+        "max": [
+          0.7455103397369385,
+          0.9510595798492432,
+          0.3938068151473999
+        ]
+      }
+    },
+    {
+      "slug": "lantern-woman",
+      "label": "女灯",
+      "source": "assets/lantern-quality/five/woman.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-woman.png",
+      "bounds": {
+        "min": [
+          -0.41292184591293335,
+          -0.3839552402496338,
+          -0.9506285786628723
+        ],
+        "max": [
+          0.4038762152194977,
+          0.3900521993637085,
+          0.9503308534622192
+        ]
+      }
+    },
+    {
+      "slug": "lantern-gongming",
+      "label": "功名灯",
+      "source": "assets/lantern-quality/five/gongming.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-gongming.png",
+      "bounds": {
+        "min": [
+          -0.9493106007575989,
+          -0.30729663372039795,
+          -0.6371634602546692
+        ],
+        "max": [
+          0.9494972229003906,
+          0.31072577834129333,
+          0.6349989175796509
+        ]
+      }
+    },
+    {
+      "slug": "lantern-tengma",
+      "label": "腾马灯",
+      "source": "assets/lantern-quality/five/tengma.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-tengma.png",
+      "bounds": {
+        "min": [
+          -0.8045697808265686,
+          -0.9501908421516418,
+          -0.6567303538322449
+        ],
+        "max": [
+          0.8039602041244507,
+          0.949381947517395,
+          0.664404571056366
+        ]
+      }
+    },
+    {
+      "slug": "lantern-green",
+      "label": "绿灯",
+      "source": "assets/lantern-quality/five/green.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-green.png",
+      "bounds": {
+        "min": [
+          -0.36611953377723694,
+          -0.3667115271091461,
+          -0.9517579078674316
+        ],
+        "max": [
+          0.3669717609882355,
+          0.3679300844669342,
+          0.950812816619873
+        ]
+      }
+    },
+    {
+      "slug": "lantern-blue",
+      "label": "蓝灯",
+      "source": "assets/lantern-quality/five/blue.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-blue.png",
+      "bounds": {
+        "min": [
+          -0.5369316935539246,
+          -0.5359886288642883,
+          -0.9540910124778748
+        ],
+        "max": [
+          0.5365065932273865,
+          0.536718487739563,
+          0.9511526823043823
+        ]
+      }
+    },
+    {
+      "slug": "lantern-gold",
+      "label": "金灯笼",
+      "source": "assets/lantern-quality/five/gold.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-gold.png",
+      "bounds": {
+        "min": [
+          -0.5471906661987305,
+          -0.5327560305595398,
+          -0.9518848061561584
+        ],
+        "max": [
+          0.5436574816703796,
+          0.5295503735542297,
+          0.9481838941574097
+        ]
+      }
+    },
+    {
+      "slug": "lantern-red",
+      "label": "红灯笼",
+      "source": "assets/lantern-quality/five/red.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\lantern-red.png",
+      "bounds": {
+        "min": [
+          -0.652702271938324,
+          -0.6494693756103516,
+          -0.9529901742935181
+        ],
+        "max": [
+          0.651701033115387,
+          0.6488828659057617,
+          0.9494566321372986
+        ]
+      }
+    },
+    {
+      "slug": "rack-blue",
+      "label": "庭院灯架-蓝",
+      "source": "assets/courtyard-rack-lanterns/blue-low.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\rack-blue.png",
+      "bounds": {
+        "min": [
+          -0.536732017993927,
+          -0.5353620052337646,
+          -0.9540560245513916
+        ],
+        "max": [
+          0.5354509949684143,
+          0.5365989804267883,
+          0.9496809840202332
+        ]
+      }
+    },
+    {
+      "slug": "rack-gold",
+      "label": "庭院灯架-金",
+      "source": "assets/courtyard-rack-lanterns/gold-low.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\rack-gold.png",
+      "bounds": {
+        "min": [
+          -0.5464299917221069,
+          -0.5286549925804138,
+          -0.9515039920806885
+        ],
+        "max": [
+          0.5441470146179199,
+          0.5293400287628174,
+          0.9500370025634766
+        ]
+      }
+    },
+    {
+      "slug": "rack-green",
+      "label": "庭院灯架-绿",
+      "source": "assets/courtyard-rack-lanterns/green-low.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\rack-green.png",
+      "bounds": {
+        "min": [
+          -0.36696699261665344,
+          -0.3663420081138611,
+          -0.9513639807701111
+        ],
+        "max": [
+          0.3663269877433777,
+          0.36708399653434753,
+          0.9510939717292786
+        ]
+      }
+    },
+    {
+      "slug": "rack-red",
+      "label": "庭院灯架-红",
+      "source": "assets/courtyard-rack-lanterns/red-low.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\rack-red.png",
+      "bounds": {
+        "min": [
+          -0.6522539854049683,
+          -0.6479079723358154,
+          -0.9517419934272766
+        ],
+        "max": [
+          0.650875985622406,
+          0.6479560136795044,
+          0.9499260187149048
+        ]
+      }
+    },
+    {
+      "slug": "placeable-column",
+      "label": "可放置灯-柱灯",
+      "source": "assets/placeable-lanterns/column-five.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\placeable-column.png",
+      "bounds": {
+        "min": [
+          -0.2981681525707245,
+          -0.3023844063282013,
+          -0.9519910216331482
+        ],
+        "max": [
+          0.2958984673023224,
+          0.3011547327041626,
+          0.9504159092903137
+        ]
+      }
+    },
+    {
+      "slug": "placeable-drum",
+      "label": "可放置灯-鼓灯",
+      "source": "assets/placeable-lanterns/drum-five.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\placeable-drum.png",
+      "bounds": {
+        "min": [
+          -0.9506203532218933,
+          -0.3436388373374939,
+          -0.49751973152160645
+        ],
+        "max": [
+          0.9494407176971436,
+          0.34334930777549744,
+          0.4982764720916748
+        ]
+      }
+    },
+    {
+      "slug": "placeable-pink",
+      "label": "可放置灯-粉灯",
+      "source": "assets/placeable-lanterns/pink-five.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\placeable-pink.png",
+      "bounds": {
+        "min": [
+          -0.32479849457740784,
+          -0.2675485610961914,
+          -0.95319002866745
+        ],
+        "max": [
+          0.3247852325439453,
+          0.26820212602615356,
+          0.9492968916893005
+        ]
+      }
+    },
+    {
+      "slug": "placeable-rack",
+      "label": "可放置灯-灯架",
+      "source": "assets/placeable-lanterns/rack-five.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\placeable-rack.png",
+      "bounds": {
+        "min": [
+          -0.9497629404067993,
+          -0.3465530276298523,
+          -0.5874364972114563
+        ],
+        "max": [
+          0.950156033039093,
+          0.34259095788002014,
+          0.6054468154907227
+        ]
+      }
+    },
+    {
+      "slug": "feature-fish",
+      "label": "特色鱼灯",
+      "source": "assets/feature-lanterns/fish-low.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\feature-fish.png",
+      "bounds": {
+        "min": [
+          -0.7444459795951843,
+          -0.9501039981842041,
+          -0.407027006149292
+        ],
+        "max": [
+          0.7457770109176636,
+          0.9503210186958313,
+          0.3933579921722412
+        ]
+      }
+    },
+    {
+      "slug": "feature-woman",
+      "label": "特色女灯",
+      "source": "assets/feature-lanterns/woman-low.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\feature-woman.png",
+      "bounds": {
+        "min": [
+          -0.41269999742507935,
+          -0.38266798853874207,
+          -0.9508640170097351
+        ],
+        "max": [
+          0.40289801359176636,
+          0.387470006942749,
+          0.9481809735298157
+        ]
+      }
+    },
+    {
+      "slug": "golden-tree",
+      "label": "金色树灯",
+      "source": "assets/golden-tree-lanterns/golden-lantern-lod.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\golden-tree.png",
+      "bounds": {
+        "min": [
+          -0.5418149828910828,
+          -0.5243059992790222,
+          -0.9510189890861511
+        ],
+        "max": [
+          0.5364440083503723,
+          0.529092013835907,
+          0.939981997013092
+        ]
+      }
+    },
+    {
+      "slug": "character-student",
+      "label": "学生主角",
+      "source": "assets/player/student.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\character-student.png",
+      "bounds": {
+        "min": [
+          -0.3153388202190399,
+          -0.4573659300804138,
+          0.04623161256313324
+        ],
+        "max": [
+          0.2988411784172058,
+          0.5403065085411072,
+          1.6687437295913696
+        ]
+      }
+    },
+    {
+      "slug": "character-master",
+      "label": "先生",
+      "source": "story/assets/master.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\character-master.png",
+      "bounds": {
+        "min": [
+          -0.3154144287109375,
+          -0.36505866050720215,
+          0.07740730792284012
+        ],
+        "max": [
+          0.3175579011440277,
+          0.5388649702072144,
+          1.6691665649414062
+        ]
+      }
+    },
+    {
+      "slug": "character-riddle-host",
+      "label": "猜灯主持人",
+      "source": "story/assets/riddle-host.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\character-riddle-host.png",
+      "bounds": {
+        "min": [
+          -0.27937018871307373,
+          -0.49228039383888245,
+          0.10849280655384064
+        ],
+        "max": [
+          0.29183444380760193,
+          0.5383783578872681,
+          1.67251455783844
+        ]
+      }
+    },
+    {
+      "slug": "character-kuixing",
+      "label": "魁星",
+      "source": "assets/kuixing-pilot/export/kuixing_LOD1.glb",
+      "output": "E:\\soft\\project\\codex-Qinhuai\\outputs\\qinhuai-dual-era\\character-renders\\all-assets\\character-kuixing.png",
+      "bounds": {
+        "min": [
+          -0.7185360193252563,
+          -0.6193029880523682,
+          -0.9506610035896301
+        ],
+        "max": [
+          0.7175970077514648,
+          0.6201120018959045,
+          0.9497789740562439
+        ]
+      }
+    }
+  ],
+  "errors": []
+}
